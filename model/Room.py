@@ -3,10 +3,10 @@ import random
 
 class Room:
 
-    def __init__(self, x, y):
+    def __init__(self):
 
-        self.mapPosX = x
-        self.mapPosY = y
+        #self.mapPosX = x
+        #self.mapPosY = y
         self.list_of_monsters = []
         self.list_of_treasures = []
         self.visited_room = False
