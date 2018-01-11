@@ -7,10 +7,10 @@ class Room:
 
         self.mapPosX = x
         self.mapPosY = y
-        self.list_of_monsters = [self.generate_treasures()]
-        self.list_of_treasures = [self.generate_monsters()]
-        self.visitedRoom = bool
-        self.isExit = bool
+        self.list_of_monsters = []
+        self.list_of_treasures = []
+        self.visited_room = False
+        self.is_exit = False
 
     ''' Adjust for later:
     def generate_treasures(self):
