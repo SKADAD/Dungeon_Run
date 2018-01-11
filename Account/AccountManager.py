@@ -36,6 +36,13 @@ class AccountManager:
             self.select_starting_pos = "SE"
             print("SE")
         self.select_size_of_map = int(input("Select size of map:\n1. Small\n2.Not too small and not too big\n3.Large"))
+        if self.select_size_of_map == 1:
+            self.select_size_of_map = 4
+        if self.select_size_of_map == 2:
+            self.select_size_of_map = 5
+        if self.select_size_of_map == 3:
+            self.select_size_of_map = 8
+
         print(self.character_new_type)
         print(self.character_new_name)
         print(self.select_starting_pos)
