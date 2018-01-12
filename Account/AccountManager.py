@@ -15,6 +15,7 @@ class AccountManager:
             return True
 
     def check_if_name_exists(self, name):
+        # Loopa igenom listan med characters och jämför namnen.
         for character in self.list_of_characters:
             if character.name == name:
                 return True
