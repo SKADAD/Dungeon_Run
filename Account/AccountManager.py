@@ -1,76 +1,98 @@
 import model.DungeonMap
 
 
-
 class AccountManager:
 
     def __init__(self):
-        self.character_new_name = "NewChar"
-        self.character_load_name = "LoadChar"
+        self.character_new_name = "Name"
+        self.character_load_name = "Name"
         self.select_starting_pos = "NW"
-        self.select_char_type_new = ""
+        self.select_char_type_new = "Class"
         self.select_size_of_map = 5
 
+    def start(self):
+        self.choice_validator(input("Enter choice:\n 1. New Character \n 2. Existing Character\n"))
 
-    def select_new_or_existing_char(self):
-        choice = int(input("Enter choice:\n 1. New Character \n 2. Existing Character"))
-        if choice == 1:
-            self.newChar()
-        elif choice == 2:
-            self.existingChar()
-        else:
-            print("Something wrong in select new or existing char")
+    def choice_validator(self, choice):
+        try:
+            choice_input = int(choice)
+            if not (1 <= choice_input <= 2):
+                raise ValueError()
+            else:
+                self.start_main_menu(choice_input)
+                return
+        except ValueError:
+            print("Not a valid choice. You must enter 1 or 2 to continue.")
+            return False
 
-    def newChar(self):
-        select_char_new_type = int(input("Enter character number:\n1. Knight\n2. Wizard\n3. Mage\n4. Thief\n"))
-        print(select_char_new_type)
-        if select_char_new_type == 1:
-            self.select_char_type_new = "Knight"
-        elif select_char_new_type == 2:
-            self.select_char_type_new = "Wizard"
-        elif select_char_new_type == 3:
-            self.select_char_type_new = "Mage"
-        elif select_char_new_type == 4:
-            self.select_char_type_new = "Thief"
-        else:
-            print("Something wrong in new Char")
+    def start_main_menu(self, choice):
+        switcher = {
+            1: self.menu_char_new,
+            2: self.menu_char_existing,
+        }
+        func = switcher.get(choice)
+        return func()
 
-        self.character_new_name = input("Enter character name:\n")
+    def menu_char_new(self):
+        choice = int(input("Enter character number:\n1. Knight\n2. Wizard\n3. Mage\n4. Thief\n"))
+        try:
+            if not (1 <= choice <= 4):
+                raise ValueError()
+            else:
+                if choice == 1:
+                    self.select_char_type_new = "Knight"
+                elif choice == 2:
+                    self.select_char_type_new = "Wizard"
+                elif choice == 3:
+                    self.select_char_type_new = "Mage"
+                elif choice == 4:
+                    self.select_char_type_new = "Thief"
+                self.character_new_name = input("Enter your characters name:\n")
+            # TODO save character
+                self.menu_map_size()
+                return
+        except ValueError:
+            print("That isn't a valid choice.\nYou must enter a number from 0 to 4 to continue.")
 
-        select_size_of_map = int(input("Select size of map:\n1. Small\n2. Not too small and not too big\n3. Large\n"))
-        print(select_size_of_map)
-        if select_size_of_map == 1:
+    def menu_map_size(self):
+        choice = int(input("Select size of map:\n1. Small\n2. Not too small and not too big\n3. Large\n"))
+        '''try:
+
+            if select_size_of_map_input == 1:
             self.select_size_of_map = 4
-        elif select_size_of_map == 2:
+        elif select_size_of_map_input == 2:
             self.select_size_of_map = 5
-        elif select_size_of_map == 3:
+        elif select_size_of_map_input == 3:
             self.select_size_of_map = 8
         else:
-            print("Something wrong selecting map size")
+            print("Not a valid input")
 
-        select_starting_pos = int(input("Enter starting position:\n1. North West\n2. North East\n3. South West\n4. South East\n"))
-        if select_starting_pos == 1:
+        select_starting_pos_input = int(input("Enter starting position:\n1. North West\n2. North East\n3. South West\n4. South East\n"))
+        if select_starting_pos_input == 1:
             self.select_starting_pos = "NW"
             print("NW")
-        elif select_starting_pos == 2:
+        elif select_starting_pos_input == 2:
             self.select_starting_pos = "NE"
             print("NE")
-        elif select_starting_pos == 3:
+        elif select_starting_pos_input == 3:
             self.select_starting_pos = "SW"
             print("SW")
-        elif select_starting_pos == 4:
+        elif select_starting_pos_input == 4:
             self.select_starting_pos = "SE"
             print("SE")
         else:
-            print("Something wrong selecting starting pos")
+            print("Not a valid input")
 
         print(self.character_new_name)
         print(self.select_char_type_new)
         print(self.select_size_of_map)
         print(self.select_starting_pos)
+        '''
+    def menu_char_existing(self):
+        # TODO this
+        print("Choice 2, trying to load existing char..")
 
-    def existingChar(self):
-        print("Create new")
+
 
 start = AccountManager()
-start.select_new_or_existing_char()
+start.start()
