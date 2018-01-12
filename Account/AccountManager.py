@@ -1,6 +1,5 @@
 from Player import Player
 
-
 class AccountManager:
 
     def __init__(self):
