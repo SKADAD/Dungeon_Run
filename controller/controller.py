@@ -3,8 +3,6 @@ import model.DungeonMap
 
 
 class AccountManager:
-    # This global variable remembers the users selected number if choice_validate confirms True:
-    global validated_user_input
 
     def __init__(self):
         # self.character() # TODO
@@ -12,21 +10,28 @@ class AccountManager:
         self.character_name = "Name"
         self.starting_pos = "NW"
         self.size_of_map = 1
-        self.running = True
 
     # First game menu and choices, validates input and finally calls for the next function:
     def start_menu(self):
-        global user_input_number
+        # Defines this menus highest value in selecting choices:
         max_value_for_menu = 2
+        # Clears the terminal:
         clear_cmd()
         print("Enter choice:\n 1. New Character \n 2. Existing Character\n")
+        # Returns true if choice is valid:
         choice = choice_validate_int(max_value_for_menu)
         if not choice:
+            # Returns to start of this menu
             self.start_menu()
+        # If the return is valid:
         elif choice:
+            # If user selected 1:
             if user_input_number == 1:
+                # Sends the user to menu create new char:
                 self.menu_char_new()
+            # If user selected 2:
             elif user_input_number == 2:
+                # Sends the user to menu load existing:
                 self.menu_char_existing()
 
     # Create new character intro and finally calls new player name
@@ -133,14 +138,16 @@ def clear_cmd():
 
 # Validates the users input when called
 def choice_validate_int(highest_value_in_menu):
+    # This global variable remembers the users selected number for menu if choice_validate first confirms True:
     global user_input_number
     try:
         user_choice = int(input(""))
         # Menu choices that can be selected is from 1 up to or as <number defined in the call to this function>
+        # If the value isn't within:
         if not (1 <= user_choice <= highest_value_in_menu):
             raise ValueError()
         else:
-            # When True remembers the choice (int)
+            # Else remember the number chosen (int)
             user_input_number = user_choice
             return True
     except ValueError:
