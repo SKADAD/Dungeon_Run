@@ -7,6 +7,7 @@ from Controller.Controller import *
 class DungeonMap:
 
     room = Room
+    string_to_print = ""
 
     def __init__(self, size_, start_position):
         self.list_of_rooms = []
@@ -79,7 +80,7 @@ class DungeonMap:
                 else:
                     string_to_print += "X "
             string_to_print += "\n"
-        toPrint(string_to_print)
+        return string_to_print
 
 
 
@@ -103,7 +104,9 @@ class DungeonMap:
                 self.playerPosY += 1
         room = self.get_player_room()
         room.visited_room = True
+        self.print_map()
         return room
+
 
     def get_player_room(self):
         return self.list_of_rooms[self.playerPosX][self.playerPosY]
