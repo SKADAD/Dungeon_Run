@@ -91,10 +91,10 @@ class DungeonMap:
             if self.playerPosY - 1 >= 0:
                 self.playerPosY -= 1
         elif direction == "s":
-            if self.playerPosX + 1 <= self.size:
+            if self.playerPosX + 1 < self.size:
                 self.playerPosX += 1
         elif direction == "d":
-            if self.playerPosY + 1 <= self.size:
+            if self.playerPosY + 1 < self.size:
                 self.playerPosY += 1
         self.visit_room()
 
@@ -103,31 +103,31 @@ class DungeonMap:
 
 
 
-test = DungeonMap(10, "NW")
-test.print_map()
-time.sleep(1)
-test.move_player("w")
-test.print_map()
-test.move_player("s")
-test.print_map()
-test.move_player("s")
-test.print_map()
-test.move_player("a")
-test.print_map()
-test.move_player("s")
-test.print_map()
-test.move_player("s")
-test.print_map()
-test.move_player("s")
-test.print_map()
-test.move_player("d")
-test.print_map()
-test.move_player("d")
-test.print_map()
-test.move_player("d")
-test.print_map()
-test.move_player("w")
-test.print_map()
+# test = DungeonMap(10, "NW")
+# test.print_map()
+# time.sleep(1)
+# test.move_player("w")
+# test.print_map()
+# test.move_player("s")
+# test.print_map()
+# test.move_player("s")
+# test.print_map()
+# test.move_player("a")
+# test.print_map()
+# test.move_player("s")
+# test.print_map()
+# test.move_player("s")
+# test.print_map()
+# test.move_player("s")
+# test.print_map()
+# test.move_player("d")
+# test.print_map()
+# test.move_player("d")
+# test.print_map()
+# test.move_player("d")
+# test.print_map()
+# test.move_player("w")
+# test.print_map()
 
 
 
