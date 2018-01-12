@@ -1,7 +1,11 @@
 import random
-
+import os, sys, time
+sys.path.append('../')
+from model.Room import Room
 
 class DungeonMap:
+
+    room = Room
 
     def __init__(self, size_, start_position):
         self.list_of_rooms = []
@@ -9,9 +13,13 @@ class DungeonMap:
         self.playerPosY = 0
         self.size = size_
 
+        print("Generating starting pos..")
         self.generate_starting_pos(start_position)
+        print("Generating rooms..")
         self.generate_rooms()
-        self.generate_exit()
+        #print("Generating exits..")
+        #self.generate_exit()
+
 
     def generate_rooms(self):
         for i in range(self.size):
@@ -38,16 +46,88 @@ class DungeonMap:
         room.list_of_treasure = []
 
     def generate_starting_pos(self, position):
+        print("Starting function..")
         if position is "NW":
+            print("If NW has been passed..")
             self.playerPosX = 0
             self.playerPosY = 0
+            print("Player pos is added")
         elif position is "NE":
-            self.playerPosX = self.size
+            self.playerPosX = self.size - 1
             self.playerPosY = 0
         elif position is "SW":
             self.playerPosX = 0
-            self.playerPosY = self.size
+            self.playerPosY = self.size - 1
         elif position is "SE":
-            self.playerPosX = self.size
-            self.playerPosY = self.size
+            self.playerPosX = self.size - 1
+            self.playerPosY = self.size - 1
+
+
+    def print_map(self):
+        os.system('cls')
+        for row in range(len(self.list_of_rooms)):
+            for element in range(len(self.list_of_rooms[row])):
+                if self.playerPosX == row and self.playerPosY == element:
+                    print("P", end=' ')
+                    continue
+                room = self.list_of_rooms[row][element]
+                #room = Room()
+                if room.visited_room:
+                    print("O", end=' ')
+                else:
+                    print("X", end=' ')
+                    # print(list_of_rooms[row][element], end = ' ')
+            print()
+
+
+    def move_player(self, direction):
+        print(self.playerPosX)
+        print(self.playerPosY)
+        time.sleep(1)
+        if direction == "w":
+            if self.playerPosX - 1 >= 0:
+                self.playerPosX -= 1
+        elif direction == "a":
+            if self.playerPosY - 1 >= 0:
+                self.playerPosY -= 1
+        elif direction == "s":
+            if self.playerPosX + 1 < self.size:
+                self.playerPosX += 1
+        elif direction == "d":
+            if self.playerPosY + 1 < self.size:
+                self.playerPosY += 1
+        self.visit_room()
+
+    def visit_room(self):
+        self.list_of_rooms[self.playerPosX][self.playerPosY].visited_room = True
+
+
+
+# test = DungeonMap(10, "NW")
+# test.print_map()
+# time.sleep(1)
+# test.move_player("w")
+# test.print_map()
+# test.move_player("s")
+# test.print_map()
+# test.move_player("s")
+# test.print_map()
+# test.move_player("a")
+# test.print_map()
+# test.move_player("s")
+# test.print_map()
+# test.move_player("s")
+# test.print_map()
+# test.move_player("s")
+# test.print_map()
+# test.move_player("d")
+# test.print_map()
+# test.move_player("d")
+# test.print_map()
+# test.move_player("d")
+# test.print_map()
+# test.move_player("w")
+# test.print_map()
+
+
 
