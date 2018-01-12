@@ -39,6 +39,3 @@ class Monster:
     def toString(self):
         print("Monster type: " + self.monster_type + " Initiative: "+ str(self.initiative) +
               " toughness: "+ str(self.toughness) + " attack: "+ str(self.attack)+ " agility: "+ str(self.agility))
-
-troll = Monster("Troll")
-print(troll.toString())

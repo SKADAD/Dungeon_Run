@@ -15,7 +15,7 @@ class Room:
         self.generate_monster()
 
     def generate_monster(self):
-
+                                    # The rooms are populated with monsters accoring to occurance percent
         list_of_monsters = []
         value1 = random.randrange(0, 4)
         if value1 == 0:
@@ -40,7 +40,7 @@ class Room:
         return list_of_monsters
 
     def generate_treasure(self):
-        list_of_treasure = []
+        list_of_treasure = []               # The placement of treasures are also calculated with correct randomness
 
         value1 = random.randrange(0, 99)
         if value1 < 40:
