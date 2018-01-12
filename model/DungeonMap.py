@@ -1,5 +1,5 @@
 import random
-import os,sys, time
+import os, sys, time
 sys.path.append('../')
 from model.Room import Room
 
@@ -53,14 +53,14 @@ class DungeonMap:
             self.playerPosY = 0
             print("Player pos is added")
         elif position is "NE":
-            self.playerPosX = self.size
+            self.playerPosX = self.size - 1
             self.playerPosY = 0
         elif position is "SW":
             self.playerPosX = 0
-            self.playerPosY = self.size
+            self.playerPosY = self.size - 1
         elif position is "SE":
-            self.playerPosX = self.size
-            self.playerPosY = self.size
+            self.playerPosX = self.size - 1
+            self.playerPosY = self.size - 1
 
 
     def print_map(self):
@@ -83,7 +83,7 @@ class DungeonMap:
     def move_player(self, direction):
         print(self.playerPosX)
         print(self.playerPosY)
-        time.sleep(5)
+        time.sleep(1)
         if direction == "w":
             if self.playerPosX - 1 >= 0:
                 self.playerPosX -= 1
@@ -96,13 +96,38 @@ class DungeonMap:
         elif direction == "d":
             if self.playerPosY + 1 <= self.size:
                 self.playerPosY += 1
+        self.visit_room()
 
+    def visit_room(self):
+        self.list_of_rooms[self.playerPosX][self.playerPosY].visited_room = True
 
 
 
 test = DungeonMap(10, "NW")
 test.print_map()
-time.sleep(2)
+time.sleep(1)
+test.move_player("w")
+test.print_map()
 test.move_player("s")
+test.print_map()
+test.move_player("s")
+test.print_map()
+test.move_player("a")
+test.print_map()
+test.move_player("s")
+test.print_map()
+test.move_player("s")
+test.print_map()
+test.move_player("s")
+test.print_map()
+test.move_player("d")
+test.print_map()
+test.move_player("d")
+test.print_map()
+test.move_player("d")
+test.print_map()
+test.move_player("w")
+test.print_map()
+
 
 
