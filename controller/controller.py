@@ -27,7 +27,7 @@ class AccountManager:
                 return
         except ValueError:
             print("Not a valid choice. You must enter 1 or 2 to continue.")
-        return False
+            self.start()
 
     # Switch / Options in first menu:
     def start_main_menu(self, choice):
@@ -40,22 +40,23 @@ class AccountManager:
 
     # Let the user create a new char:
     def menu_char_new(self):
-        choice = int(input("Enter character number:\n1. Knight\n2. Wizard\n3. Mage\n4. Thief\n"))
+        choice = int(input("Enter character number:\n1. Warrior\n2. Wizard\n3. Thief\n"))
         try:
-            if not (1 <= choice <= 4):
+            if not (1 <= choice <= 3):
                 raise ValueError()
             else:
                 if choice == 1:
-                    self.select_char_type_new = "Knight"
+                    self.select_char_type_new = "Warrior"
                 elif choice == 2:
                     self.select_char_type_new = "Wizard"
                 elif choice == 3:
-                    self.select_char_type_new = "Mage"
-                elif choice == 4:
                     self.select_char_type_new = "Thief"
                 self.clear_cmd()
                 self.character_new_name = input("Enter your characters name:\n")
-# TODO save character after created
+# TODO1 check if user name already exists
+# TODO2 save character after created
+                controller.s
+                s.load_character(TheUser)
                 self.menu_map_size()
                 return
         except ValueError:
@@ -78,26 +79,29 @@ class AccountManager:
         except ValueError:
             print("Not a valid number")
             self.menu_map_size()
+# TODO3 Request map to be created etc with stored variables
 
 
     def menu_player_position(self):
         self.clear_cmd()
         select_starting_pos_input = int(input("Enter starting position:\n1. North West\n2. North East\n3. South West\n4. South East\n"))
         try:
-        if select_starting_pos_input == 1:
-            self.select_starting_pos = "NW"
-            print("NW")
-        elif select_starting_pos_input == 2:
-            self.select_starting_pos = "NE"
-            print("NE")
-        elif select_starting_pos_input == 3:
-            self.select_starting_pos = "SW"
-            print("SW")
-        elif select_starting_pos_input == 4:
-            self.select_starting_pos = "SE"
-            print("SE")
-        else:
-            print("Not a valid input")
+            if select_starting_pos_input == 1:
+                self.select_starting_pos = "NW"
+                print("NW")
+            elif select_starting_pos_input == 2:
+                self.select_starting_pos = "NE"
+                print("NE")
+            elif select_starting_pos_input == 3:
+                self.select_starting_pos = "SW"
+                print("SW")
+            elif select_starting_pos_input == 4:
+                self.select_starting_pos = "SE"
+                print("SE")
+            else:
+                print("Not a valid input")
+        except:
+            print("Wrong input")
 
         print(self.character_new_name)
         print(self.select_char_type_new)
@@ -106,7 +110,8 @@ class AccountManager:
 
     # Load existing character
     def menu_char_existing(self):
-        # TODO this
+# TODO Look if char exists and if so load:
+
         self.clear_cmd()
         print("Choice 2, trying to load existing char..")
 
