@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../')
 from model.DungeonMap import DungeonMap
 
 dungeon = DungeonMap(8, "NE")
