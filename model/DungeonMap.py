@@ -81,8 +81,8 @@ class DungeonMap:
 
 
     def move_player(self, direction):
-        print(self.playerPosX)
-        print(self.playerPosY)
+        #print(self.playerPosX)
+        #print(self.playerPosY)
         time.sleep(1)
         if direction == "w":
             if self.playerPosX - 1 >= 0:
@@ -103,31 +103,31 @@ class DungeonMap:
 
 
 
-# test = DungeonMap(10, "NW")
-# test.print_map()
-# time.sleep(1)
-# test.move_player("w")
-# test.print_map()
-# test.move_player("s")
-# test.print_map()
-# test.move_player("s")
-# test.print_map()
-# test.move_player("a")
-# test.print_map()
-# test.move_player("s")
-# test.print_map()
-# test.move_player("s")
-# test.print_map()
-# test.move_player("s")
-# test.print_map()
-# test.move_player("d")
-# test.print_map()
-# test.move_player("d")
-# test.print_map()
-# test.move_player("d")
-# test.print_map()
-# test.move_player("w")
-# test.print_map()
+test = DungeonMap(10, "NW")
+test.print_map()
+time.sleep(1)
+test.move_player("w")
+test.print_map()
+test.move_player("s")
+test.print_map()
+test.move_player("s")
+test.print_map()
+test.move_player("a")
+test.print_map()
+test.move_player("s")
+test.print_map()
+test.move_player("s")
+test.print_map()
+test.move_player("s")
+test.print_map()
+test.move_player("d")
+test.print_map()
+test.move_player("d")
+test.print_map()
+test.move_player("d")
+test.print_map()
+test.move_player("w")
+test.print_map()
 
 
 
