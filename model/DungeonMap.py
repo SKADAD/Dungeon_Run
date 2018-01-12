@@ -2,6 +2,7 @@ import random
 import os, sys, time
 sys.path.append('../')
 from model.Room import Room
+from Controller.Controller import *
 
 class DungeonMap:
 
@@ -64,20 +65,24 @@ class DungeonMap:
 
 
     def print_map(self):
-        os.system('cls')
+        string_to_print = ""
+
         for row in range(len(self.list_of_rooms)):
             for element in range(len(self.list_of_rooms[row])):
                 if self.playerPosX == row and self.playerPosY == element:
-                    print("P", end=' ')
+                    string_to_print += "P "
                     continue
                 room = self.list_of_rooms[row][element]
                 #room = Room()
                 if room.visited_room:
-                    print("O", end=' ')
+                    string_to_print += "O "
                 else:
-                    print("X", end=' ')
-                    # print(list_of_rooms[row][element], end = ' ')
-            print()
+                    string_to_print += "X "
+            string_to_print += "\n"
+        toPrint(string_to_print)
+
+
+
 
 
     def move_player(self, direction):
