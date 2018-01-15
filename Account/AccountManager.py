@@ -1,4 +1,5 @@
-from Player.Player import Player
+from model.Player import Player
+
 
 class AccountManager:
 
@@ -19,4 +20,3 @@ class AccountManager:
             if character.name == name:
                 return True
         return False
-
