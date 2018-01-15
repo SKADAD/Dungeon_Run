@@ -7,7 +7,7 @@ class CombatController:
 
     def __init__(self, controller, list_of_monsters):
         self.controller = controller
-        self.player = controller.player
+        self.player = controller.character
         self.order_of_attack = []
         self.list_of_monsters = list_of_monsters
 

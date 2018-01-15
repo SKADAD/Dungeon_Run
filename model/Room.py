@@ -7,12 +7,12 @@ class Room:
 
         #self.mapPosX = x
         #self.mapPosY = y
-        self.list_of_monsters = []
-        self.list_of_treasures = []
+        self.list_of_monsters = self.generate_monster()
+        self.list_of_treasures = self.generate_treasure()
         self.visited_room = False
         self.is_exit = False
-        self.generate_treasure()
-        self.generate_monster()
+        # self.generate_treasure()
+        # self.generate_monster()
 
     def generate_monster(self):
                                     # The rooms are populated with monsters accoring to occurance percent
