@@ -96,38 +96,6 @@ class DungeonMap:
         elif direction == "d":
             if self.playerPosY + 1 < self.size:
                 self.playerPosY += 1
-        self.visit_room()
-
-    def visit_room(self):
-        self.list_of_rooms[self.playerPosX][self.playerPosY].visited_room = True
-
-
-
-test = DungeonMap(10, "NW")
-test.print_map()
-time.sleep(1)
-test.move_player("w")
-test.print_map()
-test.move_player("s")
-test.print_map()
-test.move_player("s")
-test.print_map()
-test.move_player("a")
-test.print_map()
-test.move_player("s")
-test.print_map()
-test.move_player("s")
-test.print_map()
-test.move_player("s")
-test.print_map()
-test.move_player("d")
-test.print_map()
-test.move_player("d")
-test.print_map()
-test.move_player("d")
-test.print_map()
-test.move_player("w")
-test.print_map()
-
-
-
+               
+    def get_player_room(self):
+        return self.list_of_rooms[self.playerPosX][self.playerPosY]
