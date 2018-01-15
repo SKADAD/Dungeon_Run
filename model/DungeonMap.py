@@ -12,6 +12,7 @@ class DungeonMap:
         self.playerPosX = 0
         self.playerPosY = 0
         self.size = size_
+        self.last_position
 
         print("Generating starting pos..")
         self.generate_starting_pos(start_position)
@@ -83,6 +84,7 @@ class DungeonMap:
     def move_player(self, direction):
         #print(self.playerPosX)
         #print(self.playerPosY)
+        self.last_position = self.list_of_rooms[self.playerPosX][self.playerPosY]
         time.sleep(1)
         if direction == "w":
             if self.playerPosX - 1 >= 0:
