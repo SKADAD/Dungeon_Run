@@ -81,8 +81,8 @@ class DungeonMap:
 
 
     def move_player(self, direction):
-        print(self.playerPosX)
-        print(self.playerPosY)
+        #print(self.playerPosX)
+        #print(self.playerPosY)
         time.sleep(1)
         if direction == "w":
             if self.playerPosX - 1 >= 0:
@@ -96,10 +96,6 @@ class DungeonMap:
         elif direction == "d":
             if self.playerPosY + 1 < self.size:
                 self.playerPosY += 1
-        room = self.get_player_room()
-        room.visited_room = True
-        return room
-
+               
     def get_player_room(self):
         return self.list_of_rooms[self.playerPosX][self.playerPosY]
-

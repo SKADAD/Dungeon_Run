@@ -1,3 +1,4 @@
+
 class Monster:
 
     def __init__(self, monster_type):
@@ -34,3 +35,7 @@ class Monster:
             self.toughness = 4
             self.attack = 7
             self.agility = 2
+
+    def toString(self):
+        print("Monster type: " + self.monster_type + " Initiative: "+ str(self.initiative) +
+              " toughness: "+ str(self.toughness) + " attack: "+ str(self.attack)+ " agility: "+ str(self.agility))
