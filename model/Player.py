@@ -2,6 +2,7 @@ class Player:
 
     def __init__(self, name, characterClass ):
         self.name = name
+        self.characterClass = characterClass
         self.initiative = 0
         self.durability = 0
         self.attack = 0
@@ -36,7 +37,9 @@ class Player:
     def toString(self):
         return "|--------------|" + "\n"\
                "|Character Name|" + "\n" +\
-               "|    " + self.name + "     |" + "\n"+ \
+               "|" + "t" + self.name + "|" + "\n"+ \
+               "|Character class|" + "\n" + \
+               "|" + "t" + self.characterClass + "|" + "\n" + \
                "|    STATS     | " +"\n" \
                "| initiative: " + str(self.initiative) + "|"+"\n"+ \
                "| durability: " + str(self.durability) + "|"+"\n" + \
