@@ -3,37 +3,42 @@ import model.DungeonMap
 
 
 class AccountManager:
-    # This global variable remembers the users selected number if choice_validate confirms True:
-    global validated_user_input
 
     def __init__(self):
         # self.character() # TODO
         self.character_hero = "Hero Type"
-        self.character_name = "Name"
+        self.character_name = "Nam!e"
         self.starting_pos = "NW"
         self.size_of_map = 1
-        self.running = True
 
-    # First game menu and choices, validates input and finally calls for the next function:
+    # First game menu and choices, validates input and finally calls for the next function
     def start_menu(self):
-        global user_input_number
+        # Number of choices in the menu
         max_value_for_menu = 2
+        # Clears the terminal:
         clear_cmd()
         print("Enter choice:\n 1. New Character \n 2. Existing Character\n")
+        # Returns true if choice is valid
         choice = choice_validate_int(max_value_for_menu)
         if not choice:
+            # Returns to start of this menu
             self.start_menu()
+        # If the return is valid
         elif choice:
+            # If user selected 1
             if user_input_number == 1:
+                # Sends the user to menu create new char
                 self.menu_char_new()
+            # If user selected 2
             elif user_input_number == 2:
+                # Sends the user to menu load existing
                 self.menu_char_existing()
 
     # Create new character intro and finally calls new player name
     def menu_char_new(self):
         clear_cmd()
         max_value_of_menu = 3
-        print("Choose hero by number:\n1. Warrior\n2. Wizard\n3. Thief\n")
+        print("Choose hero by number:\n 1. Warrior\n 2. Wizard\n 3. Thief\n")
         choice = choice_validate_int(max_value_of_menu)
         if not choice:
             print("Invalid choice")
@@ -52,7 +57,7 @@ class AccountManager:
         else:
             print("Unexpected..")
 
-    # Create new name for new character and starts map:
+    # Create new name for new character and starts map
     def menu_new_player_name(self):
         choice = str(input("Enter a character name:\n"))
         # TODO check if user name already exists
@@ -61,11 +66,11 @@ class AccountManager:
         print("Your new name is: " + self.character_name)
         self.menu_map_size()
 
-    # User selects map size and set position function starts:
+    # User selects map size and set position function starts
     def menu_map_size(self):
         clear_cmd()
         max_value_of_menu = 3
-        print("Select map size:\n1. 16 rooms\n2. 25 rooms \n3. 64 rooms\n")
+        print("Select map size:\n 1. 16 rooms\n 2. 25 rooms \n 3. 64 rooms\n")
         choice = choice_validate_int(max_value_of_menu)
         if not choice:
             clear_cmd()
@@ -85,7 +90,7 @@ class AccountManager:
     def menu_player_position(self):
         clear_cmd()
         max_value_of_menu = 4
-        print("Enter starting position:\n1. North West\n2. North East\n3. South West\n4. South East\n")
+        print("Enter starting position:\n 1. North West\n 2. North East\n 3. South West\n 4. South East\n")
         choice = choice_validate_int(max_value_of_menu)
         if not choice:
             self.menu_player_position()
@@ -109,8 +114,7 @@ class AccountManager:
     def present_result(self):
         print("Name: " + self.character_name)
         print("Hero Class: " + self.character_hero)
-        sizeofmap = str(self.size_of_map * self.size_of_map)
-        print("Map Total Rooms: " + sizeofmap)
+        print("Map Total Rooms: " + str(self.size_of_map * self.size_of_map))
         print("Map starting position: " + self.starting_pos)
 
     # Load existing character
@@ -120,7 +124,7 @@ class AccountManager:
         print("Choice 2, trying to load existing char..")
 
 
-# Clear CLI / GUI from lines when needed:
+# Clear CLI / GUI from lines when needed
 def clear_cmd():
     try:
         print("\n\n\n\n")
@@ -133,14 +137,15 @@ def clear_cmd():
 
 # Validates the users input when called
 def choice_validate_int(highest_value_in_menu):
+    # This global variable remembers the users selected number for menu if choice_validate first confirms True
     global user_input_number
     try:
         user_choice = int(input(""))
-        # Menu choices that can be selected is from 1 up to or as <number defined in the call to this function>
+        # Choices in a menu is at minimum 1 and up to or as <number defined in the call to this function>
         if not (1 <= user_choice <= highest_value_in_menu):
             raise ValueError()
         else:
-            # When True remembers the choice (int)
+            # Else remember the number chosen (int)
             user_input_number = user_choice
             return True
     except ValueError:
