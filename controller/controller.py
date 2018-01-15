@@ -1,4 +1,6 @@
 from model.DungeonMap import *
+from model.Player import *
+
 
 class Controller:
     dungeonMap = DungeonMap
@@ -6,7 +8,7 @@ class Controller:
     def __init__(self):
         # self.character() # TODO
         self.character_hero = "Hero Type"
-        self.character_name = "Nam!e"
+        self.character_name = "Name"
         self.starting_pos = "NW"
         self.size_of_map = 1
 
@@ -59,8 +61,14 @@ class Controller:
     # Create new name for new character and starts map
     def menu_new_player_name(self):
         choice = str(input("Enter a character name:\n"))
+        self.character_name = choice
         # TODO check if user name already exists
         # TODO save character to account
+        playerObj = Player(self.character_name, self.character_hero)
+        ojb = Player.toString(playerObj)
+        print("BELOW HERE")
+        print(ojb)
+
         self.character_name = choice
         print("Your new name is: " + self.character_name)
         self.menu_map_size()
@@ -125,10 +133,11 @@ class Controller:
 
 # Clear CLI / GUI from lines when needed
 def clear_cmd():
+# Import check OS
     try:
         print("\n\n\n\n")
     # disabled (debug mode on)
-    # os.system('CLR')
+    # os.system('CLS')
     # os.system('clear')
     except:
         print("Tried to clear CLI but failed")
@@ -149,17 +158,19 @@ def choice_validate_int(highest_value_in_menu):
             return True
     except ValueError:
         return False
-      
-    def toPrint(string_to_print):
-        os.system('cls')
-        print(string_to_print)
 
 
-    def player_movement(direction):
-        if direction == "w" or "a" or "s" or "d":
-            DungeonMap.move_player(direction)
-        else:
-            print("fool, wrong step")
+def to_print(string_to_print):
+    clear_cmd()
+    print(string_to_print)
+
+
+def player_movement(direction):
+    if direction == "w" or "a" or "s" or "d":
+        DungeonMap.move_player(direction)
+    else:
+        print("fool, wrong step")
+
 
 start = Controller()
 start.start_menu()
