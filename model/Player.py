@@ -35,14 +35,13 @@ class Player:
 
 
     def toString(self):
-        return "|--------------|" + "\n"\
-               "|Character Name|" + "\n" +\
-               "|" + "t" + self.name + "|" + "\n"+ \
-               "|Character class|" + "\n" + \
-               "|" + "t" + self.characterClass + "|" + "\n" + \
-               "|    STATS     | " +"\n" \
-               "| initiative: " + str(self.initiative) + "|"+"\n"+ \
-               "| durability: " + str(self.durability) + "|"+"\n" + \
-               "| Attack:     " + str(self.attack) + "|" +"\n"+ \
-               "| Agility:    " + str(self.agility) + "|"
+        return "|" + "\t" + "Character Name" + "\t" + "|" + "\n" +\
+               "|" + "\t" + self.name + "\t"  + "\t" + "\t" + "|" + "\n"+ \
+               "|" + "Character class"+ "\t" + "|" + "\n" + \
+               "|" + "\t" + self.characterClass + "\t" + "\t" + "\t" + "|" + "\n" + \
+               "|" + "\t" + "STATS" + "\t" + "\t" + "\t" + "|" +"\n" \
+               "|" + "Initiative:" + str(self.initiative) + "\t" + "\t" "|"+"\n"+ \
+               "|" + "Durability:" + str(self.durability) + "\t" + "\t" "|"+"\n" + \
+               "|" + "Attack:" + str(self.attack) + "\t"+ "\t"+ "\t" "|" +"\n"+ \
+               "|" + "Agility:" + str(self.agility) + "\t"+ "\t"+ "\t" + "|"
 
