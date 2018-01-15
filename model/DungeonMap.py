@@ -79,14 +79,10 @@ class DungeonMap:
                     string_to_print += "X "
             string_to_print += "\n"
         return string_to_print
-
-
-
-
-
+      
     def move_player(self, direction):
-        print(self.playerPosX)
-        print(self.playerPosY)
+        #print(self.playerPosX)
+        #print(self.playerPosY)
         time.sleep(1)
         if direction == "w":
             if self.playerPosX - 1 >= 0:
@@ -105,7 +101,5 @@ class DungeonMap:
         self.print_map()
         return room
 
-
     def get_player_room(self):
         return self.list_of_rooms[self.playerPosX][self.playerPosY]
-
