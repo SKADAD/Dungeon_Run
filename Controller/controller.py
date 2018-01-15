@@ -3,10 +3,6 @@ from model.DungeonMap import *
 
 class Controller:
 
-    def __init__(self):
-
-
-    dungeonMap = DungeonMap()
 
     def toPrint(string_to_print):
         os.system('cls')
@@ -18,5 +14,4 @@ class Controller:
             dungeonMap.move_player(direction)
         else:
             print("fool, wrong step")
-
-    toPrint(dungeonMap.print_map())
+            Controller.toPrint(DungeonMap.print_map())
