@@ -10,7 +10,7 @@ class Player:
         self.warrior = False
         self.wizard = False
         self.thief = False
-
+        self.is_alive = True
 
         if characterClass == "Warrior":
             self.initiative = 5
@@ -19,20 +19,19 @@ class Player:
             self.agility = 4
             self.warrior = True
 
-        elif  characterClass == "Wizard":
+        elif characterClass == "Wizard":
             self.initiative = 6
             self.durability = 4
             self.attack = 9
             self.agility = 5
             self.wizard = True
 
-        elif  characterClass == "Thief":
+        elif characterClass == "Thief":
             self.initiative = 7
             self.durability = 5
             self.attack = 5
             self.agility = 7
             self.thief = True
-
 
     def toString(self):
         return "|" + "\t" + "Character Name" + "\t" + "|" + "\n" +\
