@@ -6,7 +6,7 @@ class Controller:
     dungeonMap = DungeonMap
 
     def __init__(self):
-        # self.character() # TODO
+        self.character = ""  # Object of character
         self.character_hero = "Hero Type"
         self.character_name = "Name"
         self.starting_pos = "NW"
@@ -60,17 +60,16 @@ class Controller:
 
     # Create new name for new character and starts map
     def menu_new_player_name(self):
-        choice = str(input("Enter a character name:\n"))
-        self.character_name = choice
-        # TODO check if user name already exists
-        # TODO save character to account
-        playerObj = Player(self.character_name, self.character_hero)
-        ojb = Player.toString(playerObj)
-        print("BELOW HERE")
-        print(ojb)
+        self.character_name = str(input("Enter a character name:\n"))
+# TODO check if user name already exists
+        # If user doesnt exist already, initialize the player to save it:
+        newCharacter = Player(self.character_name, self.character_hero)
+        print(newCharacter.toString())
+        print(newCharacter)
+# TODO save character to account
 
-        self.character_name = choice
         print("Your new name is: " + self.character_name)
+        # Request next function, set map size
         self.menu_map_size()
 
     # User selects map size and set position function starts
@@ -113,11 +112,14 @@ class Controller:
             else:
                 print("Unexpected, selecting default:" + self.starting_pos)
             self.present_result()
-        # TODO send character data from here
+
+
+# TODO send character data from here
+
         else:
             print("Unexpected2")
 
-    # Prints the choices made in menu:
+    # Prints the choices made in menu, temporary fix:
     def present_result(self):
         print("Name: " + self.character_name)
         print("Hero Class: " + self.character_hero)
@@ -126,14 +128,33 @@ class Controller:
 
     # Load existing character
     def menu_char_existing(self):
-        # TODO Look if char exists and if so load:
+
+# TODO Look if char exists and if so load:
+
         clear_cmd()
         print("Choice 2, trying to load existing char..")
+
+    def create_adventure(self, ):
+        print("hi")
+
+
+    def to_print(self, string_to_print):
+        clear_cmd()
+        print(string_to_print)
+
+    def quit_game(self):
+        raise SystemExit
+
+    def player_movement(self, direction):
+        if direction == "w" or "a" or "s" or "d":
+            DungeonMap.move_player(direction)
+        else:
+            print("fool, wrong step")
 
 
 # Clear CLI / GUI from lines when needed
 def clear_cmd():
-# Import check OS
+    # Import check type of OS win/lin
     try:
         print("\n\n\n\n")
     # disabled (debug mode on)
@@ -158,18 +179,6 @@ def choice_validate_int(highest_value_in_menu):
             return True
     except ValueError:
         return False
-
-
-def to_print(string_to_print):
-    clear_cmd()
-    print(string_to_print)
-
-
-def player_movement(direction):
-    if direction == "w" or "a" or "s" or "d":
-        DungeonMap.move_player(direction)
-    else:
-        print("fool, wrong step")
 
 
 start = Controller()
