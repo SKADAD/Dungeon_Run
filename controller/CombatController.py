@@ -34,6 +34,8 @@ class CombatController:
             monster_target.durability -= 1
             if monster_target.durability <= 0:
                 print("Enemy down")
+        else:
+            print("attack missed")
 
     def monster_attack(self, monster):
         monster_attack = self.roll_dice(monster.attack)
@@ -42,3 +44,5 @@ class CombatController:
             self.player.durability -= 1
             if self.player.durability <= 0:
                 print("game over")
+        else:
+            print("attack missed")
