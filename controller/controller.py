@@ -1,8 +1,7 @@
-import model.DungeonMap
-# import os
+from model.DungeonMap import *
 
-
-class AccountManager:
+class Controller:
+    dungeonMap = DungeonMap
 
     def __init__(self):
         # self.character() # TODO
@@ -150,7 +149,17 @@ def choice_validate_int(highest_value_in_menu):
             return True
     except ValueError:
         return False
+      
+    def toPrint(string_to_print):
+        os.system('cls')
+        print(string_to_print)
 
 
-start = AccountManager()
+    def player_movement(direction):
+        if direction == "w" or "a" or "s" or "d":
+            DungeonMap.move_player(direction)
+        else:
+            print("fool, wrong step")
+
+start = Controller()
 start.start_menu()

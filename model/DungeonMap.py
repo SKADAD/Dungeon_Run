@@ -6,6 +6,7 @@ from model.Room import Room
 class DungeonMap:
 
     room = Room
+    string_to_print = ""
 
     def __init__(self, size_, start_position):
         self.list_of_rooms = []
@@ -64,22 +65,21 @@ class DungeonMap:
 
 
     def print_map(self):
-        os.system('cls')
+        string_to_print = ""
         for row in range(len(self.list_of_rooms)):
             for element in range(len(self.list_of_rooms[row])):
                 if self.playerPosX == row and self.playerPosY == element:
-                    print("P", end=' ')
+                    string_to_print += "P "
                     continue
                 room = self.list_of_rooms[row][element]
                 #room = Room()
                 if room.visited_room:
-                    print("O", end=' ')
+                    string_to_print += "O "
                 else:
-                    print("X", end=' ')
-                    # print(list_of_rooms[row][element], end = ' ')
-            print()
-
-
+                    string_to_print += "X "
+            string_to_print += "\n"
+        return string_to_print
+      
     def move_player(self, direction):
         #print(self.playerPosX)
         #print(self.playerPosY)
@@ -96,6 +96,10 @@ class DungeonMap:
         elif direction == "d":
             if self.playerPosY + 1 < self.size:
                 self.playerPosY += 1
-               
+        room = self.get_player_room()
+        room.visited_room = True
+        self.print_map()
+        return room
+
     def get_player_room(self):
         return self.list_of_rooms[self.playerPosX][self.playerPosY]
