@@ -6,6 +6,7 @@ from model.Room import Room
 class DungeonMap:
 
     room = Room
+    string_to_print = ""
 
     def __init__(self, size_, start_position):
         self.list_of_rooms = []
@@ -19,8 +20,8 @@ class DungeonMap:
         self.generate_starting_pos(start_position)
         print("Generating rooms..")
         self.generate_rooms()
-        #print("Generating exits..")
-        #self.generate_exit()
+        print("Generating exits..")
+        self.generate_exit()
 
 
     def generate_rooms(self):
@@ -29,9 +30,10 @@ class DungeonMap:
             for j in range(self.size):
                 room = Room()
                 # If the position is the same as the starting position, set no monsters and no treasure
-                if i == self.playerPosX and j == self.playerPosY:
+                if i == self.playerPosY and j == self.playerPosX:
                     room.list_of_monsters = []
                     room.list_of_treasure = []
+                    room.visited_room = True
                 self.list_of_rooms[i].append(room)
 
     def generate_exit(self):
@@ -39,21 +41,20 @@ class DungeonMap:
         while True:
             int_x = random.randrange(0, self.size)
             int_y = random.randrange(0, self.size)
-            if not self.playerPosX == int_x and self.playerPosY == int_x:
+            if not self.playerPosX == int_x and not self.playerPosY == int_x:
                 break
 
         room = self.list_of_rooms[int_x][int_y]
         room.is_exit = True
         room.list_of_monsters = []
         room.list_of_treasure = []
+        print(str(int_x) + " " + str(int_y))
 
     def generate_starting_pos(self, position):
         print("Starting function..")
         if position is "NW":
-            print("If NW has been passed..")
             self.playerPosX = 0
             self.playerPosY = 0
-            print("Player pos is added")
         elif position is "NE":
             self.playerPosX = self.size - 1
             self.playerPosY = 0
@@ -64,43 +65,49 @@ class DungeonMap:
             self.playerPosX = self.size - 1
             self.playerPosY = self.size - 1
 
-
     def print_map(self):
-        os.system('cls')
+        string_to_print = ""
         for row in range(len(self.list_of_rooms)):
             for element in range(len(self.list_of_rooms[row])):
-                if self.playerPosX == row and self.playerPosY == element:
-                    print("P", end=' ')
+                if self.playerPosX == element and self.playerPosY == row:
+                    string_to_print += "P "
                     continue
                 room = self.list_of_rooms[row][element]
-                #room = Room()
-                if room.visited_room:
-                    print("O", end=' ')
+
+                if room.is_exit and room.visited_room:
+                    string_to_print += "E "
+                elif room.visited_room:
+                    string_to_print += "O "
                 else:
-                    print("X", end=' ')
-                    # print(list_of_rooms[row][element], end = ' ')
-            print()
-
-
+                    string_to_print += "X "
+            string_to_print += "\n"
+        return string_to_print
+      
     def move_player(self, direction):
-        #print(self.playerPosX)
-        #print(self.playerPosY)
+
         self.last_position = tuple(self.list_of_rooms[self.playerPosX][self.playerPosY])
+
         time.sleep(1)
         if direction == "w":
-            if self.playerPosX - 1 >= 0:
-                self.playerPosX -= 1
-        elif direction == "a":
             if self.playerPosY - 1 >= 0:
                 self.playerPosY -= 1
+        elif direction == "a":
+            if self.playerPosX - 1 >= 0:
+                self.playerPosX -= 1
         elif direction == "s":
-            if self.playerPosX + 1 < self.size:
-                self.playerPosX += 1
-        elif direction == "d":
             if self.playerPosY + 1 < self.size:
                 self.playerPosY += 1
 
         self.current_position = tuple(self.list_of_rooms[self.playerPosX][self.playerPosY])
                
+
+        elif direction == "d":
+            if self.playerPosX + 1 < self.size:
+                self.playerPosX += 1
+        room = self.get_player_room()
+        room.visited_room = True
+        self.print_map()
+        return room
+
     def get_player_room(self):
-        return self.list_of_rooms[self.playerPosX][self.playerPosY]
+        return self.list_of_rooms[self.playerPosY][self.playerPosX]
