@@ -90,8 +90,8 @@ class CombatController:
         flee_var = self.player.agility * 10
         dice_roll = random.randrange(0, 100)
         if dice_roll <= flee_var:
-            self.controller.dungeon_map.playerposX = self.controller.dungeon_map.last_position[0]
-            self.controller.dungeon_map.playerposY = self.controller.dungeon_map.last_position[1]
+            self.controller.dungeon_map.playerPosX = self.controller.dungeon_map.last_position[0]
+            self.controller.dungeon_map.playerPosY = self.controller.dungeon_map.last_position[1]
             return True
         else:
             return False
