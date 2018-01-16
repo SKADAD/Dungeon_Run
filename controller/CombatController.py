@@ -1,5 +1,4 @@
 import random
-from model import DungeonMap
 
 
 class CombatController:
@@ -87,15 +86,14 @@ class CombatController:
         else:
             print("attack missed")
 
-    def player_flee(self):
-
+    def flee(self):
         flee_var = self.player.agility * 10
-        value1 = random.randrange(0, 100)
-        if (value1 < flee_var):
-            print("Escape successful")
-            last_pos = DungeonMap.last_position
-            # update player position
+        dice_roll = random.randrange(0, 100)
+        if dice_roll <= flee_var:
+            self.controller.dungeon_map.playerposX = self.controller.dungeon_map.last_position[0]
+            self.controller.dungeon_map.playerposY = self.controller.dungeon_map.last_position[1]
+            return True
         else:
-            print("Escape not successful")
+            return False
 
 
