@@ -20,3 +20,9 @@ class AccountManager:
             if character.name == name:
                 return character
         return False
+
+    def get_list_of_names(self):
+        list_of_names = []
+        for character in self.list_of_characters:
+            list_of_names.append(character.name)
+        return list_of_names

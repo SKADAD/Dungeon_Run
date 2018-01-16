@@ -1,4 +1,4 @@
-from Account.AccountManager import AccountManager
+from model.AccountManager import AccountManager
 
 am = AccountManager()
 

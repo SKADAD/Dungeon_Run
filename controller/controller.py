@@ -1,6 +1,6 @@
-from Account.AccountManager import *
+from controller.CombatController import CombatController
+from model.AccountManager import *
 from model.DungeonMap import *
-# from controller import *
 
 
 class Controller:
@@ -56,6 +56,7 @@ class Controller:
             self.character_name = input("\nCharacter name:\n")
             if self.character_name == "":
                 print("You must enter a name")
+                continue
             elif self.account_manager.create_new_character(self.character_name, self.character_hero):
                 clear_cmd()
                 print("\nCharacter " + self.character_name + ", The " + self.character_hero + " was born!\n")
@@ -63,17 +64,6 @@ class Controller:
                 break
             else:
                 print("Character already exists, try another name")
-
-# # TODO check if user name already exists
-#         # If user doesnt exist already, initialize the player to save it:
-#         newCharacter = Player(self.character_name, self.character_hero)
-#         print(newCharacter.toString())
-#         print(newCharacter)
-# # TODO save character to account
-#
-#         print("Your new name is: " + self.character_name)
-#         # Request next function, set map size
-#         self.menu_map_size()
 
     # User selects map size and set position function starts
     def menu_map_size(self):
@@ -130,28 +120,34 @@ class Controller:
                 self.player_movement()
 
     # Load existing character
-    def menu_char_existing(self):
-        # TODO : Print list of chars from here instead:
-        while True:
-            print("\nYour characters:")
-            self.account_manager.get_list_of_characters()
-            name = input("\nSelect character by entering name, or 0 to return to main menu: \n")
-            if name == "0":
-                self.start_menu()
-                break
-            character = self.account_manager.get_character_by_name(name)
-            if character:
-                self.character = character
-                clear_cmd()
-                print("Character " + name + " loaded.")
-                self.menu_map_size()
-                break
-            else:
-                print("We couldn't find: " + name + ", please try again!")
+    # def menu_char_existing(self):
+    #     # TODO : Print list of chars from here instead:
+    #     while True:
+    #         print("\nYour characters:")
+    #         # self.account_manager.get_list_of_characters() # commented out until correct method exists
+    #         name = input("\nSelect character by entering name, or 0 to return to main menu: \n")
+    #         if name == "0":
+    #             self.start_menu()
+    #             break
+    #         character = self.account_manager.get_character_by_name(name)
+    #         if character:
+    #             self.character = character
+    #             clear_cmd()
+    #             print("Character " + name + " loaded.")
+    #             self.menu_map_size()
+    #             break
+    #         else:
+    #             print("We couldn't find: " + name + ", please try again!")
 
-# # TODO Look if char exists and if so load:
-#         clear_cmd()
-#         print("Choice 2, trying to load existing char..")
+    def menu_char_existing(self):
+        print("\nYour characters:")
+        choice = validate(self.account_manager.get_list_of_names())
+        if choice == 0:
+            self.start_menu()
+        else:
+            self.character = self.account_manager.list_of_characters[choice - 1]
+            print("Character " + self.character.name + " loaded.")
+            self.menu_map_size()
 
     def create_adventure(self, ):
         print("hi")
@@ -175,7 +171,8 @@ class Controller:
 
     def room_handler(self, room):
         # Kolla om det finns en utgång. Ge isf valet att avsluta.
-        # Kolla ifall det finns några monster i rummet. Isf starta combat. Lever spelaren så får den skatterna som finns i rummet.
+        # Kolla ifall det finns några monster i rummet. Isf starta combat.
+        # Lever spelaren så får den skatterna som finns i rummet.
 
         if room.is_exit:
             while True:
@@ -190,10 +187,9 @@ class Controller:
                     print("Must choose yes or no!")
                     continue
 
-
         if len(room.list_of_monsters) > 0:
             print("The room is populated with monsters! Defend yourself!")
-            combat = CombatController(self.character, room.list_of_monsters)
+            combat = CombatController(self, room.list_of_monsters)
             combat.start()
             if not self.character.is_alive:
                 self.handle_death()
@@ -215,7 +211,7 @@ def clear_cmd():
             print('\n' * 10)
         else:
             print('\n' * 10)
-    except:
+    except Exception:
         print("Clear failed")
 
 
@@ -238,6 +234,6 @@ def validate(list_of_choices):
             continue
 
 
-start = Controller()
-clear_cmd()
-start.start_menu()
+# start = Controller()
+# clear_cmd()
+# start.start_menu()

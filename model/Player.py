@@ -11,6 +11,7 @@ class Player:
         self.wizard = False
         self.thief = False
         self.is_alive = True
+        self.amount_of_gold = 0
 
         if characterClass == "Warrior":
             self.initiative = 5

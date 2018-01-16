@@ -3,10 +3,8 @@ import os, sys, time
 sys.path.append('../')
 from model.Room import Room
 
-class DungeonMap:
 
-    room = Room
-    string_to_print = ""
+class DungeonMap:
 
     def __init__(self, size_, start_position):
         self.list_of_rooms = []
@@ -14,7 +12,6 @@ class DungeonMap:
         self.playerPosY = 0
         self.size = size_
         self.last_position = () # last position as a tuple
-        self.current_position = ()
 
         print("Generating starting pos..")
         self.generate_starting_pos(start_position)
@@ -22,7 +19,6 @@ class DungeonMap:
         self.generate_rooms()
         print("Generating exits..")
         self.generate_exit()
-
 
     def generate_rooms(self):
         for i in range(self.size):
@@ -41,14 +37,13 @@ class DungeonMap:
         while True:
             int_x = random.randrange(0, self.size)
             int_y = random.randrange(0, self.size)
-            if not self.playerPosX == int_x and not self.playerPosY == int_x:
+            if not self.playerPosX == int_x and not self.playerPosY == int_y:
                 break
 
-        room = self.list_of_rooms[int_x][int_y]
+        room = self.list_of_rooms[int_y][int_x]
         room.is_exit = True
         room.list_of_monsters = []
         room.list_of_treasure = []
-        print(str(int_x) + " " + str(int_y))
 
     def generate_starting_pos(self, position):
         print("Starting function..")
@@ -85,9 +80,9 @@ class DungeonMap:
       
     def move_player(self, direction):
 
-        self.last_position = tuple(self.list_of_rooms[self.playerPosX][self.playerPosY])
+        # self.last_position = tuple(self.list_of_rooms[self.playerPosX][self.playerPosY])
+        self.last_position = (self.playerPosY, self.playerPosX)
 
-        time.sleep(1)
         if direction == "w":
             if self.playerPosY - 1 >= 0:
                 self.playerPosY -= 1
@@ -100,10 +95,9 @@ class DungeonMap:
         elif direction == "d":
             if self.playerPosX + 1 < self.size:
                 self.playerPosX += 1
+
         room = self.get_player_room()
         room.visited_room = True
-        self.print_map()
-        self.current_position = tuple(self.list_of_rooms[self.playerPosX][self.playerPosY])
 
         return room
 
