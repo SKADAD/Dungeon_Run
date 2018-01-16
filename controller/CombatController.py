@@ -1,7 +1,5 @@
 import random
 
-from model.Player import Player
-
 
 class CombatController:
 
@@ -50,8 +48,10 @@ class CombatController:
         # Skapa en dictionary med varje deltagare och deras initiativ för striden.
         # Skapa en sorterad lista med det rullade initiativet som sorteringsvärde. Reverse=True ger högst först.
 
+
         dict_of_initiative = {self.player: self.roll_dice(self.player.initiative)}
         for monster in self.list_of_monsters:
+
             dict_of_initiative[monster] = self.roll_dice(monster.initiative)
             print(monster.monster_type)
 
@@ -65,3 +65,23 @@ class CombatController:
         for i in range(number_of_dices):
             value += random.randint(1, 6)
         return value
+
+    def player_attack(self, monster_target):
+        player_attack = self.roll_dice(self.player.attack)
+        enemy_agility = self.roll_dice(monster_target.agility)
+        if player_attack > enemy_agility:
+            monster_target.durability -= 1
+            if monster_target.durability <= 0:
+                print("Enemy down")
+        else:
+            print("attack missed")
+
+    def monster_attack(self, monster):
+        monster_attack = self.roll_dice(monster.attack)
+        player_agility = self.roll_dice(self.player.agility)
+        if monster_attack > player_agility:
+            self.player.durability -= 1
+            if self.player.durability <= 0:
+                print("game over")
+        else:
+            print("attack missed")

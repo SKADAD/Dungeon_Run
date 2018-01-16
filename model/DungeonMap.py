@@ -13,6 +13,8 @@ class DungeonMap:
         self.playerPosX = 0
         self.playerPosY = 0
         self.size = size_
+        self.last_position = () # last position as a tuple
+        self.current_position = ()
 
         print("Generating starting pos..")
         self.generate_starting_pos(start_position)
@@ -82,6 +84,9 @@ class DungeonMap:
         return string_to_print
       
     def move_player(self, direction):
+
+        self.last_position = tuple(self.list_of_rooms[self.playerPosX][self.playerPosY])
+
         time.sleep(1)
         if direction == "w":
             if self.playerPosY - 1 >= 0:
@@ -92,6 +97,10 @@ class DungeonMap:
         elif direction == "s":
             if self.playerPosY + 1 < self.size:
                 self.playerPosY += 1
+
+        self.current_position = tuple(self.list_of_rooms[self.playerPosX][self.playerPosY])
+               
+
         elif direction == "d":
             if self.playerPosX + 1 < self.size:
                 self.playerPosX += 1
