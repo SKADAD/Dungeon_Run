@@ -97,16 +97,14 @@ class DungeonMap:
         elif direction == "s":
             if self.playerPosY + 1 < self.size:
                 self.playerPosY += 1
-
-        self.current_position = tuple(self.list_of_rooms[self.playerPosX][self.playerPosY])
-               
-
         elif direction == "d":
             if self.playerPosX + 1 < self.size:
                 self.playerPosX += 1
         room = self.get_player_room()
         room.visited_room = True
         self.print_map()
+        self.current_position = tuple(self.list_of_rooms[self.playerPosX][self.playerPosY])
+
         return room
 
     def get_player_room(self):
