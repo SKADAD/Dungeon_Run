@@ -1,6 +1,6 @@
-from Account.AccountManager import AccountManager
-from CombatController import CombatController
+from Account.AccountManager import *
 from model.DungeonMap import *
+# from controller import *
 
 
 class Controller:
@@ -16,60 +16,54 @@ class Controller:
 
     # First game menu and choices, validates input and finally calls for the next function
     def start_menu(self):
-        # Number of choices in the menu
-        max_value_for_menu = 2
-        # Clears the terminal:
-        clear_cmd()
-        print("Enter choice:\n 1. New Character \n 2. Existing Character\n")
-        # Returns true if choice is valid
-        choice = choice_validate_int(max_value_for_menu)
-        if not choice:
-            # Returns to start of this menu
-            self.start_menu()
-        # If the return is valid
-        elif choice:
-            # If user selected 1
-            if user_input_number == 1:
-                # Sends the user to menu create new char
-                self.menu_char_new()
-            # If user selected 2
-            elif user_input_number == 2:
-                # Sends the user to menu load existing
-                self.menu_char_existing()
+        while True:
+            # Returns true if choice is valid
+            print("* Main Menu: *")
+            choice = validate(["New Character", "Existing Character(s)"])
+            # If the return is valid
+            if choice:
+                # If user selected 1
+                if choice == 1:
+                    # Sends the user to menu create new char
+                    self.menu_char_new()
+                # If user selected 2
+                elif choice == 2:
+                    # Sends the user to menu load existing
+                    self.menu_char_existing()
+                break
 
     # Create new character intro and finally calls new player name
     def menu_char_new(self):
-        clear_cmd()
-        max_value_of_menu = 3
-        print("Choose hero by number:\n 1. Warrior\n 2. Wizard\n 3. Thief\n")
-        choice = choice_validate_int(max_value_of_menu)
-        if not choice:
-            print("Invalid choice")
-            self.menu_char_new()
-        elif choice:
-            if user_input_number == 1:
-                self.character_hero = "Warrior"
-            elif user_input_number == 2:
-                self.character_hero = "Wizard"
-            elif user_input_number == 3:
-                self.character_hero = "Thief"
-            else:
-                print("Unexpected.")
-            # Sends the user to next menu
-            self.menu_new_player_name()
-        else:
-            print("Unexpected..")
+        while True:
+            print("\nSelect hero class:")
+            choice = validate(["Warrior", "Wizard", "Thief"])
+            if choice:
+                if choice == 1:
+                    self.character_hero = "Warrior"
+                elif choice == 2:
+                    self.character_hero = "Wizard"
+                elif choice == 3:
+                    self.character_hero = "Thief"
+                else:
+                    print("Unexpected.")
+                # Sends the user to next menu
+                self.menu_new_player_name()
+                break
 
     # Create new name for new character and starts map
     def menu_new_player_name(self):
         while True:
-            self.character_name = input("Enter a character name:\n")
-            if self.account_manager.create_new_character(self.character_name, self.character_hero):
-                print("Character " + self.character_name + ", " + self.character_hero + " created!")
+            self.character_name = input("\nCharacter name:\n")
+            if self.character_name == "":
+                print("You must enter a name")
+            elif self.account_manager.create_new_character(self.character_name, self.character_hero):
+                clear_cmd()
+                print("\nCharacter " + self.character_name + ", The " + self.character_hero + " was born!\n")
                 self.start_menu()
                 break
             else:
-                print("Name already exists, try another")
+                print("Character already exists, try another name")
+
 # # TODO check if user name already exists
 #         # If user doesnt exist already, initialize the player to save it:
 #         newCharacter = Player(self.character_name, self.character_hero)
@@ -84,22 +78,14 @@ class Controller:
     # User selects map size and set position function starts
     def menu_map_size(self):
         while True:
-            clear_cmd()
-            max_value_of_menu = 3
-            print("Select map size:\n 1. 16 rooms\n 2. 25 rooms \n 3. 64 rooms\n")
-            choice = choice_validate_int(max_value_of_menu)
-            # if not choice:
-            #     clear_cmd()
-            #     self.menu_map_size()
-            # elif choice:
+            print("\nSelect size of map:")
+            choice = validate(["4 x 4 Grid (16 rooms)", "5 x 5 grid (25 rooms)", "8 x 8 grid (64 rooms)"])
             if choice:
-                if user_input_number == 1:
-                    print("Choice =4")
+                if choice == 1:
                     self.size_of_map = 4
-                elif user_input_number == 2:
+                elif choice == 2:
                     self.size_of_map = 5
-                elif user_input_number == 3:
-                    print("Choice =8")
+                elif choice == 3:
                     self.size_of_map = 8
                 self.menu_player_position()
                 break
@@ -108,65 +94,67 @@ class Controller:
     def menu_player_position(self):
         while True:
             clear_cmd()
-            max_value_of_menu = 4
-            print("Enter starting position:\n 1. North West\n 2. North East\n 3. South West\n 4. South East\n")
-            choice = choice_validate_int(max_value_of_menu)
-            # if not choice:
-            #     self.menu_player_position()
-            # elif choice:
+            print("Select starting corner:")
+            choice = validate(["North West", "North East", "South West", "South East"])
             if choice:
-                if user_input_number == 1:
+                if choice == 1:
                     self.starting_pos = "NW"
-                elif user_input_number == 2:
+                elif choice == 2:
                     self.starting_pos = "NE"
-                elif user_input_number == 3:
+                elif choice == 3:
                     self.starting_pos = "SW"
-                elif user_input_number == 4:
+                elif choice == 4:
                     self.starting_pos = "SE"
                 else:
                     print("Unexpected, selecting default:" + self.starting_pos)
+                clear_cmd()
                 self.dungeon_map = DungeonMap(self.size_of_map, self.starting_pos)
+                clear_cmd()
                 self.present_result()
                 break
 
-
-# TODO send character data from here
-
-        else:
-            print("Unexpected2")
-
-    # Prints the choices made in menu, temporary fix:
+    # Before starting game, shows game selected info:
     def present_result(self):
         print("Name: " + self.character_name)
         print("Hero Class: " + self.character_hero)
-        print("Map Total Rooms: " + str(self.size_of_map * self.size_of_map))
-        print("Map starting position: " + self.starting_pos)
-        self.player_movement()
+        print("Rooms to explore: " + str(self.size_of_map * self.size_of_map))
+        print("Starting position: " + self.starting_pos)
+        while True:
+            test = input("\nReady to start adventure? Press Enter, else 0 to return to main menu\n")
+            if test == "0":
+                clear_cmd()
+                self.start_menu()
+                break
+            else:
+                clear_cmd()
+                self.player_movement()
 
     # Load existing character
     def menu_char_existing(self):
+        # TODO : Print list of chars from here instead:
         while True:
-            name = input("Enter the name of you character or 0 to go back: \n")
+            print("\nYour characters:")
+            self.account_manager.get_list_of_characters()
+            name = input("\nSelect character by entering name, or 0 to return to main menu: \n")
             if name == "0":
                 self.start_menu()
                 break
             character = self.account_manager.get_character_by_name(name)
             if character:
                 self.character = character
+                clear_cmd()
                 print("Character " + name + " loaded.")
                 self.menu_map_size()
                 break
             else:
-                print(name + " could not be found, please try again!")
+                print("We couldn't find: " + name + ", please try again!")
 
 # # TODO Look if char exists and if so load:
-#
 #         clear_cmd()
 #         print("Choice 2, trying to load existing char..")
 
     def create_adventure(self, ):
         print("hi")
-
 
     def to_print(self, string_to_print):
         clear_cmd()
@@ -202,8 +190,9 @@ class Controller:
                     print("Must choose yes or no!")
                     continue
 
+
         if len(room.list_of_monsters) > 0:
-            print("The room is populated with monsters! Defend youself!")
+            print("The room is populated with monsters! Defend yourself!")
             combat = CombatController(self.character, room.list_of_monsters)
             combat.start()
             if not self.character.is_alive:
@@ -214,34 +203,41 @@ class Controller:
             # TODO print out the treasures
 
 
-# Clear CLI / GUI from lines when needed
 def clear_cmd():
-    # Import check type of OS win/lin
+    import os
+    import platform
     try:
-        print("\n\n\n\n")
-    # disabled (debug mode on)
-    # os.system('CLS')
-    # os.system('clear')
-    except:
-        print("Tried to clear CLI but failed")
-
-
-# Validates the users input when called
-def choice_validate_int(highest_value_in_menu):
-    # This global variable remembers the users selected number for menu if choice_validate first confirms True
-    global user_input_number
-    try:
-        user_choice = int(input(""))
-        # Choices in a menu is at minimum 1 and up to or as <number defined in the call to this function>
-        if not (1 <= user_choice <= highest_value_in_menu):
-            raise ValueError()
+        if platform.system() == 'Windows':
+            os.system('cls')
+        elif platform.system() == 'Linux':
+            os.system('clear')
+            # Used for debugging in Pycharm IDE:
+            print('\n' * 10)
         else:
-            # Else remember the number chosen (int)
-            user_input_number = user_choice
-            return True
-    except ValueError:
-        return False
+            print('\n' * 10)
+    except:
+        print("Clear failed")
+
+
+# def validate is called from different menus when user input needs validation, takes menu choices as arguments:
+def validate(list_of_choices):
+    while True:
+        # Enumerates each menu choice and then waits for user input:
+        for i, choice in enumerate(list_of_choices):
+            print(str(i + 1) + ". " + choice)
+        choice = input()
+        try:
+            choice = int(choice)
+            # Only return the users choice if its valid within the menus numbered choices:
+            if 0 < choice <= len(list_of_choices):
+                return choice
+            else:
+                raise ValueError
+        except ValueError:
+            print("\nYou must enter a valid number. Try again.\n")
+            continue
 
 
 start = Controller()
+clear_cmd()
 start.start_menu()
