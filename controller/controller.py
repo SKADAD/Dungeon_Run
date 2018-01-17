@@ -190,14 +190,19 @@ class Controller:
         if len(room.list_of_monsters) > 0:
             print("The room is populated with monsters! Defend yourself!")
             combat = CombatController(self, room.list_of_monsters)
-            combat.start()
-            if not self.character.is_alive:
-                self.handle_death()
+            if combat.start():
+                if not self.character.is_alive:
+                    self.handle_death()
+                    return
+            else:
+                return
 
         if len(room.list_of_treasures) > 0:
             print("You pick up treasures from the room: ")
             # TODO print out the treasures
 
+    def handle_death(self):
+        print("You died, sorry...")
 
 def clear_cmd():
     import os
