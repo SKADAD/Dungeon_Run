@@ -1,3 +1,5 @@
+from model.Statistics import Statistics
+
 class Player:
 
     def __init__(self, name, characterClass ):
@@ -12,6 +14,7 @@ class Player:
         self.thief = False
         self.is_alive = True
         self.amount_of_gold = 0
+        self.statistics = Statistics()
 
         if characterClass == "Warrior":
             self.initiative = 5
@@ -33,6 +36,11 @@ class Player:
             self.attack = 5
             self.agility = 7
             self.thief = True
+
+    def update_money(self):
+        collected_money = self.amount_of_gold
+
+
 
     def toString(self):
         return "|" + "\t" + "Character Name" + "\t" + "|" + "\n" +\
