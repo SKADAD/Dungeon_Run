@@ -76,7 +76,7 @@ class CombatController:
         player_attack = self.roll_dice(self.player.attack)
         enemy_agility = self.roll_dice(monster_target.agility)
         if player_attack >= enemy_agility:
-            if self.player.characterClass == "Thief" and random.randint(1, 100) <= 25:
+            if self.player.is_thief and random.randint(1, 100) <= 25:
                 print("Double Strike hit " + monster_target.monster_type + " for 2 durability.")
                 monster_target.durabillity -= 2
             else:
@@ -92,7 +92,7 @@ class CombatController:
         monster_attack = self.roll_dice(monster.attack)
         player_agility = self.roll_dice(self.player.agility)
         if monster_attack > player_agility:
-            if self.player.characterClass == "Warrior" and self.soldier_special:
+            if self.player.is_warrior and self.soldier_special:
                 print("The shield blocked the attack. You take no damage.")
                 self.soldier_special = False
             else:
@@ -107,7 +107,7 @@ class CombatController:
     def flee(self):
         flee_var = self.player.agility * 10
         dice_roll = random.randrange(0, 100)
-        if self.player.characterClass == "Wizard":
+        if self.player.is_wizard:
             flee_var = 80
         if dice_roll <= flee_var:
             self.controller.dungeon_map.playerPosX = self.controller.dungeon_map.last_position[0]
