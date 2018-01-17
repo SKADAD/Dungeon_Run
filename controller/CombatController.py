@@ -18,12 +18,14 @@ class CombatController:
         self.create_order_of_attack()
         self.soldier_special = True
         while len(self.list_of_monsters) > 0 and self.player.is_alive:
-            for creature in self.order_of_attack:
-                if type(creature) is Player and self.player.is_alive:
+            for creature in self.order_of_attack[:]:
+                if not self.player.is_alive:
+                    break
+                if type(creature) is Player:
                     action = self.player_action()
                     if action == "flee":
                         return False
-                else:
+                elif creature.durability > 0:
                     self.monster_attack(creature)
 
         return True
@@ -61,9 +63,8 @@ class CombatController:
         # Skapa en dictionary med varje deltagare och deras initiativ för striden.
         # Skapa en sorterad lista med det rullade initiativet som sorteringsvärde. Reverse=True ger högst först.
 
-        dict_of_initiative = {self.player: self.roll_dice(self.player.initiative), "lars": 7}
-        dict_of_initiative = {}
-        dict_of_initiative[self.player] = self.roll_dice(self.player.initiative)
+        dict_of_initiative = {self.player: self.roll_dice(self.player.initiative)}
+
         for monster in self.list_of_monsters:
             dict_of_initiative[monster] = self.roll_dice(monster.initiative)
 
@@ -84,7 +85,7 @@ class CombatController:
         if player_attack >= enemy_agility:
             if self.player.is_thief and random.randint(1, 100) <= 25:
                 print("Double Strike hit " + monster_target.monster_type + " for 2 durability.")
-                monster_target.durabillity -= 2
+                monster_target.durability -= 2
             else:
                 print("Attack hit " + monster_target.monster_type + " for 1 durability.")
                 monster_target.durability -= 1

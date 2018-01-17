@@ -84,7 +84,6 @@ class Controller:
                     self.size_of_map = 8
                 self.menu_player_position()
                 break
-            break
 
     # Position is selected. The end is todo:
     def menu_player_position(self):
@@ -189,7 +188,7 @@ class Controller:
     def player_movement(self):
         while True:
             print(self.dungeon_map.print_map())
-            direction = input("Choose direction to move:\nW - Up, A - Left, S - Down, D - Right:\n")
+            direction = input("Choose direction to move:\nW - Up, A - Left, S - Down, D - Right:\n").lower()
             if direction == "w" or "a" or "s" or "d":
                 room = self.dungeon_map.move_player(direction)
                 self.room_handler(room)
@@ -204,7 +203,7 @@ class Controller:
         if room.is_exit:
             while True:
                 print("There is an exit in the room. Do you wish to leave? y/n")
-                choice = input()
+                choice = input().lower()
                 if choice == "y":
                     self.quit_game()
                     break
@@ -235,7 +234,6 @@ class Controller:
             self.character.amount_of_gold += money
             print("your character has gathered: " + str(self.character.amount_of_gold) + " this adventure")
             room.list_of_treasures = []
-
 
     def handle_death(self):
         print("You died, sorry...")
