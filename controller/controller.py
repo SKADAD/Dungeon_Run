@@ -204,7 +204,7 @@ class Controller:
                 print("treasure: " + str(var[0]))
                 print("value: " + str(var[1]))
                 money += var[1]
-            self.character.amount_of_gold = money
+            self.character.amount_of_gold += money
             print("your character has gathered: " + str(self.character.amount_of_gold) + " this adventure")
             room.list_of_treasures = []
 
