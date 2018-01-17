@@ -203,6 +203,7 @@ class Controller:
 
     def handle_death(self):
         print("You died, sorry...")
+        self.quit_game()
 
 def clear_cmd():
     import os

@@ -9,6 +9,7 @@ class CombatController:
         self.player = controller.character
         self.order_of_attack = []
         self.list_of_monsters = list_of_monsters
+        self.temp_monsters = self.list_of_monsters.copy()
         # self.list_of_monsters = []
 
     def start(self):
@@ -16,7 +17,7 @@ class CombatController:
         self.create_order_of_attack()
         while len(self.list_of_monsters) > 0 and self.player.is_alive:
             for creature in self.order_of_attack:
-                if type(creature) is Player:
+                if type(creature) is Player and self.player.is_alive:
                     action = self.player_action()
                     if action == "flee":
                         return False
@@ -58,7 +59,9 @@ class CombatController:
         # Skapa en dictionary med varje deltagare och deras initiativ för striden.
         # Skapa en sorterad lista med det rullade initiativet som sorteringsvärde. Reverse=True ger högst först.
 
-        dict_of_initiative = {self.player: self.roll_dice(self.player.initiative)}
+        dict_of_initiative = {self.player: self.roll_dice(self.player.initiative), "lars": 7}
+        dict_of_initiative = {}
+        dict_of_initiative[self.player] = self.roll_dice(self.player.initiative)
         for monster in self.list_of_monsters:
             dict_of_initiative[monster] = self.roll_dice(monster.initiative)
 
