@@ -51,7 +51,6 @@ class AccountManager:
             try:
                 Load = pickle.load(open("Database.pickle", "rb"))
                 Load = list(Load)
-                print(Load)
                 self.list_of_characters = Load
                 break
             except:

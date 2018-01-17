@@ -9,9 +9,9 @@ class Player:
         self.durability = 0
         self.attack = 0
         self.agility = 0
-        self.warrior = False
-        self.wizard = False
-        self.thief = False
+        self.is_warrior = False
+        self.is_wizard = False
+        self.is_thief = False
         self.is_alive = True
         self.amount_of_gold = 0
         self.statistics = Statistics()
@@ -21,21 +21,21 @@ class Player:
             self.durability = 9
             self.attack = 6
             self.agility = 4
-            self.warrior = True
+            self.is_warrior = True
 
         elif characterClass == "Wizard":
             self.initiative = 6
             self.durability = 4
             self.attack = 9
             self.agility = 5
-            self.wizard = True
+            self.is_wizard = True
 
         elif characterClass == "Thief":
             self.initiative = 7
             self.durability = 5
             self.attack = 5
             self.agility = 7
-            self.thief = True
+            self.is_thief = True
 
     def update_money(self):
         collected_money = self.amount_of_gold
