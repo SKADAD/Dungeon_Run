@@ -9,6 +9,7 @@ class CombatController:
         self.player = controller.character
         self.order_of_attack = []
         self.list_of_monsters = list_of_monsters
+        self.temp_monsters = self.list_of_monsters.copy()
         # self.list_of_monsters = []
 
     def start(self):
@@ -16,27 +17,29 @@ class CombatController:
         self.create_order_of_attack()
         while len(self.list_of_monsters) > 0 and self.player.is_alive:
             for creature in self.order_of_attack:
-                if type(creature) is Player:
+                if type(creature) is Player and self.player.is_alive:
                     action = self.player_action()
                     if action == "flee":
-                        return
+                        return False
                 else:
                     self.monster_attack(creature)
+
+        return True
 
     def player_action(self):
         # Se till att det är ett korrekt värde från spelaren. Lista igenom monster med deras index +1 först.
         # Konvertera input till int. Antingen fly, eller attackera valt monster.
 
         while True:
-            self.controller.to_print("Choose your action:")
+            print("Choose your action: " + self.player.short_string())
             for i, monster in enumerate(self.list_of_monsters):
-                self.controller.to_print(str(i + 1) + ". Attack the " + monster.short_string())
-            self.controller.to_print("0. Flee to the previous room")
+                print(str(i + 1) + ". Attack the " + monster.short_string())
+            print("0. Flee to the previous room")
 
             try:
                 choice = int(input())
             except ValueError:
-                self.controller.to_print("Must enter a valid input!")
+                print("Must enter a valid input!")
                 continue
 
             if choice == 0:
@@ -50,13 +53,15 @@ class CombatController:
                 self.player_attack(self.list_of_monsters[choice - 1])
                 return "attack"
             else:
-                self.controller.to_print("Must enter a valid input!")
+                print("Must enter a valid input!")
 
     def create_order_of_attack(self):
         # Skapa en dictionary med varje deltagare och deras initiativ för striden.
         # Skapa en sorterad lista med det rullade initiativet som sorteringsvärde. Reverse=True ger högst först.
 
-        dict_of_initiative = {self.player: self.roll_dice(self.player.initiative)}
+        dict_of_initiative = {self.player: self.roll_dice(self.player.initiative), "lars": 7}
+        dict_of_initiative = {}
+        dict_of_initiative[self.player] = self.roll_dice(self.player.initiative)
         for monster in self.list_of_monsters:
             dict_of_initiative[monster] = self.roll_dice(monster.initiative)
 
@@ -80,6 +85,7 @@ class CombatController:
             if monster_target.durability <= 0:
                 print(monster_target.monster_type + " died!")
                 self.list_of_monsters.remove(monster_target)
+                self.order_of_attack.remove(monster_target)
         else:
             print("Your attack missed")
 
@@ -99,8 +105,8 @@ class CombatController:
         flee_var = self.player.agility * 10
         dice_roll = random.randrange(0, 100)
         if dice_roll <= flee_var:
-            self.controller.dungeon_map.playerPosX = self.controller.dungeon_map.last_position[0]
-            self.controller.dungeon_map.playerPosY = self.controller.dungeon_map.last_position[1]
+            self.controller.dungeon_map.playerPosY = self.controller.dungeon_map.last_position[0]
+            self.controller.dungeon_map.playerPosX = self.controller.dungeon_map.last_position[1]
             return True
         else:
             return False

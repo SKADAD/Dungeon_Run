@@ -45,3 +45,11 @@ class Player:
                "|" + "Attack:" + str(self.attack) + "\t"+ "\t"+ "\t" "|" +"\n"+ \
                "|" + "Agility:" + str(self.agility) + "\t"+ "\t"+ "\t" + "|"
 
+    def short_string(self):
+        return_string = "(INI = " + str(self.initiative) +\
+                        ", DUR = " + str(self.durability) +\
+                        ", ATT = " + str(self.attack) +\
+                        ", AGI = " + str(self.agility) + ")"
+
+        return return_string
+

@@ -190,13 +190,14 @@ class Controller:
         if len(room.list_of_monsters) > 0:
             print("The room is populated with monsters! Defend yourself!")
             combat = CombatController(self, room.list_of_monsters)
-            combat.start()
-            if not self.character.is_alive:
-                self.handle_death()
+            if combat.start():
+                if not self.character.is_alive:
+                    self.handle_death()
+                    return
+            else:
+                return
 
         if len(room.list_of_treasures) > 0:
-            print("*" * 10)
-            print("You pick up treasures from the room: ")
             print("*" * 10)
 
             money = 0
@@ -207,6 +208,11 @@ class Controller:
             self.character.amount_of_gold += money
             print("your character has gathered: " + str(self.character.amount_of_gold) + " this adventure")
             room.list_of_treasures = []
+
+
+    def handle_death(self):
+        print("You died, sorry...")
+        self.quit_game()
 
 def clear_cmd():
     import os

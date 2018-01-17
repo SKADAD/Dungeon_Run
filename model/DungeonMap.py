@@ -13,11 +13,11 @@ class DungeonMap:
         self.size = size_
         self.last_position = () # last position as a tuple
 
-        print("Generating starting pos..")
+        # print("Generating starting pos..")
         self.generate_starting_pos(start_position)
-        print("Generating rooms..")
+        # print("Generating rooms..")
         self.generate_rooms()
-        print("Generating exits..")
+        # print("Generating exits..")
         self.generate_exit()
 
     def generate_rooms(self):
@@ -46,7 +46,6 @@ class DungeonMap:
         room.list_of_treasure = []
 
     def generate_starting_pos(self, position):
-        print("Starting function..")
         if position is "NW":
             self.playerPosX = 0
             self.playerPosY = 0
