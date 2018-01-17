@@ -78,7 +78,7 @@ class CombatController:
         if player_attack >= enemy_agility:
             if self.player.characterClass == "Thief" and random.randint(1, 100) <= 25:
                 print("Double Strike hit " + monster_target.monster_type + " for 2 durability.")
-                monster_target -= 2
+                monster_target.durabillity -= 2
             else:
                 print("Attack hit " + monster_target.monster_type + " for 1 durability.")
                 monster_target.durability -= 1
