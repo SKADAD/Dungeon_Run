@@ -198,8 +198,17 @@ class Controller:
                 return
 
         if len(room.list_of_treasures) > 0:
-            print("You pick up treasures from the room: ")
-            # TODO print out the treasures
+            print("*" * 10)
+
+            money = 0
+            for var in room.list_of_treasures:
+                print("treasure: " + str(var[0]))
+                print("value: " + str(var[1]))
+                money += var[1]
+            self.character.amount_of_gold += money
+            print("your character has gathered: " + str(self.character.amount_of_gold) + " this adventure")
+            room.list_of_treasures = []
+
 
     def handle_death(self):
         print("You died, sorry...")

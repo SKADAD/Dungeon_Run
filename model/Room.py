@@ -42,27 +42,32 @@ class Room:
         list_of_treasure = []
         value1 = random.randint(0, 99)    # 40% chance to apear in room
         if value1 < 40:
-            cash = {"cash":2}
+            #cash = {"cash":2}
+            cash = ("cash", 2)
             list_of_treasure.append(cash)
 
         value2 = random.randint(0, 4)     # 20% chance
         if value2 == 0:
-            cash_bag = {"cash_bag": 6}
+            #cash_bag = {"cash_bag": 6}
+            cash_bag = ("cash_bag", 6)
             list_of_treasure.append(cash_bag)
 
         value3 = random.randint(0, 99)   # 15%
         if value3 < 15:
-            gold = {"gold": 10}
+            #gold = {"gold": 10}
+            gold = ("gold", 10)
             list_of_treasure.append(gold)
 
         value4 = random.randint(0, 9)     # 10%
         if value4 == 0:
-            gem = {"gem": 14}
+            #gem = {"gem": 14}
+            gem = ("gem", 14)
             list_of_treasure.append(gem)
 
         value5 = random.randint(0, 19)    # 5 %
         if value5 == 0:
-            treasure_chest = {"treasure_chest": 20}
+            #treasure_chest = {"treasure_chest": 20}
+            treasure_chest = ("treasure_chest", 20)
             list_of_treasure.append(treasure_chest)
 
         return list_of_treasure
