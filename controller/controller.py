@@ -16,6 +16,9 @@ class Controller:
 
     # First game menu and choices, validates input and finally calls for the next function
     def start_menu(self):
+
+        # Load characters to self.list_of
+
         while True:
             # Returns true if choice is valid
             print("* Main Menu: *")
@@ -50,13 +53,13 @@ class Controller:
                 self.menu_new_player_name()
                 break
 
-    # Create new name for new character and starts map
+    # Create new name for new character and then saves to disk
     def menu_new_player_name(self):
         while True:
             self.character_name = input("\nCharacter name:\n")
             if self.character_name == "":
                 print("You must enter a name")
-                continue
+                break
             elif self.account_manager.create_new_character(self.character_name, self.character_hero):
                 clear_cmd()
                 print("\nCharacter " + self.character_name + ", The " + self.character_hero + " was born!\n")
@@ -64,11 +67,15 @@ class Controller:
                 break
             else:
                 print("Character already exists, try another name")
+                self.menu_new_player_name()
+                return
+
+
 
     # User selects map size and set position function starts
     def menu_map_size(self):
         while True:
-            print("\nSelect size of map:")
+            print("\nSelect size of map")
             choice = validate(["4 x 4 Grid (16 rooms)", "5 x 5 grid (25 rooms)", "8 x 8 grid (64 rooms)"])
             if choice:
                 if choice == 1:
@@ -79,6 +86,7 @@ class Controller:
                     self.size_of_map = 8
                 self.menu_player_position()
                 break
+            break
 
     # Position is selected. The end is todo:
     def menu_player_position(self):
@@ -102,9 +110,11 @@ class Controller:
                 clear_cmd()
                 self.present_result()
                 break
+            break
 
     # Before starting game, shows game selected info:
     def present_result(self):
+        print("Game Information:\n")
         print("Name: " + self.character_name)
         print("Hero Class: " + self.character_hero)
         print("Rooms to explore: " + str(self.size_of_map * self.size_of_map))
@@ -118,6 +128,7 @@ class Controller:
             else:
                 clear_cmd()
                 self.player_movement()
+                break
 
     # Load existing character
     # def menu_char_existing(self):
@@ -140,17 +151,35 @@ class Controller:
     #             print("We couldn't find: " + name + ", please try again!")
 
     def menu_char_existing(self):
-        print("\nYour characters:")
-        choice = validate(self.account_manager.get_list_of_names())
-        if choice == 0:
-            self.start_menu()
-        else:
-            self.character = self.account_manager.list_of_characters[choice - 1]
-            print("Character " + self.character.name + " loaded.")
-            self.menu_map_size()
-
-    def create_adventure(self, ):
-        print("hi")
+        while True:
+            is_empty = self.account_manager.get_list_of_names()
+            print("\nYour characters:")
+            if is_empty == []:
+                print("No characters in this account exist.\nPlease create your first now: ")
+                self.menu_char_new()
+                test = AccountManager()
+                test2 = test.load_list_characters()
+                if test2 == True:
+                    print("Loaded now!")
+                    print("Returning to main menu")
+                    self.start_menu()
+                    break
+                print(test)
+                #self.menu_char_new()
+                break
+            choice = validate(self.account_manager.get_list_of_names())
+            if choice == 0:
+                self.start_menu()
+                break
+            else:
+                try:
+                    self.character = self.account_manager.list_of_characters[choice - 1]
+                    print("Character " + self.character.name + " loaded.")
+                    self.menu_map_size()
+                    break
+                except TypeError:
+                    self.menu_char_new()
+                    break
 
     def to_print(self, string_to_print):
         clear_cmd()
@@ -162,7 +191,7 @@ class Controller:
     def player_movement(self):
         while True:
             print(self.dungeon_map.print_map())
-            direction = input("Choose direction to go. w - up, a - left, s - down, d - right:\n")
+            direction = input("Move direction: W - Up, A - Left, S - Down, D - Right:\n")
             if direction == "w" or "a" or "s" or "d":
                 room = self.dungeon_map.move_player(direction)
                 self.room_handler(room)
@@ -219,10 +248,10 @@ def clear_cmd():
 def validate(list_of_choices):
     while True:
         # Enumerates each menu choice and then waits for user input:
-        for i, choice in enumerate(list_of_choices):
-            print(str(i + 1) + ". " + choice)
-        choice = input()
         try:
+            for i, choice in enumerate(list_of_choices):
+                print(str(i + 1) + ". " + choice)
+            choice = input()
             choice = int(choice)
             # Only return the users choice if its valid within the menus numbered choices:
             if 0 < choice <= len(list_of_choices):
@@ -230,8 +259,10 @@ def validate(list_of_choices):
             else:
                 raise ValueError
         except ValueError:
-            print("\nYou must enter a valid number. Try again.\n")
-            continue
+            print("\nNot a valid choice! Please try again.")
+            break
+        except TypeError:
+            break
 
 
 # start = Controller()
