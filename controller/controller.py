@@ -59,18 +59,16 @@ class Controller:
             self.character_name = input("\nCharacter name:\n")
             if self.character_name == "":
                 print("You must enter a name")
-                break
+                continue
             elif self.account_manager.create_new_character(self.character_name, self.character_hero):
                 clear_cmd()
                 print("\nCharacter " + self.character_name + ", The " + self.character_hero + " was born!\n")
                 self.start_menu()
                 break
             else:
-                print("Character already exists, try another name")
+                print("Character name already exists, try another name")
                 self.menu_new_player_name()
                 return
-
-
 
     # User selects map size and set position function starts
     def menu_map_size(self):
@@ -191,7 +189,7 @@ class Controller:
     def player_movement(self):
         while True:
             print(self.dungeon_map.print_map())
-            direction = input("Move direction: W - Up, A - Left, S - Down, D - Right:\n")
+            direction = input("Choose direction to move:\nW - Up, A - Left, S - Down, D - Right:\n")
             if direction == "w" or "a" or "s" or "d":
                 room = self.dungeon_map.move_player(direction)
                 self.room_handler(room)
