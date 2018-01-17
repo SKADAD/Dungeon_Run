@@ -15,6 +15,7 @@ class CombatController:
     def start(self):
         #Skapa ordningen. Så länge det finns minst ett monster i listan över monster och spelaren lever så får spelaren ett val medan monster attakerar
         self.create_order_of_attack()
+        self.soldier_special = True
         while len(self.list_of_monsters) > 0 and self.player.is_alive:
             for creature in self.order_of_attack:
                 if type(creature) is Player and self.player.is_alive:
@@ -80,8 +81,12 @@ class CombatController:
         player_attack = self.roll_dice(self.player.attack)
         enemy_agility = self.roll_dice(monster_target.agility)
         if player_attack >= enemy_agility:
-            print("Attack hit " + monster_target.monster_type + " for 1 durability.")
-            monster_target.durability -= 1
+            if self.player.is_thief and random.randint(1, 100) <= 25:
+                print("Double Strike hit " + monster_target.monster_type + " for 2 durability.")
+                monster_target.durabillity -= 2
+            else:
+                print("Attack hit " + monster_target.monster_type + " for 1 durability.")
+                monster_target.durability -= 1
             if monster_target.durability <= 0:
                 print(monster_target.monster_type + " died!")
                 self.list_of_monsters.remove(monster_target)
@@ -93,8 +98,12 @@ class CombatController:
         monster_attack = self.roll_dice(monster.attack)
         player_agility = self.roll_dice(self.player.agility)
         if monster_attack > player_agility:
-            print(monster.monster_type + " hit you for 1 durability.")
-            self.player.durability -= 1
+            if self.player.is_warrior and self.soldier_special:
+                print("The shield blocked the attack. You take no damage.")
+                self.soldier_special = False
+            else:
+                print(monster.monster_type + " hit you for 1 durability.")
+                self.player.durability -= 1
             if self.player.durability <= 0:
                 self.player.is_alive = False
                 print("Game over")
@@ -104,11 +113,11 @@ class CombatController:
     def flee(self):
         flee_var = self.player.agility * 10
         dice_roll = random.randrange(0, 100)
+        if self.player.is_wizard:
+            flee_var = 80
         if dice_roll <= flee_var:
             self.controller.dungeon_map.playerPosY = self.controller.dungeon_map.last_position[0]
             self.controller.dungeon_map.playerPosX = self.controller.dungeon_map.last_position[1]
             return True
         else:
             return False
-
-
