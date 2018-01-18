@@ -91,7 +91,8 @@ class CombatController:
                 monster_target.durability -= 1
             if monster_target.durability <= 0:
                 print(monster_target.monster_type + " died!")
-                Statistics.monster_killed(monster_target.monster_type)
+                stats = Statistics()
+                stats.monster_killed(monster_target.monster_type)
                 self.list_of_monsters.remove(monster_target)
                 self.order_of_attack.remove(monster_target)
         else:
