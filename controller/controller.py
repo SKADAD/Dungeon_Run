@@ -142,7 +142,6 @@ class Controller:
             try:
                 self.character = self.account_manager.list_of_characters[choice - 1]
                 self.character_name = self.character.name
-                print(self.character.is_alive)
                 print("\nSelected character: " + self.character_name + "\n")
                 self.menu_map_size()
             except TypeError:
@@ -206,6 +205,7 @@ class Controller:
             self.character.amount_of_gold += money
             print("your character has gathered: " + str(self.character.amount_of_gold) + " this adventure")
             room.list_of_treasures = []
+        time.sleep(2)
 
     def handle_death(self):
         print("You died, sorry...")
