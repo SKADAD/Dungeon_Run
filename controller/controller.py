@@ -16,8 +16,10 @@ class Controller:
 
     # First game menu and choices, validates input and finally calls for the next function
     def start_menu(self):
+        clear_cmd()
         # Load characters to self.list_of
         while True:
+            
             # Returns true if choice is valid
             print("\n* Main Menu *")
             choice = validate(["New Character", "Existing Character(s)", "Statistics", "Quit game"])
@@ -155,6 +157,7 @@ class Controller:
 
     def player_movement(self):
         while True:
+            clear_cmd()
             print(self.dungeon_map.print_map())
             direction = input("Choose direction to move:\nW - Up, A - Left, S - Down, D - Right:\n").lower()
             if direction == "w" or "a" or "s" or "d":
