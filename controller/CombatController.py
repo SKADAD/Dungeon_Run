@@ -57,7 +57,6 @@ class CombatController:
                 else:
                     # Clear cmd
                     controller.Controller.clear_cmd()
-                    print("Escaped")
                     print("\n- Your escape attempt failed!\n")
                     return "failed"
             elif choice <= len(self.list_of_monsters):
