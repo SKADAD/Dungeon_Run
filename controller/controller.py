@@ -1,6 +1,7 @@
 from controller.CombatController import CombatController
 from model.AccountManager import *
 from model.DungeonMap import *
+from model.Player import Player
 
 
 class Controller:
@@ -218,6 +219,7 @@ class Controller:
                 print("Value: " + str(var[1]))
                 money += var[1]
             self.character.amount_of_gold += money
+            self.character.statistics.treasures_collected(room.list_of_treasures)
             print("- Your character has gathered: " + str(self.character.amount_of_gold) + " gold in this room")
             room.list_of_treasures = []
             input("\nPress Enter to confirm and continue")

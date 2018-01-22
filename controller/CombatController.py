@@ -93,8 +93,7 @@ class CombatController:
             if monster_target.durability <= 0:
                 print("- You killed: " + monster_target.monster_type + "!\n")
                 input("Press Enter to continue")
-                stats = Statistics()
-                stats.monster_killed(monster_target.monster_type)
+                self.player.statistics.monster_killed(monster_target.monster_type)
                 self.list_of_monsters.remove(monster_target)
                 self.order_of_attack.remove(monster_target)
         else:
