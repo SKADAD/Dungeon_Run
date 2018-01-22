@@ -30,7 +30,7 @@ class CombatController:
                     action = self.player_action()
                     if action == "flee":
                         input("Press enter to confirm")
-                        return True
+                        return False
                 elif creature.durability > 0:
                     self.monster_attack(creature)
 
