@@ -5,6 +5,8 @@ from model.AI import Ai
 from model.Monster import Monster
 from model.Player import Player
 from model.Statistics import Statistics
+import controller.Controller
+
 
 
 class CombatController:
@@ -61,11 +63,14 @@ class CombatController:
 
             if choice == 0:
                 if self.flee():
+                    controller.Controller.clear_cmd()
                     print("\n- You fled from the room!")
                     self.room.list_of_monsters = self.temp_monsters
                     # self.list_of_monsters = self.temp_monsters
                     return "flee"
                 else:
+                    # Clear cmd
+                    controller.Controller.clear_cmd()
                     print("\n- Your escape attempt failed!\n")
                     return "failed"
             elif choice <= len(self.list_of_monsters):
@@ -117,7 +122,7 @@ class CombatController:
                         self.temp_monsters.remove(monster)
                         break
         else:
-            print("- Your attack missed")
+            print("\n- Your attack missed!")
 
     def monster_attack(self, monster):
         monster_attack = self.roll_dice(monster.attack)
