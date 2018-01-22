@@ -6,7 +6,7 @@ from model.DungeonMap import *
 class Controller:
 
     def __init__(self):
-        self.character = ""  # Object of character
+        self.character = None  # Object of character
         self.character_hero = "Hero type"
         self.character_name = "Name"
         self.starting_pos = "NW"
@@ -139,11 +139,13 @@ class Controller:
 
     def menu_char_existing(self):
         is_empty = self.account_manager.get_list_of_names()
-        if is_empty == []:
+        if is_empty:
             print("\nNo characters in this account exists! Please create your first now.")
             self.menu_char_new()
+        is_empty.append("Return to main menu")
         print("\nPick one of your characters:")
-        choice = validate(self.account_manager.get_list_of_names())
+        # choice = validate(self.account_manager.get_list_of_names())
+        choice = validate(is_empty)
         if not choice:
             self.menu_char_existing()
         elif choice == 0:
@@ -194,6 +196,7 @@ class Controller:
                 choice = input().lower()
                 if choice == "y":
                     # TODO spara alla stats innan avslutar
+                    self.character.durability = self.character.max_durability
                     self.start_menu()
                     print("- Player found the exit and escaped!")
                     break

@@ -37,6 +37,8 @@ class Player:
             self.agility = 7
             self.is_thief = True
 
+        self.max_durability = self.durability
+
     def update_money(self):
         collected_money = self.amount_of_gold
 
