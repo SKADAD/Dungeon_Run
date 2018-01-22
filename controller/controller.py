@@ -34,11 +34,14 @@ class Controller:
                     clear_cmd()
                     self.menu_char_existing()
                 elif choice == 3:
+                    clear_cmd()
                     statistics()
                 elif choice == 4:
-                    play_with_ai()
-                elif choice == 5:
+                    clear_cmd()
                     statistics_high_score()
+                elif choice == 5:
+                    clear_cmd()
+                    play_with_ai()
                 elif choice == 6:
                     self.quit_game()
                 break
@@ -138,14 +141,14 @@ class Controller:
             self.player_movement()
 
     def menu_char_existing(self):
-        is_empty = self.account_manager.get_list_of_names()
-        if not is_empty:
+        list_of_existing_char = self.account_manager.get_list_of_names()
+        if not list_of_existing_char:
             print("\nNo characters in this account exists! Please create your first now.")
             self.menu_char_new()
-        is_empty.append("Return to main menu")
+        list_of_existing_char.append("Return to main menu")
         print("\nPick one of your characters:")
         # choice = validate(self.account_manager.get_list_of_names())
-        choice = validate(is_empty)
+        choice = validate(list_of_existing_char)
         if not choice:
             self.menu_char_existing()
         elif choice == 0:
@@ -222,7 +225,7 @@ class Controller:
                 elif choice == "n":
                     break
                 else:
-                    print("Must choose yes or no!")
+                    print("You must choose yes or no!")
                     continue
 
         if len(room.list_of_monsters) > 0:
@@ -266,7 +269,12 @@ def statistics_high_score():
 
 
 def play_with_ai():
-    print("Letting AI play")
+    clear_cmd()
+    print("1. ...")
+    hero_AI = input("Enter a hero:\n")
+    print("Hero choosen: " + hero_AI)
+    number_of_rounds = input("Enter number of games the AI should play\n")
+    print("Letting AI play " + number_of_rounds + " times")
 
 
 
