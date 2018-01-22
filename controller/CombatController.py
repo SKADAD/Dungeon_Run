@@ -1,5 +1,7 @@
 import random
+import time
 
+from model.AI import Ai
 from model.Monster import Monster
 from model.Player import Player
 from model.Statistics import Statistics
@@ -31,9 +33,14 @@ class CombatController:
                     if action == "flee":
                         input("Press enter to confirm")
                         return False
+                elif type(creature) is Ai:
+                    self.player_attack(self.list_of_monsters[0])
                 elif creature.durability > 0:
                     self.monster_attack(creature)
-
+        if type(self.player) is Ai:
+            time.sleep(self.player.wait_time)
+        else:
+            input("\nPress Enter to confirm and continue")
         return True
 
     def player_action(self):
@@ -99,7 +106,7 @@ class CombatController:
                 monster_target.durability -= 1
             if monster_target.durability <= 0:
                 print("- You killed: " + monster_target.monster_type + "!\n")
-                input("Press Enter to continue")
+                # input("Press Enter to continue")
                 stats = Statistics()
                 stats.monster_killed(monster_target.monster_type)
                 self.list_of_monsters.remove(monster_target)
@@ -109,8 +116,6 @@ class CombatController:
                     if monster.monster_type is monster_target.monster_type:
                         self.temp_monsters.remove(monster)
                         break
-
-                # self.temp_monsters.remove(monster_target)
         else:
             print("- Your attack missed")
 
