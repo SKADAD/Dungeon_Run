@@ -1,6 +1,7 @@
 from controller.CombatController import CombatController
 from model.AccountManager import *
 from model.DungeonMap import *
+from model.Player import *
 
 
 class Controller:
@@ -20,7 +21,8 @@ class Controller:
         while True:
             # Returns true if choice is valid
             print("\n* Main Menu *")
-            choice = validate(["New Character", "Existing Character(s)", "Statistics", "High scores", "Play with AI", "Quit game"])
+            choice = validate(["New Character", "Existing Character(s)", "AI Auto Play", "Statistics", "High Scores",
+                               "Quit game"])
             # If the return is valid
             if choice:
                 # If user selected 1
@@ -35,13 +37,13 @@ class Controller:
                     self.menu_char_existing()
                 elif choice == 3:
                     clear_cmd()
-                    statistics()
+                    player_ai_start()
                 elif choice == 4:
                     clear_cmd()
-                    statistics_high_score()
+                    statistics()
                 elif choice == 5:
                     clear_cmd()
-                    play_with_ai()
+                    statistics_high_scores()
                 elif choice == 6:
                     self.quit_game()
                 break
@@ -49,7 +51,8 @@ class Controller:
     # Create new character intro and finally calls new player name
     def menu_char_new(self):
         print("\nSelect hero class:")
-        choice = validate(["Warrior" + self.character.short_string, "Wizard", "Thief", "Return to main menu."])
+        choice = validate([" Warrior\t" + str(attributes("Warrior")), " Wizard\t" + str(attributes("Wizard")),
+                           " Thief\t" + str(attributes("Thief")), "Return to main menu."])
         if choice:
             if choice == 1:
                 self.character_hero = "Warrior"
@@ -58,6 +61,7 @@ class Controller:
             elif choice == 3:
                 self.character_hero = "Thief"
             elif choice == 4:
+                clear_cmd()
                 self.start_menu()
             else:
                 print("Unexpected.")
@@ -88,7 +92,8 @@ class Controller:
     def menu_map_size(self):
         clear_cmd()
         print("Select dungeon size:")
-        choice = validate(["4 x 4 Grid (16 rooms)", "5 x 5 grid (25 rooms)", "8 x 8 grid (64 rooms)", "Return to main menu"])
+        choice = validate(["4 x 4 Grid (16 rooms)", "5 x 5 grid (25 rooms)", "8 x 8 grid (64 rooms)",
+                           "Return to main menu"])
         if choice:
             if choice == 1:
                 self.size_of_map = 4
@@ -143,18 +148,13 @@ class Controller:
 
     def menu_char_existing(self):
         list_of_existing_char = self.account_manager.get_list_of_names()
-
-        print("Length of list of ex chaR:")
-        print(len(list_of_existing_char))
-
         if not list_of_existing_char:
             print("\nNo characters in this account exists! Please create your first now.")
             self.menu_char_new()
         list_of_existing_char.append("Return to main menu")
+
         print("\nPick one of your characters:")
         choice = validate(list_of_existing_char)
-        print("Length of list of ex chaR:")
-        print(len(list_of_existing_char))
         if not choice:
             self.menu_char_existing()
         elif choice == len(list_of_existing_char):
@@ -173,13 +173,9 @@ class Controller:
                 print("Index Error! Try again")
                 self.menu_char_existing()
 
-    def to_print(self, string_to_print):
-        clear_cmd()
-        print(string_to_print)
-
     def quit_game(self):
         clear_cmd()
-        quit_confirm = input("User requesting to quit game. Confirm with Y/N:\n ")
+        quit_confirm = input("Sure you want to quit? Confirm with Y/N:\n ")
         if quit_confirm.lower() == 'y':
             print("\nQuitting game")
             raise SystemExit
@@ -274,16 +270,15 @@ def statistics():
     print("Want to show stats")
 
 
-def statistics_high_score():
+def statistics_high_scores():
     print("Statistics high score")
 
 
-def play_with_ai():
+def player_ai_start():
     clear_cmd()
-    print("1. ...")
-    hero_AI = input("Enter a hero:\n")
+    hero_AI = input("Enter hero:\n")
     print("Hero choosen: " + hero_AI)
-    number_of_rounds = input("Enter number of games the AI should play\n")
+    number_of_rounds = input("Enter the number of games the AI should play: \n")
     print("Letting AI play " + number_of_rounds + " times")
 
 
@@ -328,3 +323,4 @@ def validate(list_of_choices):
 # start = Controller()
 # clear_cmd()
 # start.start_menu()
+1
