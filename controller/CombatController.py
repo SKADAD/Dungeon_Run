@@ -112,7 +112,7 @@ class CombatController:
 
                 # self.temp_monsters.remove(monster_target)
         else:
-            print("- Your attack missed")
+            print("\n- Your attack missed!")
 
     def monster_attack(self, monster):
         monster_attack = self.roll_dice(monster.attack)
