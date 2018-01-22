@@ -63,12 +63,12 @@ class Player:
 
         return return_string
 
-    def warriorAttributes(self):
-        return "Initiative: 5 | Durability: 9 | Attack: 6 | Agility: 4 |"
+def attribute_warrior():
+    return "Initiative: 5 | Durability: 9 | Attack: 6 | Agility: 4 |"
 
-    def wizardAttributes(self):
-        return "Initiative: 6 | Durability: 4 | Attack: 9 | Agility: 5 |"
+def attribute_wizard():
+    return "Initiative: 6 | Durability: 4 | Attack: 9 | Agility: 5 |"
 
-    def thiefAttributes(self):
-        return "Initiative: 7 | Durability: 5 | Attack: 5 | Agility: 7 |"
+def attribute_thief():
+    return "Initiative: 7 | Durability: 5 | Attack: 5 | Agility: 7 |"
 
