@@ -16,27 +16,30 @@ class Controller:
 
     # First game menu and choices, validates input and finally calls for the next function
     def start_menu(self):
-        clear_cmd()
         # Load characters to self.list_of
         while True:
-            
             # Returns true if choice is valid
             print("\n* Main Menu *")
-            choice = validate(["New Character", "Existing Character(s)", "Statistics", "Quit game"])
+            choice = validate(["New Character", "Existing Character(s)", "Statistics", "High scores", "Play with AI", "Quit game"])
             # If the return is valid
             if choice:
                 # If user selected 1
                 if choice == 1:
                     # Sends the user to menu create new char
+                    clear_cmd()
                     self.menu_char_new()
                 # If user selected 2
                 elif choice == 2:
                     # Sends the user to menu load existing
+                    clear_cmd()
                     self.menu_char_existing()
                 elif choice == 3:
-                    print("Statistics not yet implemented.")
-                    self.start_menu()
+                    statistics()
                 elif choice == 4:
+                    play_with_ai()
+                elif choice == 5:
+                    statistics_high_score()
+                elif choice == 6:
                     self.quit_game()
                 break
 
@@ -56,16 +59,20 @@ class Controller:
             else:
                 print("Unexpected.")
             # Sends the user to next menu
+            clear_cmd()
             self.menu_new_player_name()
         else:
             self.menu_char_new()
 
     # Create new name for new character and then saves to disk
     def menu_new_player_name(self):
-        self.character_name = input("\nCharacter name:\n")
+        self.character_name = input("\nEnter character name or 0 to return:\n")
         if self.character_name == "":
             print("Blank name not allowed")
             self.menu_new_player_name()
+        elif self.character_name == "0":
+            print("Returning")
+            self.menu_char_new()
         elif self.account_manager.create_new_character(self.character_name, self.character_hero):
             clear_cmd()
             print("\nCharacter " + self.character_name + ", The " + self.character_hero + " was born!")
@@ -76,6 +83,7 @@ class Controller:
 
     # User selects map size and set position function starts
     def menu_map_size(self):
+        clear_cmd()
         print("Select dungeon size:")
         choice = validate(["4 x 4 Grid (16 rooms)", "5 x 5 grid (25 rooms)", "8 x 8 grid (64 rooms)", "Return to main menu"])
         if choice:
@@ -87,15 +95,17 @@ class Controller:
                 self.size_of_map = 8
             elif choice == 4:
                 self.start_menu()
+            clear_cmd()
             print("\nNumber of rooms in dungeon: " + str(self.size_of_map * self.size_of_map))
             self.menu_player_position()
+        elif not choice:
+            self.menu_map_size()
 
     # Position is selected and map started
     def menu_player_position(self):
             print("\nChoose starting corner:")
             choice = validate(["North West", "North East", "South West", "South East", "Return to main menu"])
             if not choice:
-                print("NOT VALID")
                 self.menu_player_position()
             if choice:
                 if choice == 1:
@@ -142,6 +152,7 @@ class Controller:
             try:
                 self.character = self.account_manager.list_of_characters[choice - 1]
                 self.character_name = self.character.name
+                clear_cmd()
                 print("\nSelected character: " + self.character_name + "\n")
                 self.menu_map_size()
             except TypeError:
@@ -169,13 +180,15 @@ class Controller:
         # Kolla om det finns en utgång. Ge isf valet att avsluta.
         # Kolla ifall det finns några monster i rummet. Isf starta combat.
         # Lever spelaren så får den skatterna som finns i rummet.
-
+        clear_cmd()
         if room.is_exit:
             while True:
                 print("There is an exit in the room. Do you wish to leave? Y/N")
                 choice = input().lower()
                 if choice == "y":
-                    self.quit_game()
+                    # TODO spara alla stats innan avslutar
+                    self.start_menu()
+                    print("Player found the exit and escaped!")
                     break
                 elif choice == "n":
                     break
@@ -184,7 +197,8 @@ class Controller:
                     continue
 
         if len(room.list_of_monsters) > 0:
-            print("The room is populated with monsters! Defend yourself!")
+            clear_cmd()
+            print("The room is populated with monsters! Defend yourself!\n")
             combat = CombatController(self, room.list_of_monsters)
             if combat.start():
                 if not self.character.is_alive:
@@ -197,19 +211,33 @@ class Controller:
             print("*" * 10)
 
             money = 0
+            clear_cmd()
             print("Room items:")
             for var in room.list_of_treasures:
-                print("treasure: " + str(var[0]))
-                print("value: " + str(var[1]))
+                print("Treasure: " + str(var[0]))
+                print("Value: " + str(var[1]))
                 money += var[1]
             self.character.amount_of_gold += money
-            print("your character has gathered: " + str(self.character.amount_of_gold) + " this adventure")
+            print("Your character has gathered: " + str(self.character.amount_of_gold) + " gold in this room")
             room.list_of_treasures = []
-        time.sleep(2)
+            input("\nPress Enter to confirm and continue")
 
     def handle_death(self):
+        # TODO Set char as isDead = true and save
         print("You died, sorry...")
         self.quit_game()
+
+
+def statistics():
+    print("Want to show stats")
+
+
+def statistics_high_score():
+    print("Statistics high score")
+
+
+def play_with_ai():
+    print("Letting AI play")
 
 
 def clear_cmd():
