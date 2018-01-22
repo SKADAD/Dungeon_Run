@@ -230,8 +230,9 @@ class Controller:
         self.quit_game()
 
 
-def statistics():
-    print("Want to show stats")
+def statistics(self):
+    self.character.statistics.print_monster_killed()
+    self.character.statistics.print_treasure()
 
 
 def statistics_high_score():
