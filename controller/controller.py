@@ -126,8 +126,8 @@ class Controller:
     def present_game_start_info(self):
         clear_cmd()
         print("* Game Information. *\n")
-        print("Name: " + self.character_name)
-        print("Hero Class: " + self.character_hero)
+        print("Name: " + self.character.name)
+        print("Hero Class: " + self.character.characterClass)
         print("Rooms to explore: " + str(self.size_of_map * self.size_of_map))
         print("Starting in corner: " + self.starting_pos)
         test = input("\nPress Enter to enter the dungeon or 0 to return to main menu\n")
