@@ -41,7 +41,7 @@ class Statistics:
         return_string = ""
         for var in self.treasures:
             return_string +="\nTreasure: " + str(var[0])
-            return_string +="\nValue: " + str(var[1])
+            return_string +=" Value: " + str(var[1])
         return return_string
 
     def room_count(self):
