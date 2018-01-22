@@ -24,7 +24,8 @@ class CombatController:
                 if type(creature) is Player:
                     action = self.player_action()
                     if action == "flee":
-                        return False
+                        input("Press enter to confirm")
+                        return True
                 elif creature.durability > 0:
                     self.monster_attack(creature)
 
@@ -43,15 +44,15 @@ class CombatController:
             try:
                 choice = int(input())
             except ValueError:
-                print("Must enter a valid input!")
+                print("- You must enter a valid input!")
                 continue
 
             if choice == 0:
                 if self.flee():
-                    print("You fled from the room!")
+                    print("\n- You fled from the room!")
                     return "flee"
                 else:
-                    print("Your escape attempt failed!")
+                    print("\n- Your escape attempt failed!\n")
                     return "failed"
             elif choice <= len(self.list_of_monsters):
                 self.player_attack(self.list_of_monsters[choice - 1])
@@ -84,35 +85,37 @@ class CombatController:
         enemy_agility = self.roll_dice(monster_target.agility)
         if player_attack >= enemy_agility:
             if self.player.is_thief and random.randint(1, 100) <= 25:
-                print("Double Strike hit " + monster_target.monster_type + " for 2 durability.")
+                print("- Double Strike hit " + monster_target.monster_type + " for 2 durability.")
                 monster_target.durability -= 2
             else:
-                print("Attack hit " + monster_target.monster_type + " for 1 durability.")
+                print("\n- Attack hit " + monster_target.monster_type + " for 1 durability.")
                 monster_target.durability -= 1
             if monster_target.durability <= 0:
-                print(monster_target.monster_type + " died!")
+                print("- You killed: " + monster_target.monster_type + "!\n")
+                input("Press Enter to continue")
                 stats = Statistics()
                 stats.monster_killed(monster_target.monster_type)
                 self.list_of_monsters.remove(monster_target)
                 self.order_of_attack.remove(monster_target)
         else:
-            print("Your attack missed")
+            print("- Your attack missed")
 
     def monster_attack(self, monster):
         monster_attack = self.roll_dice(monster.attack)
         player_agility = self.roll_dice(self.player.agility)
         if monster_attack > player_agility:
             if self.player.is_warrior and self.soldier_special:
-                print("The shield blocked the attack. You take no damage.")
+                print("- The shield blocked the attack. You take no damage.\n")
                 self.soldier_special = False
+
             else:
-                print(monster.monster_type + " hit you for 1 durability.")
+                print("\n- " + monster.monster_type + " hit you for 1 durability!\n")
                 self.player.durability -= 1
             if self.player.durability <= 0:
                 self.player.is_alive = False
-                print("Game over")
+                print("- Game over")
         else:
-            print(monster.monster_type + " missed you.")
+            print("- " + monster.monster_type + " attack missed you!\n")
 
     def flee(self):
         flee_var = self.player.agility * 10

@@ -188,7 +188,7 @@ class Controller:
                 if choice == "y":
                     # TODO spara alla stats innan avslutar
                     self.start_menu()
-                    print("Player found the exit and escaped!")
+                    print("- Player found the exit and escaped!")
                     break
                 elif choice == "n":
                     break
@@ -218,7 +218,7 @@ class Controller:
                 print("Value: " + str(var[1]))
                 money += var[1]
             self.character.amount_of_gold += money
-            print("Your character has gathered: " + str(self.character.amount_of_gold) + " gold in this room")
+            print("- Your character has gathered: " + str(self.character.amount_of_gold) + " gold in this room")
             room.list_of_treasures = []
             input("\nPress Enter to confirm and continue")
 
