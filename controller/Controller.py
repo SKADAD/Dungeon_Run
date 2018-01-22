@@ -132,12 +132,12 @@ class Controller:
     # Before starting game, shows game selected info:
     def present_game_start_info(self):
         clear_cmd()
-        print("* Game Information. *\n")
-        print("Name: " + self.character_name)
-        print("Hero Class: " + self.character_hero)
-        print("Character attributes:" + self.character.short_string())
-        print("Rooms to explore: " + str(self.size_of_map * self.size_of_map))
-        print("Starting in corner: " + self.starting_pos)
+        print("* Game Start Information *")
+        print("Name:\t\t" + self.character_name)
+        print("Hero Class:\t" + self.character_hero)
+        print("Selected Characters stats:" + self.character.short_string())
+        print("Number of rooms: \t" + str(self.size_of_map * self.size_of_map))
+        print("Starting corner: \t" + self.starting_pos)
         test = input("\nPress Enter to enter the dungeon or 0 to return to main menu\n")
         if test == "0":
             clear_cmd()
@@ -279,7 +279,7 @@ def player_ai_start():
     hero_AI = input("Enter hero:\n")
     print("Hero choosen: " + hero_AI)
     number_of_rounds = input("Enter the number of games the AI should play: \n")
-    print("Letting AI play " + number_of_rounds + " times")
+    print("Letting AI play " + number_of_rounds + " times. ")
 
 
 def clear_cmd():
