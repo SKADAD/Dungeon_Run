@@ -20,6 +20,14 @@ class DungeonMap:
         # print("Generating exits..")
         self.generate_exit()
 
+    def get_number_of_visited_rooms(self):
+        number = 0
+        for list in self.list_of_rooms:
+            for room in list:
+                if room.visited_room:
+                    number += 1
+        return number
+
     def generate_rooms(self):
         for i in range(self.size):
             self.list_of_rooms.append([])

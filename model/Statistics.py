@@ -40,5 +40,5 @@ class Statistics:
             print("Value: " + str(var[1]))
 
     def room_count(self):
-
+        # not implemented/connected yet
         self.rooms_visited += 1
