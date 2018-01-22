@@ -49,7 +49,7 @@ class Controller:
     # Create new character intro and finally calls new player name
     def menu_char_new(self):
         print("\nSelect hero class:")
-        choice = validate(["Warrior", "Wizard", "Thief", "Return to main menu."])
+        choice = validate(["Warrior" + self.character.short_string, "Wizard", "Thief", "Return to main menu."])
         if choice:
             if choice == 1:
                 self.character_hero = "Warrior"
@@ -130,6 +130,7 @@ class Controller:
         print("* Game Information. *\n")
         print("Name: " + self.character_name)
         print("Hero Class: " + self.character_hero)
+        print("Character attributes:" + self.character.short_string())
         print("Rooms to explore: " + str(self.size_of_map * self.size_of_map))
         print("Starting in corner: " + self.starting_pos)
         test = input("\nPress Enter to enter the dungeon or 0 to return to main menu\n")
@@ -142,26 +143,35 @@ class Controller:
 
     def menu_char_existing(self):
         list_of_existing_char = self.account_manager.get_list_of_names()
+
+        print("Length of list of ex chaR:")
+        print(len(list_of_existing_char))
+
         if not list_of_existing_char:
             print("\nNo characters in this account exists! Please create your first now.")
             self.menu_char_new()
         list_of_existing_char.append("Return to main menu")
         print("\nPick one of your characters:")
-        # choice = validate(self.account_manager.get_list_of_names())
         choice = validate(list_of_existing_char)
+        print("Length of list of ex chaR:")
+        print(len(list_of_existing_char))
         if not choice:
             self.menu_char_existing()
-        elif choice == 0:
+        elif choice == len(list_of_existing_char):
             self.start_menu()
         else:
             try:
                 self.character = self.account_manager.list_of_characters[choice - 1]
                 self.character_name = self.character.name
+                self.character_hero = self.character.characterClass
                 clear_cmd()
                 print("\nSelected character: " + self.character_name + "\n")
                 self.menu_map_size()
             except TypeError:
                 self.menu_char_new()
+            except IndexError:
+                print("Index Error! Try again")
+                self.menu_char_existing()
 
     def to_print(self, string_to_print):
         clear_cmd()
@@ -277,7 +287,6 @@ def play_with_ai():
     print("Letting AI play " + number_of_rounds + " times")
 
 
-
 def clear_cmd():
     import os
     import platform
@@ -289,6 +298,7 @@ def clear_cmd():
             # Used for debugging in Pycharm IDE:
             print('\n' * 10)
         else:
+            print("Plattform unknown but printing empty rows..")
             print('\n' * 10)
     except Exception:
         print("Clear failed")
