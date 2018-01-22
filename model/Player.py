@@ -72,3 +72,11 @@ def attribute_wizard():
 def attribute_thief():
     return "Initiative: 7 | Durability: 5 | Attack: 5 | Agility: 7 |"
 
+# TODO
+def attributes(charaterClass):
+    if charaterClass == "warrior":
+        return "Initiative: 5 | Durability: 9 | Attack: 6 | Agility: 4 |"
+    elif charaterClass == "wizard":
+        return "Initiative: 6 | Durability: 4 | Attack: 9 | Agility: 5 |"
+    elif charaterClass == "wizard":
+        return "Initiative: 7 | Durability: 5 | Attack: 5 | Agility: 7 |"

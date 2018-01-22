@@ -32,7 +32,7 @@ class AccountManager:
             list_of_names = []
             try:
                 for character in self.list_of_characters:
-                    list_of_names.append(character.name)
+                    list_of_names.append(character.name + "Class: " + character.characterClass + " " +character.short_string())
                 return list_of_names
             except TypeError:
                 break
