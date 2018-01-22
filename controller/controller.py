@@ -103,23 +103,23 @@ class Controller:
 
     # Position is selected and map started
     def menu_player_position(self):
-            print("\nChoose starting corner:")
-            choice = validate(["North West", "North East", "South West", "South East", "Return to main menu"])
-            if not choice:
-                self.menu_player_position()
-            if choice:
-                if choice == 1:
-                    self.starting_pos = "NW"
-                elif choice == 2:
-                    self.starting_pos = "NE"
-                elif choice == 3:
-                    self.starting_pos = "SW"
-                elif choice == 4:
-                    self.starting_pos = "SE"
-                elif choice == 5:
-                    self.start_menu()
-                self.dungeon_map = DungeonMap(self.size_of_map, self.starting_pos)
-                self.present_game_start_info()
+        print("\nChoose starting corner:")
+        choice = validate(["North West", "North East", "South West", "South East", "Return to main menu"])
+        if not choice:
+            self.menu_player_position()
+        if choice:
+            if choice == 1:
+                self.starting_pos = "NW"
+            elif choice == 2:
+                self.starting_pos = "NE"
+            elif choice == 3:
+                self.starting_pos = "SW"
+            elif choice == 4:
+                self.starting_pos = "SE"
+            elif choice == 5:
+                self.start_menu()
+            self.dungeon_map = DungeonMap(self.size_of_map, self.starting_pos)
+            self.present_game_start_info()
 
     # Before starting game, shows game selected info:
     def present_game_start_info(self):
@@ -174,13 +174,31 @@ class Controller:
             self.start_menu()
 
     def player_movement(self):
+        # Rensa och skriv ut kartan. Hämta möjliga moves från dungeon_map
+        # Iterera över moves och skriv ut dessa. Vid korrekt input, flytta spelaren och hantera det nya rummet.
+
         while True:
             clear_cmd()
             print(self.dungeon_map.print_map())
-            direction = input("Choose direction to move:\nW - Up, A - Left, S - Down, D - Right:\n").lower()
-            if direction == "w" or "a" or "s" or "d":
+
+            list_of_direction = []
+            string_of_choices = self.dungeon_map.get_movement_choices()
+            for char in string_of_choices:
+                if char == "w":
+                    list_of_direction.append("W - Up")
+                elif char == "a":
+                    list_of_direction.append("A - Left")
+                elif char == "s":
+                    list_of_direction.append("S - Down")
+                elif char == "d":
+                    list_of_direction.append("D - Right")
+
+            # direction = input("Choose direction to move:\nW - Up, A - Left, S - Down, D - Right:\n").lower()
+            direction = input("Choose direction to move:\n" + ", ".join(list_of_direction) + "\n").lower()
+            if direction in string_of_choices:
                 room = self.dungeon_map.move_player(direction)
-                self.room_handler(room)
+                if self.room_handler(room) is "exit":
+                    self.start_menu()
             else:
                 print("fool, wrong step")
 
@@ -200,7 +218,7 @@ class Controller:
                     self.account_manager.save_list_characters()
                     self.start_menu()
                     print("- Player found the exit and escaped!")
-                    break
+                    return "exit"
                 elif choice == "n":
                     break
                 else:
