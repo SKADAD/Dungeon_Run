@@ -163,7 +163,13 @@ class Controller:
         print(string_to_print)
 
     def quit_game(self):
-        raise SystemExit
+        clear_cmd()
+        quit_confirm = input("User requesting to quit game. Confirm with Y/N:\n ")
+        if quit_confirm.lower() == 'y':
+            print("\nQuitting game")
+            raise SystemExit
+        elif quit_confirm.lower() == 'n':
+            self.start_menu()
 
     def player_movement(self):
         while True:
@@ -182,6 +188,7 @@ class Controller:
         # Lever spelaren så får den skatterna som finns i rummet.
         clear_cmd()
         if room.is_exit:
+            clear_cmd()
             while True:
                 print("There is an exit in the room. Do you wish to leave? Y/N")
                 choice = input().lower()
@@ -238,6 +245,7 @@ def statistics_high_score():
 
 def play_with_ai():
     print("Letting AI play")
+
 
 
 def clear_cmd():
