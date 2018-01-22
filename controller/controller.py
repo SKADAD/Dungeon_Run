@@ -231,8 +231,9 @@ class Controller:
 
 
 def statistics(self):
-    self.character.statistics.print_monster_killed()
-    self.character.statistics.print_treasure()
+    pass
+    #self.character.statistics.monster_killed_toString()
+    #self.character.statistics.treasure_toString()
 
 
 def statistics_high_score():
