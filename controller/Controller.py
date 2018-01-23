@@ -74,6 +74,7 @@ class Controller:
                 print("Unexpected.")
             # Sends the user to next menu
             clear_cmd()
+            print("Selected hero class: " + self.character_hero)
             self.menu_new_player_name()
         else:
             self.menu_char_new()
@@ -130,7 +131,6 @@ class Controller:
                 
     # User selects map size and set position function starts
     def menu_map_size(self):
-        clear_cmd()
         print("Select dungeon size:")
         choice = validate(["4 x 4 Grid (16 rooms)", "5 x 5 grid (25 rooms)", "8 x 8 grid (64 rooms)",
                            "Return to main menu"])
