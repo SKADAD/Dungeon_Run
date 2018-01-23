@@ -215,10 +215,6 @@ class Controller:
                 print("Index Error! Try again")
                 self.menu_char_existing()
 
-    def quit_game(self):
-        clear_cmd()
-        quit_confirm = input("Sure you want to quit? Confirm with Y/N:\n ")
-
     def to_print(self, string_to_print):
         clear_cmd()
         print(string_to_print)
