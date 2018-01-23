@@ -5,7 +5,9 @@ from model.AI import Ai
 from model.Monster import Monster
 from model.Player import Player
 from model.Statistics import Statistics
+from model.AccountManager import *
 import controller.Controller
+
 
 
 
@@ -111,7 +113,6 @@ class CombatController:
                 monster_target.durability -= 1
             if monster_target.durability <= 0:
                 print("- You killed: " + monster_target.monster_type + "!\n")
-                input("Press Enter to continue")
                 self.player.statistics.monster_killed(monster_target.monster_type)
                 self.list_of_monsters.remove(monster_target)
                 self.order_of_attack.remove(monster_target)
@@ -130,15 +131,14 @@ class CombatController:
             if self.player.is_warrior and self.soldier_special:
                 print("- The shield blocked the attack. You take no damage.\n")
                 self.soldier_special = False
-
             else:
                 print("\n- " + monster.monster_type + " hit you for 1 durability!\n")
                 self.player.durability -= 1
             if self.player.durability <= 0:
-                self.player.is_alive = False
                 print("- Game over")
+                self.controller.handle_death()
         else:
-            print("- " + monster.monster_type + " attack missed you!\n")
+            print("\n- " + monster.monster_type + " attack missed you!\n")
 
     def flee(self):
         flee_var = self.player.agility * 10
