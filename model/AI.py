@@ -16,6 +16,6 @@ class Ai(Player):
         summary += "Number of monsters killed:\n"
         summary += self.statistics.monster_killed_toString()
         summary += "Total gold collected: " + str(self.amount_of_gold)
-        summary += "Total rooms visited: " + str(self.statistics.rooms_visited)
+        summary += "Total rooms visited: " + str(self.statistics.room_count)
         return summary
 
