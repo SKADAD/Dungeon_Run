@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../')
-from controller.controller import Controller
+from controller.Controller import Controller
 from model.DungeonMap import DungeonMap
 
 dungeon = DungeonMap(8, "NE")
