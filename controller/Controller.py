@@ -2,8 +2,7 @@ from controller.CombatController import CombatController
 from model.AI import Ai
 from model.AccountManager import *
 from model.DungeonMap import *
-from model.Player import Player
-
+from model.Player import *
 
 class Controller:
 
@@ -22,7 +21,8 @@ class Controller:
         while True:
             # Returns true if choice is valid
             print("\n* Main Menu *")
-            choice = validate(["New Character", "Existing Character(s)", "Statistics", "High scores", "Play with AI", "Quit game"])
+            choice = validate(["New Character", "Existing Character(s)", "AI Auto Play", "Statistics", "High Scores",
+                               "Quit game"])
             # If the return is valid
             if choice:
                 # If user selected 1
@@ -37,19 +37,20 @@ class Controller:
                     self.menu_char_existing()
                 elif choice == 3:
                     clear_cmd()
-                    statistics()
-                elif choice == 4:
-                    clear_cmd()
-                    statistics_high_score()
-                elif choice == 5:
-                    if self.create_ai_class():
+                    player_ai_start()
+                      if self.create_ai_class():
                         wait_time = self.select_wait_time_for_ai()
                         if wait_time == "exit":
                             continue
                         self.character = Ai(self.character_hero, wait_time)
                         self.character_name = self.character.name
                         self.menu_map_size()
-
+                elif choice == 4:
+                    clear_cmd()
+                    statistics()
+                elif choice == 5:
+                    clear_cmd()
+                    statistics_high_scores()
                 elif choice == 6:
                     self.quit_game()
                 break
@@ -57,7 +58,8 @@ class Controller:
     # Create new character intro and finally calls new player name
     def menu_char_new(self):
         print("\nSelect hero class:")
-        choice = validate(["Warrior", "Wizard", "Thief", "Return to main menu."])
+        choice = validate([" Warrior\t" + str(attributes("Warrior")), " Wizard\t" + str(attributes("Wizard")),
+                           " Thief\t" + str(attributes("Thief")), "Return to main menu."])
         if choice:
             if choice == 1:
                 self.character_hero = "Warrior"
@@ -66,6 +68,7 @@ class Controller:
             elif choice == 3:
                 self.character_hero = "Thief"
             elif choice == 4:
+                clear_cmd()
                 self.start_menu()
             else:
                 print("Unexpected.")
@@ -124,12 +127,13 @@ class Controller:
                 return wait_time
             except TypeError:
                 print("Must enter a digit and must be lower then 20.\n")
-
+                
     # User selects map size and set position function starts
     def menu_map_size(self):
         clear_cmd()
         print("Select dungeon size:")
-        choice = validate(["4 x 4 Grid (16 rooms)", "5 x 5 grid (25 rooms)", "8 x 8 grid (64 rooms)", "Return to main menu"])
+        choice = validate(["4 x 4 Grid (16 rooms)", "5 x 5 grid (25 rooms)", "8 x 8 grid (64 rooms)",
+                           "Return to main menu"])
         if choice:
             if choice == 1:
                 self.size_of_map = 4
@@ -168,11 +172,12 @@ class Controller:
     # Before starting game, shows game selected info:
     def present_game_start_info(self):
         clear_cmd()
-        print("* Game Information. *\n")
-        print("Name: " + self.character.name)
-        print("Hero Class: " + self.character.characterClass)
-        print("Rooms to explore: " + str(self.size_of_map * self.size_of_map))
-        print("Starting in corner: " + self.starting_pos)
+        print("* Game Start Information *")
+        print("Name:\t\t" + self.character_name)
+        print("Hero Class:\t" + self.character_hero)
+        print("Selected Characters stats:" + self.character.short_string())
+        print("Number of rooms: \t" + str(self.size_of_map * self.size_of_map))
+        print("Starting corner: \t" + self.starting_pos)
         test = input("\nPress Enter to enter the dungeon or 0 to return to main menu\n")
         if test == "0":
             clear_cmd()
@@ -191,21 +196,28 @@ class Controller:
             self.menu_char_new()
         list_of_existing_char.append("Return to main menu")
         print("\nPick one of your characters:")
-        # choice = validate(self.account_manager.get_list_of_names())
         choice = validate(list_of_existing_char)
         if not choice:
             self.menu_char_existing()
-        elif choice == 0:
+        elif choice == len(list_of_existing_char):
             self.start_menu()
         else:
             try:
                 self.character = self.account_manager.list_of_characters[choice - 1]
                 self.character_name = self.character.name
+                self.character_hero = self.character.characterClass
                 clear_cmd()
                 print("\nSelected character: " + self.character_name + "\n")
                 self.menu_map_size()
             except TypeError:
                 self.menu_char_new()
+            except IndexError:
+                print("Index Error! Try again")
+                self.menu_char_existing()
+
+    def quit_game(self):
+        clear_cmd()
+        quit_confirm = input("Sure you want to quit? Confirm with Y/N:\n ")
 
     def to_print(self, string_to_print):
         clear_cmd()
@@ -293,7 +305,6 @@ class Controller:
 
         if len(room.list_of_treasures) > 0:
             print("*" * 10)
-
             money = 0
             clear_cmd()
             print("Room items:")
@@ -302,6 +313,9 @@ class Controller:
                 print("Value: " + str(var[1]))
                 money += var[1]
             self.character.amount_of_gold += money
+            print("- Your character has gathered: " + str(self.character.amount_of_gold) + " gold in this room")
+            room.list_of_treasures = []
+            input("\nPress Enter to confirm and continue")
             self.character.statistics.treasures_collected(room.list_of_treasures)
             print("- Your character has gathered: " + str(self.character.amount_of_gold) + " gold in this room")
             room.list_of_treasures = []
@@ -315,13 +329,29 @@ class Controller:
         print("You died, sorry...")
         self.quit_game()
 
+        
+def statistics():
+    print("Want to show stats")
 
+
+def statistics_high_scores():
+    print("Statistics high score")
+
+
+def player_ai_start():
+    clear_cmd()
+    hero_AI = input("Enter hero:\n")
+    print("Hero choosen: " + hero_AI)
+    number_of_rounds = input("Enter the number of games the AI should play: \n")
+    print("Letting AI play " + number_of_rounds + " times. ")
+
+    
 def statistics(self):
     pass
     #self.character.statistics.monster_killed_toString()
     #self.character.statistics.treasure_toString()
 
-
+    
 def statistics_high_score():
     print("Statistics high score")
 
@@ -335,7 +365,6 @@ def play_with_ai():
     print("Letting AI play " + number_of_rounds + " times")
 
 
-
 def clear_cmd():
     import os
     import platform
@@ -347,6 +376,7 @@ def clear_cmd():
             # Used for debugging in Pycharm IDE:
             print('\n' * 10)
         else:
+            print("Plattform unknown but printing empty rows..")
             print('\n' * 10)
     except Exception:
         print("Clear failed")
@@ -372,7 +402,8 @@ def validate(list_of_choices):
         except TypeError:
             return False
 
-
+          
 # start = Controller()
 # clear_cmd()
 # start.start_menu()
+

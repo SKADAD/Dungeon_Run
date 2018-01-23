@@ -1,5 +1,6 @@
 from model.Statistics import Statistics
 
+
 class Player:
 
     def __init__(self, name, characterClass):
@@ -39,6 +40,9 @@ class Player:
 
         self.max_durability = self.durability
         
+    def update_money(self):
+        collected_money = self.amount_of_gold
+
     def toString(self):
         return "|" + "\t" + "Character Name" + "\t" + "|" + "\n" +\
                "|" + "\t" + self.name + "\t"  + "\t" + "\t" + "|" + "\n"+ \
@@ -51,10 +55,17 @@ class Player:
                "|" + "Agility:" + str(self.agility) + "\t"+ "\t"+ "\t" + "|"
 
     def short_string(self):
-        return_string = "(INI = " + str(self.initiative) +\
-                        ", DUR = " + str(self.durability) +\
-                        ", ATT = " + str(self.attack) +\
-                        ", AGI = " + str(self.agility) + ")"
-
+        return_string = " INI = " + str(self.initiative) +\
+                        " | DUR = " + str(self.durability) +\
+                        " | ATT = " + str(self.attack) +\
+                        " | AGI = " + str(self.agility) + " |"
         return return_string
 
+
+def attributes(character_hero):
+    if character_hero == "Warrior":
+        return "\t| Initiative = 5 | Durability = 9 | Attack = 6 | Agility = 4 | Special = Shield Block |"
+    elif character_hero == "Wizard":
+        return "\t| Initiative = 6 | Durability = 4 | Attack = 9 | Agility = 5 | Special = Light Shine  |"
+    elif character_hero == "Thief":
+        return "\t| Initiative = 7 | Durability = 5 | Attack = 5 | Agility = 7 | Special = Critical hit |"
