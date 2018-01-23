@@ -313,10 +313,7 @@ class Controller:
             self.character.amount_of_gold += money
             print("- Your character has gathered: " + str(self.character.amount_of_gold) + " gold in this room")
             room.list_of_treasures = []
-            input("\nPress Enter to confirm and continue")
             self.character.statistics.treasures_collected(room.list_of_treasures)
-            print("- Your character has gathered: " + str(self.character.amount_of_gold) + " gold in this room")
-            room.list_of_treasures = []
             if type(self.character) is Ai:
                 time.sleep(self.character.wait_time)
             else:
@@ -342,25 +339,6 @@ def player_ai_start():
     print("Hero choosen: " + hero_AI)
     number_of_rounds = input("Enter the number of games the AI should play: \n")
     print("Letting AI play " + number_of_rounds + " times. ")
-
-    
-def statistics(self):
-    pass
-    #self.character.statistics.monster_killed_toString()
-    #self.character.statistics.treasure_toString()
-
-    
-def statistics_high_score():
-    print("Statistics high score")
-
-
-def play_with_ai():
-    clear_cmd()
-    print("1. ...")
-    hero_AI = input("Enter a hero:\n")
-    print("Hero choosen: " + hero_AI)
-    number_of_rounds = input("Enter number of games the AI should play\n")
-    print("Letting AI play " + number_of_rounds + " times")
 
 
 def clear_cmd():
