@@ -37,7 +37,7 @@ class Controller:
                     self.menu_char_existing()
                 elif choice == 3:
                     clear_cmd()
-                    player_ai_start()
+                    # player_ai_start()
                     if self.create_ai_class():
                         wait_time = self.select_wait_time_for_ai()
                         if wait_time == "exit":
@@ -258,7 +258,15 @@ class Controller:
                 print("fool, wrong step")
 
     def ai_movement(self):
-        pass
+        while True:
+            clear_cmd()
+            print(self.dungeon_map.print_map())
+            string_of_choices = self.dungeon_map.get_movement_choices()
+            index = random.randrange(0, len(string_of_choices))
+            direction = string_of_choices[index]
+            room = self.dungeon_map.move_player(direction)
+            if self.room_handler(room) is "exit":
+                self.start_menu()
 
     def room_handler(self, room):
         # Kolla om det finns en utgång. Ge isf valet att avsluta.
