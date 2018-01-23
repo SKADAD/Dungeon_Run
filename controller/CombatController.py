@@ -1,8 +1,12 @@
 import random
+import time
 
+from model.AI import Ai
 from model.Monster import Monster
 from model.Player import Player
 from model.Statistics import Statistics
+import controller.Controller
+
 
 
 class CombatController:
@@ -31,9 +35,14 @@ class CombatController:
                     if action == "flee":
                         input("Press enter to confirm")
                         return False
+                elif type(creature) is Ai:
+                    self.player_attack(self.list_of_monsters[0])
                 elif creature.durability > 0:
                     self.monster_attack(creature)
-
+        if type(self.player) is Ai:
+            time.sleep(self.player.wait_time)
+        else:
+            input("\nPress Enter to confirm and continue")
         return True
 
     def player_action(self):
@@ -54,11 +63,14 @@ class CombatController:
 
             if choice == 0:
                 if self.flee():
+                    controller.Controller.clear_cmd()
                     print("\n- You fled from the room!")
                     self.room.list_of_monsters = self.temp_monsters
                     # self.list_of_monsters = self.temp_monsters
                     return "flee"
                 else:
+                    # Clear cmd
+                    controller.Controller.clear_cmd()
                     print("\n- Your escape attempt failed!\n")
                     return "failed"
             elif choice <= len(self.list_of_monsters):
@@ -100,8 +112,7 @@ class CombatController:
             if monster_target.durability <= 0:
                 print("- You killed: " + monster_target.monster_type + "!\n")
                 input("Press Enter to continue")
-                stats = Statistics()
-                stats.monster_killed(monster_target.monster_type)
+                self.player.statistics.monster_killed(monster_target.monster_type)
                 self.list_of_monsters.remove(monster_target)
                 self.order_of_attack.remove(monster_target)
 
@@ -109,8 +120,6 @@ class CombatController:
                     if monster.monster_type is monster_target.monster_type:
                         self.temp_monsters.remove(monster)
                         break
-
-                # self.temp_monsters.remove(monster_target)
         else:
             print("\n- Your attack missed!")
 

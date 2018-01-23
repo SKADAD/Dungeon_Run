@@ -1,8 +1,8 @@
 from controller.CombatController import CombatController
+from model.AI import Ai
 from model.AccountManager import *
 from model.DungeonMap import *
 from model.Player import *
-
 
 class Controller:
 
@@ -38,6 +38,13 @@ class Controller:
                 elif choice == 3:
                     clear_cmd()
                     player_ai_start()
+                      if self.create_ai_class():
+                        wait_time = self.select_wait_time_for_ai()
+                        if wait_time == "exit":
+                            continue
+                        self.character = Ai(self.character_hero, wait_time)
+                        self.character_name = self.character.name
+                        self.menu_map_size()
                 elif choice == 4:
                     clear_cmd()
                     statistics()
@@ -88,6 +95,39 @@ class Controller:
             print("\nCharacter name already exists! Try again.")
             self.menu_new_player_name()
 
+    def create_ai_class(self):
+        clear_cmd()
+        while True:
+            print("\nSelect class for the AI:")
+            choice = validate(["Warrior", "Wizard", "Thief", "Return to main menu."])
+            if choice == 1:
+                self.character_hero = "Warrior"
+                break
+            elif choice == 2:
+                self.character_hero = "Wizard"
+                break
+            elif choice == 3:
+                self.character_hero = "Thief"
+                break
+            elif choice == 4:
+                return False
+        return True
+
+    def select_wait_time_for_ai(self):
+        clear_cmd()
+        while True:
+            print("Select AI delay after each room and combat, type ""exit"" to go back:")
+            wait_time = input()
+            if wait_time is "exit":
+                return wait_time
+            try:
+                wait_time = int(wait_time)
+                if wait_time > 20:
+                    raise TypeError
+                return wait_time
+            except TypeError:
+                print("Must enter a digit and must be lower then 20.\n")
+                
     # User selects map size and set position function starts
     def menu_map_size(self):
         clear_cmd()
@@ -142,6 +182,9 @@ class Controller:
         if test == "0":
             clear_cmd()
             self.start_menu()
+        elif type(self.character) is Ai:
+            clear_cmd()
+            self.ai_movement()
         else:
             clear_cmd()
             self.player_movement()
@@ -152,7 +195,6 @@ class Controller:
             print("\nNo characters in this account exists! Please create your first now.")
             self.menu_char_new()
         list_of_existing_char.append("Return to main menu")
-
         print("\nPick one of your characters:")
         choice = validate(list_of_existing_char)
         if not choice:
@@ -176,6 +218,14 @@ class Controller:
     def quit_game(self):
         clear_cmd()
         quit_confirm = input("Sure you want to quit? Confirm with Y/N:\n ")
+
+    def to_print(self, string_to_print):
+        clear_cmd()
+        print(string_to_print)
+
+    def quit_game(self):
+        clear_cmd()
+        quit_confirm = input("User requesting to quit game. Confirm with Y/N:\n ")
         if quit_confirm.lower() == 'y':
             print("\nQuitting game")
             raise SystemExit
@@ -211,12 +261,20 @@ class Controller:
             else:
                 print("fool, wrong step")
 
+    def ai_movement(self):
+        pass
+
     def room_handler(self, room):
         # Kolla om det finns en utgång. Ge isf valet att avsluta.
         # Kolla ifall det finns några monster i rummet. Isf starta combat.
         # Lever spelaren så får den skatterna som finns i rummet.
         clear_cmd()
         if room.is_exit:
+            if type(self.character) is Ai:
+                self.character.durability = self.character.max_durability
+                print(self.character.summary_string())
+                input("Press enter to continue")
+                return "exit"
             clear_cmd()
             while True:
                 print("There is an exit in the room. Do you wish to leave? Y/N")
@@ -247,7 +305,6 @@ class Controller:
 
         if len(room.list_of_treasures) > 0:
             print("*" * 10)
-
             money = 0
             clear_cmd()
             print("Room items:")
@@ -259,13 +316,20 @@ class Controller:
             print("- Your character has gathered: " + str(self.character.amount_of_gold) + " gold in this room")
             room.list_of_treasures = []
             input("\nPress Enter to confirm and continue")
+            self.character.statistics.treasures_collected(room.list_of_treasures)
+            print("- Your character has gathered: " + str(self.character.amount_of_gold) + " gold in this room")
+            room.list_of_treasures = []
+            if type(self.character) is Ai:
+                time.sleep(self.character.wait_time)
+            else:
+                input("\nPress Enter to confirm and continue")
 
     def handle_death(self):
         # TODO Set char as isDead = true and save
         print("You died, sorry...")
         self.quit_game()
 
-
+        
 def statistics():
     print("Want to show stats")
 
@@ -280,6 +344,25 @@ def player_ai_start():
     print("Hero choosen: " + hero_AI)
     number_of_rounds = input("Enter the number of games the AI should play: \n")
     print("Letting AI play " + number_of_rounds + " times. ")
+
+    
+def statistics(self):
+    pass
+    #self.character.statistics.monster_killed_toString()
+    #self.character.statistics.treasure_toString()
+
+    
+def statistics_high_score():
+    print("Statistics high score")
+
+
+def play_with_ai():
+    clear_cmd()
+    print("1. ...")
+    hero_AI = input("Enter a hero:\n")
+    print("Hero choosen: " + hero_AI)
+    number_of_rounds = input("Enter number of games the AI should play\n")
+    print("Letting AI play " + number_of_rounds + " times")
 
 
 def clear_cmd():
@@ -319,8 +402,8 @@ def validate(list_of_choices):
         except TypeError:
             return False
 
-
+          
 # start = Controller()
 # clear_cmd()
 # start.start_menu()
-1
+
