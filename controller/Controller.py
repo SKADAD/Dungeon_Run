@@ -204,11 +204,17 @@ class Controller:
         else:
             try:
                 self.character = self.account_manager.list_of_characters[choice - 1]
-                self.character_name = self.character.name
-                self.character_hero = self.character.characterClass
-                clear_cmd()
-                print("\nSelected character: " + self.character_name + "\n")
-                self.menu_map_size()
+                if self.character.is_alive:
+                    self.character_name = self.character.name
+                    self.character_hero = self.character.characterClass
+                    clear_cmd()
+                    print("\nSelected character: " + self.character_name + "\n")
+                    self.menu_map_size()
+                else:
+                    clear_cmd()
+                    print("The character is dead, choose one that is alive or create a new.")
+                    self.menu_char_existing()
+
             except TypeError:
                 self.menu_char_new()
             except IndexError:
@@ -227,6 +233,16 @@ class Controller:
             raise SystemExit
         elif quit_confirm.lower() == 'n':
             self.start_menu()
+
+    def exit_game(self):
+        clear_cmd()
+        exit_confirm = input("User requesting to exit dungeon. Confirm with Y/N:\n ")
+        if exit_confirm.lower() == 'y':
+            print("\nQuitting game")
+            raise SystemExit
+        elif exit_confirm.lower() == 'n':
+            self.start_menu()
+
 
     def player_movement(self):
         # Rensa och skriv ut kartan. Hämta möjliga moves från dungeon_map
@@ -328,11 +344,14 @@ class Controller:
                 input("\nPress Enter to confirm and continue")
 
     def handle_death(self):
-        # TODO Set char as isDead = true and save
-        print("You died, sorry...")
-        self.quit_game()
+        self.character.is_alive = False
+        clear_cmd()
+        print("You died!")
+        input("Press Enter to continue to main menu")
+        self.account_manager.save_list_characters()
+        self.start_menu()
 
-        
+
 def statistics():
     print("Want to show stats")
 
@@ -360,7 +379,7 @@ def clear_cmd():
             # Used for debugging in Pycharm IDE:
             print('\n' * 10)
         else:
-            print("Plattform unknown but printing empty rows..")
+            print("Platform unknown but printing empty rows..")
             print('\n' * 10)
     except Exception:
         print("Clear failed")
