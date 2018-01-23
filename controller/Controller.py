@@ -38,7 +38,7 @@ class Controller:
                 elif choice == 3:
                     clear_cmd()
                     player_ai_start()
-                      if self.create_ai_class():
+                    if self.create_ai_class():
                         wait_time = self.select_wait_time_for_ai()
                         if wait_time == "exit":
                             continue
