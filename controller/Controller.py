@@ -277,6 +277,8 @@ class Controller:
                 choice = input().lower()
                 if choice == "y":
                     # TODO spara alla stats innan avslutar
+                    rooms_visited = self.dungeon_map.get_number_of_visited_rooms()
+                    self.character.statistics.room_count(rooms_visited)
                     self.character.durability = self.character.max_durability
                     self.account_manager.save_list_characters()
                     self.start_menu()

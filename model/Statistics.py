@@ -44,6 +44,7 @@ class Statistics:
             return_string +=" Value: " + str(var[1])
         return return_string
 
-    def room_count(self):
-        # not implemented/connected yet
-        self.rooms_visited += 1
+    def room_count(self, number_of_rooms):
+
+        rooms_visited = number_of_rooms
+        return rooms_visited
