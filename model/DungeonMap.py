@@ -36,7 +36,7 @@ class DungeonMap:
                 # If the position is the same as the starting position, set no monsters and no treasure
                 if i == self.playerPosY and j == self.playerPosX:
                     room.list_of_monsters = []
-                    room.list_of_treasure = []
+                    room.list_of_treasures = []
                     room.visited_room = True
                 self.list_of_rooms[i].append(room)
 
@@ -51,7 +51,7 @@ class DungeonMap:
         room = self.list_of_rooms[int_y][int_x]
         room.is_exit = True
         room.list_of_monsters = []
-        room.list_of_treasure = []
+        room.list_of_treasures = []
 
     def generate_starting_pos(self, position):
         if position is "NW":
@@ -84,24 +84,48 @@ class DungeonMap:
                     string_to_print += "X "
             string_to_print += "\n"
         return string_to_print
+
+    def get_movement_choices(self):
+        # Kolla ifall spelarens x och y postion +- 1 inte är under 0 eller över size. Returnera möjliga val.
+
+        list_of_choices = []
+
+        if self.playerPosY - 1 >= 0:
+            list_of_choices.append("w")
+        if self.playerPosX - 1 >= 0:
+            list_of_choices.append("a")
+        if self.playerPosY + 1 < self.size:
+            list_of_choices.append("s")
+        if self.playerPosX + 1 < self.size:
+            list_of_choices.append("d")
+
+        return "".join(list_of_choices)
       
     def move_player(self, direction):
+        # Uppdatera senaste position. Öka spelarens x och y koordinater och returnera motsvarande rum.
 
-        # self.last_position = tuple(self.list_of_rooms[self.playerPosX][self.playerPosY])
+        # if direction == "w":
+        #     if self.playerPosY - 1 >= 0:
+        #         self.playerPosY -= 1
+        # elif direction == "a":
+        #     if self.playerPosX - 1 >= 0:
+        #         self.playerPosX -= 1
+        # elif direction == "s":
+        #     if self.playerPosY + 1 < self.size:
+        #         self.playerPosY += 1
+        # elif direction == "d":
+        #     if self.playerPosX + 1 < self.size:
+        #         self.playerPosX += 1
         self.last_position = (self.playerPosY, self.playerPosX)
 
         if direction == "w":
-            if self.playerPosY - 1 >= 0:
-                self.playerPosY -= 1
+            self.playerPosY -= 1
         elif direction == "a":
-            if self.playerPosX - 1 >= 0:
-                self.playerPosX -= 1
+            self.playerPosX -= 1
         elif direction == "s":
-            if self.playerPosY + 1 < self.size:
-                self.playerPosY += 1
+            self.playerPosY += 1
         elif direction == "d":
-            if self.playerPosX + 1 < self.size:
-                self.playerPosX += 1
+            self.playerPosX += 1
 
         room = self.get_player_room()
         room.visited_room = True

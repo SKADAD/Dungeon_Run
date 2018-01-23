@@ -37,6 +37,8 @@ class Player:
             self.agility = 7
             self.is_thief = True
 
+        self.max_durability = self.durability
+        
     def toString(self):
         return "|" + "\t" + "Character Name" + "\t" + "|" + "\n" +\
                "|" + "\t" + self.name + "\t"  + "\t" + "\t" + "|" + "\n"+ \

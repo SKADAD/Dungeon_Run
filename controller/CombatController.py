@@ -1,17 +1,26 @@
 import random
+import time
+
+from model.AI import Ai
+from model.Monster import Monster
 from model.Player import Player
 from model.Statistics import Statistics
+import controller.Controller
+
 
 
 class CombatController:
 
-    def __init__(self, controller, list_of_monsters):
+    def __init__(self, controller, room):
         self.controller = controller
+        self.room = room
         self.player = controller.character
         self.order_of_attack = []
-        self.list_of_monsters = list_of_monsters
-        self.temp_monsters = self.list_of_monsters.copy()
-        # self.list_of_monsters = []
+        self.list_of_monsters = room.list_of_monsters
+        self.temp_monsters = []
+
+        for monster in self.list_of_monsters:
+            self.temp_monsters.append(Monster(monster.monster_type))
 
     def start(self):
         #Skapa ordningen. Så länge det finns minst ett monster i listan över monster och spelaren lever så får spelaren ett val medan monster attakerar
@@ -25,10 +34,15 @@ class CombatController:
                     action = self.player_action()
                     if action == "flee":
                         input("Press enter to confirm")
-                        return True
+                        return False
+                elif type(creature) is Ai:
+                    self.player_attack(self.list_of_monsters[0])
                 elif creature.durability > 0:
                     self.monster_attack(creature)
-
+        if type(self.player) is Ai:
+            time.sleep(self.player.wait_time)
+        else:
+            input("\nPress Enter to confirm and continue")
         return True
 
     def player_action(self):
@@ -49,9 +63,14 @@ class CombatController:
 
             if choice == 0:
                 if self.flee():
+                    controller.Controller.clear_cmd()
                     print("\n- You fled from the room!")
+                    self.room.list_of_monsters = self.temp_monsters
+                    # self.list_of_monsters = self.temp_monsters
                     return "flee"
                 else:
+                    # Clear cmd
+                    controller.Controller.clear_cmd()
                     print("\n- Your escape attempt failed!\n")
                     return "failed"
             elif choice <= len(self.list_of_monsters):
@@ -96,8 +115,13 @@ class CombatController:
                 self.player.statistics.monster_killed(monster_target.monster_type)
                 self.list_of_monsters.remove(monster_target)
                 self.order_of_attack.remove(monster_target)
+
+                for monster in self.temp_monsters:
+                    if monster.monster_type is monster_target.monster_type:
+                        self.temp_monsters.remove(monster)
+                        break
         else:
-            print("- Your attack missed")
+            print("\n- Your attack missed!")
 
     def monster_attack(self, monster):
         monster_attack = self.roll_dice(monster.attack)
