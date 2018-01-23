@@ -311,7 +311,7 @@ class Controller:
                 print("Value: " + str(var[1]))
                 money += var[1]
             self.character.amount_of_gold += money
-            print("- Your character has gathered: " + str(self.character.amount_of_gold) + " gold in this room")
+            print("- Your character has gathered: " + str(self.character.amount_of_gold) + " gold so far")
             room.list_of_treasures = []
             self.character.statistics.treasures_collected(room.list_of_treasures)
             if type(self.character) is Ai:
