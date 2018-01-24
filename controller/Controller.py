@@ -4,6 +4,7 @@ from model.AccountManager import *
 from model.DungeonMap import *
 from model.Player import *
 
+
 class Controller:
 
     def __init__(self):
@@ -15,125 +16,109 @@ class Controller:
         self.account_manager = AccountManager()
         self.dungeon_map = DungeonMap(5, "NW")
 
-    # First game menu and choices, validates input and finally calls for the next function
-    def start_menu(self):
-        # Load characters to self.list_of
+    def start_menu(self):    # Main menu. User makes a choice and the appropriate function is called:
         while True:
-            # Returns true if choice is valid
             print("\n* Main Menu *")
+            # Validate returns true if users selected choice is within the available choices, otherwise false
             choice = validate(["New Character", "Existing Character(s)", "AI Auto Play", "Statistics", "High Scores",
                                "Quit game"])
-            # If the return is valid
+            clear_cmd()
             if choice:
-                # If user selected 1
                 if choice == 1:
-                    # Sends the user to menu create new char
-                    clear_cmd()
                     self.menu_char_new()
-                # If user selected 2
                 elif choice == 2:
-                    # Sends the user to menu load existing
-                    clear_cmd()
                     self.menu_char_existing()
                 elif choice == 3:
-                    clear_cmd()
-                    # player_ai_start()
-                    if self.create_ai_class():
-                        wait_time = self.select_wait_time_for_ai()
-                        if wait_time == "exit":
-                            continue
-                        self.character = Ai(self.character_hero, wait_time)
-                        self.character_name = self.character.name
-                        self.menu_map_size()
+                    self.create_ai_class()
                 elif choice == 4:
-                    clear_cmd()
-                    statistics()
+                    self.statistics()
                 elif choice == 5:
-                    clear_cmd()
-                    statistics_high_scores()
+                    self.statistics_high_scores()
                 elif choice == 6:
-                    self.quit_game()
-                break
+                    self.game_quit()
 
     # Create new character intro and finally calls new player name
     def menu_char_new(self):
         print("\nSelect hero class:")
         choice = validate([" Warrior\t" + str(attributes("Warrior")), " Wizard\t" + str(attributes("Wizard")),
                            " Thief\t" + str(attributes("Thief")), "Return to main menu."])
+        clear_cmd()
         if choice:
-            if choice == 1:
-                self.character_hero = "Warrior"
-            elif choice == 2:
-                self.character_hero = "Wizard"
-            elif choice == 3:
-                self.character_hero = "Thief"
+            if choice != 4:
+                if choice == 1:
+                    self.character_hero = "Warrior"
+                elif choice == 2:
+                    self.character_hero = "Wizard"
+                elif choice == 3:
+                    self.character_hero = "Thief"
+                print("Selected hero class: " + self.character_hero)
+                self.menu_new_player_name()
             elif choice == 4:
-                clear_cmd()
                 self.start_menu()
-            else:
-                print("Unexpected.")
-            # Sends the user to next menu
-            clear_cmd()
-            print("Selected hero class: " + self.character_hero)
-            self.menu_new_player_name()
         else:
             self.menu_char_new()
 
     # Create new name for new character and then saves to disk
     def menu_new_player_name(self):
-        self.character_name = input("\nEnter character name or 0 to return:\n")
+        self.character_name = input("\nEnter character name or \"0\" to return:\n")
+        clear_cmd()
         if self.character_name == "":
             print("Blank name not allowed")
             self.menu_new_player_name()
         elif self.character_name == "0":
-            print("Returning")
             self.menu_char_new()
         elif self.account_manager.create_new_character(self.character_name, self.character_hero):
-            clear_cmd()
             print("\nCharacter " + self.character_name + ", The " + self.character_hero + " was born!")
-            self.start_menu()
+            self.menu_map_size()
         else:
             print("\nCharacter name already exists! Try again.")
             self.menu_new_player_name()
 
     def create_ai_class(self):
+        print("\nSelect hero class for the AI:")
+        choice = validate(["Warrior", "Wizard", "Thief", "Return to main menu."])
         clear_cmd()
-        while True:
-            print("\nSelect class for the AI:")
-            choice = validate(["Warrior", "Wizard", "Thief", "Return to main menu."])
-            if choice == 1:
-                self.character_hero = "Warrior"
-                break
-            elif choice == 2:
-                self.character_hero = "Wizard"
-                break
-            elif choice == 3:
-                self.character_hero = "Thief"
-                break
+        if choice:
+            if choice != 4:
+                if choice == 1:
+                    self.character_hero = "Warrior"
+                elif choice == 2:
+                    self.character_hero = "Wizard"
+                elif choice == 3:
+                    self.character_hero = "Thief"
+                print("Selected AI Hero class: " + self.character_hero)
+                self.select_wait_time_for_ai()
             elif choice == 4:
-                return False
-        return True
+                self.start_menu()
+        else:
+            self.create_ai_class()
 
     def select_wait_time_for_ai(self):
-        clear_cmd()
-        while True:
-            print("Select AI delay after each room and combat, type ""exit"" to go back:")
-            wait_time = input()
-            if wait_time is "exit":
-                return wait_time
-            try:
-                wait_time = int(wait_time)
-                if wait_time > 20:
-                    raise TypeError
-                return wait_time
-            except TypeError:
-                print("Must enter a digit and must be lower then 20.\n")
-                
+        print("\nEnter seconds to delay or type \"cancel\" to cancel.")
+        wait_time = input()
+        try:
+            if str(wait_time.lower()) == "cancel":
+                clear_cmd()
+                self.create_ai_class()
+            wait_time = int(wait_time)
+            if wait_time > 20:
+                raise TypeError
+            else:
+                self.character = Ai(self.character_hero, wait_time)
+                self.character_name = self.character.name
+                clear_cmd()
+                self.menu_map_size()
+        except (TypeError, ValueError):
+            clear_cmd()
+            print("\nYou must enter a digit lower then 20!\n")
+            self.select_wait_time_for_ai()
+
     # User selects map size and set position function starts
     def menu_map_size(self):
-        print("Select dungeon size:")
+        print("\nSelect dungeon size:")
         choice = validate(["4 x 4 Grid (16 rooms)", "5 x 5 grid (25 rooms)", "8 x 8 grid (64 rooms)",
                            "Return to main menu"])
+        clear_cmd()
         if choice:
             if choice == 1:
                 self.size_of_map = 4
@@ -143,7 +128,6 @@ class Controller:
                 self.size_of_map = 8
             elif choice == 4:
                 self.start_menu()
-            clear_cmd()
             print("\nNumber of rooms in dungeon: " + str(self.size_of_map * self.size_of_map))
             self.menu_player_position()
         elif not choice:
@@ -152,22 +136,25 @@ class Controller:
     # Position is selected and map started
     def menu_player_position(self):
         print("\nChoose starting corner:")
-        choice = validate(["North West", "North East", "South West", "South East", "Return to main menu"])
+        choice = validate(["North West", "North East", "South West", "South East", "Return to select dungeon size"])
+        clear_cmd()
         if not choice:
             self.menu_player_position()
         if choice:
-            if choice == 1:
-                self.starting_pos = "NW"
-            elif choice == 2:
-                self.starting_pos = "NE"
-            elif choice == 3:
-                self.starting_pos = "SW"
-            elif choice == 4:
-                self.starting_pos = "SE"
+            if choice != 5:
+                if choice == 1:
+                    self.starting_pos = "NW"
+                elif choice == 2:
+                    self.starting_pos = "NE"
+                elif choice == 3:
+                    self.starting_pos = "SW"
+                elif choice == 4:
+                    self.starting_pos = "SE"
+                self.dungeon_map = DungeonMap(self.size_of_map, self.starting_pos)
+                self.present_game_start_info()
             elif choice == 5:
                 self.start_menu()
-            self.dungeon_map = DungeonMap(self.size_of_map, self.starting_pos)
-            self.present_game_start_info()
+
 
     # Before starting game, shows game selected info:
     def present_game_start_info(self):
@@ -175,20 +162,20 @@ class Controller:
         print("* Game Start Information *")
         print("Name:\t\t" + self.character_name)
         print("Hero Class:\t" + self.character_hero)
-        print("Selected Characters stats:" + self.character.short_string())
+        # print("Selected Characters stats:" + self.character.short_string())
         print("Number of rooms: \t" + str(self.size_of_map * self.size_of_map))
         print("Starting corner: \t" + self.starting_pos)
-        test = input("\nPress Enter to enter the dungeon or 0 to return to main menu\n")
+        test = input("\nPress Enter to enter the dungeon or \"0\" to return to main menu\n")
+        clear_cmd()
         if test == "0":
-            clear_cmd()
             self.start_menu()
         elif type(self.character) is Ai:
-            clear_cmd()
             self.ai_movement()
         else:
-            clear_cmd()
+            self.character = self.account_manager.get_character_by_name(self.character_name)
             self.player_movement()
 
+    # If user wants to play with existing character:
     def menu_char_existing(self):
         list_of_existing_char = self.account_manager.get_list_of_names()
         if not list_of_existing_char:
@@ -197,6 +184,7 @@ class Controller:
         list_of_existing_char.append("Return to main menu")
         print("\nPick one of your characters:")
         choice = validate(list_of_existing_char)
+        clear_cmd()
         if not choice:
             self.menu_char_existing()
         elif choice == len(list_of_existing_char):
@@ -207,47 +195,38 @@ class Controller:
                 if self.character.is_alive:
                     self.character_name = self.character.name
                     self.character_hero = self.character.characterClass
-                    clear_cmd()
-                    print("\nSelected character: " + self.character_name + "\n")
+                    print("\nSelected character: " + self.character_name)
                     self.menu_map_size()
                 else:
-                    clear_cmd()
                     print("The character is dead, choose one that is alive or create a new.")
                     self.menu_char_existing()
-
             except TypeError:
                 self.menu_char_new()
             except IndexError:
                 print("Index Error! Try again")
                 self.menu_char_existing()
 
-    def to_print(self, string_to_print):
-        clear_cmd()
-        print(string_to_print)
-
-    def quit_game(self):
+    def game_quit(self):    # If user request quit from Main Menu
         clear_cmd()
         quit_confirm = input("User requesting to quit game. Confirm with Y/N:\n ")
         if quit_confirm.lower() == 'y':
-            print("\nQuitting game")
+            print("\nQuitting game. Bye!")
             raise SystemExit
         elif quit_confirm.lower() == 'n':
             self.start_menu()
 
-    def exit_game(self):
+    def game_finish(self):    # If player finds the exit
         clear_cmd()
-        exit_confirm = input("User requesting to exit dungeon. Confirm with Y/N:\n ")
+        exit_confirm = input("User found the exit! Do you want to leave? \nConfirm with Y/N:\n ")
         if exit_confirm.lower() == 'y':
             print("\nQuitting game")
             raise SystemExit
         elif exit_confirm.lower() == 'n':
             self.start_menu()
 
-
     def player_movement(self):
         # Rensa och skriv ut kartan. Hämta möjliga moves från dungeon_map
         # Iterera över moves och skriv ut dessa. Vid korrekt input, flytta spelaren och hantera det nya rummet.
-
         while True:
             clear_cmd()
             print(self.dungeon_map.print_map())
@@ -256,14 +235,13 @@ class Controller:
             string_of_choices = self.dungeon_map.get_movement_choices()
             for char in string_of_choices:
                 if char == "w":
-                    list_of_direction.append("W - Up")
+                    list_of_direction.append("W (Up)")
                 elif char == "a":
-                    list_of_direction.append("A - Left")
+                    list_of_direction.append("A (Left)")
                 elif char == "s":
-                    list_of_direction.append("S - Down")
+                    list_of_direction.append("S (Down)")
                 elif char == "d":
-                    list_of_direction.append("D - Right")
-
+                    list_of_direction.append("D (Right)")
             # direction = input("Choose direction to move:\nW - Up, A - Left, S - Down, D - Right:\n").lower()
             direction = input("Choose direction to move:\n" + ", ".join(list_of_direction) + "\n").lower()
             if direction in string_of_choices:
@@ -292,19 +270,21 @@ class Controller:
         if room.is_exit:
             if type(self.character) is Ai:
                 self.character.durability = self.character.max_durability
-                print(self.character.summary_string())
-                input("Press enter to continue")
+                print(Player.summary_string_dungeon(self.character))
+                input("\nPress \"Enter\" to continue")
+                clear_cmd()
                 return "exit"
             clear_cmd()
             while True:
-                print("There is an exit in the room. Do you wish to leave? Y/N")
+                print(Player.summary_string_dungeon(self.character))
+                print("There is an exit in the room. Do you wish to leave? Y/N\n")
                 choice = input().lower()
                 if choice == "y":
-                    # TODO spara alla stats innan avslutar
                     rooms_visited = self.dungeon_map.get_number_of_visited_rooms()
                     self.character.statistics.room_count(rooms_visited)
                     self.character.durability = self.character.max_durability
                     self.account_manager.save_list_characters()
+
                     self.start_menu()
                     print("- Player found the exit and escaped!")
                     return "exit"
@@ -345,27 +325,17 @@ class Controller:
 
     def handle_death(self):
         self.character.is_alive = False
-        clear_cmd()
-        print("You died!")
-        input("Press Enter to continue to main menu")
         self.account_manager.save_list_characters()
+        clear_cmd()
+        print(Player.summary_string_dungeon(self.character))
+        input("Press Enter to continue to main menu")
         self.start_menu()
 
+    def statistics(self):
+        print("FIX statistics here please")
 
-def statistics():
-    print("Want to show stats")
-
-
-def statistics_high_scores():
-    print("Statistics high score")
-
-
-def player_ai_start():
-    clear_cmd()
-    hero_AI = input("Enter hero:\n")
-    print("Hero choosen: " + hero_AI)
-    number_of_rounds = input("Enter the number of games the AI should play: \n")
-    print("Letting AI play " + number_of_rounds + " times. ")
+    def statistics_high_scores(self):
+        print("FIX statistics high scores here please")
 
 
 def clear_cmd():
@@ -374,6 +344,7 @@ def clear_cmd():
     try:
         if platform.system() == 'Windows':
             os.system('cls')
+            print('\n' * 10)
         elif platform.system() == 'Linux':
             os.system('clear')
             # Used for debugging in Pycharm IDE:
@@ -405,8 +376,9 @@ def validate(list_of_choices):
         except TypeError:
             return False
 
-          
-# start = Controller()
-# clear_cmd()
-# start.start_menu()
 
+game_run = True
+while game_run:
+    start = Controller()
+    clear_cmd()
+    start.start_menu()

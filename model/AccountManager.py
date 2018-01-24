@@ -41,7 +41,6 @@ class AccountManager:
     def save_list_characters(self):
         try:
             pickle.dump(self.list_of_characters, open("Database.pickle", "wb"))
-            print("Saved!")
             return True
         except:
             return False
