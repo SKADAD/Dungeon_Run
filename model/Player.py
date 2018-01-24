@@ -65,6 +65,17 @@ class Player:
                         " | ALIVE = " + str(self.is_alive)
         return return_string
 
+    def summary_string_dungeon(self):
+        summary = "Summary of run with " + self.characterClass + "\n"
+        if self.is_alive:
+            summary += "Your durability remaining: " + str(self.durability) + "\n"
+        else:
+            summary += "You died during battle!\n"
+        summary += "Number of monsters killed:\n"
+        summary += self.statistics.monster_killed_toString()
+        summary += "Total gold collected: " + str(self.amount_of_gold)
+        summary += "Total rooms visited: " + str(self.statistics.room_count)
+        return summary
 
 def attributes(character_hero):
     if character_hero == "Warrior":

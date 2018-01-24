@@ -6,7 +6,7 @@ from model.Monster import Monster
 from model.Player import Player
 from model.Statistics import Statistics
 from model.AccountManager import *
-import controller.Controller
+#import controller.Controller
 
 
 
@@ -65,14 +65,14 @@ class CombatController:
 
             if choice == 0:
                 if self.flee():
-                    controller.Controller.clear_cmd()
+                    clear_cmd()
                     print("\n- You fled from the room!")
                     self.room.list_of_monsters = self.temp_monsters
                     # self.list_of_monsters = self.temp_monsters
                     return "flee"
                 else:
                     # Clear cmd
-                    controller.Controller.clear_cmd()
+                    clear_cmd()
                     print("\n- Your escape attempt failed!\n")
                     return "failed"
             elif choice <= len(self.list_of_monsters):
@@ -106,10 +106,10 @@ class CombatController:
         enemy_agility = self.roll_dice(monster_target.agility)
         if player_attack >= enemy_agility:
             if self.player.is_thief and random.randint(1, 100) <= 25:
-                print("- Double Strike hit " + monster_target.monster_type + " for 2 durability.")
+                print("- Double Strike hit " + monster_target.monster_type + " for 2 durability.\n")
                 monster_target.durability -= 2
             else:
-                print("\n- Attack hit " + monster_target.monster_type + " for 1 durability.")
+                print("- Attack hit " + monster_target.monster_type + " for 1 durability.\n")
                 monster_target.durability -= 1
             if monster_target.durability <= 0:
                 print("- You killed: " + monster_target.monster_type + "!\n")
@@ -122,7 +122,7 @@ class CombatController:
                         self.temp_monsters.remove(monster)
                         break
         else:
-            print("\n- Your attack missed!")
+            print("- Your attack missed!\n")
 
     def monster_attack(self, monster):
         monster_attack = self.roll_dice(monster.attack)
@@ -132,13 +132,13 @@ class CombatController:
                 print("- The shield blocked the attack. You take no damage.\n")
                 self.soldier_special = False
             else:
-                print("\n- " + monster.monster_type + " hit you for 1 durability!\n")
+                print("- " + monster.monster_type + " hit you for 1 durability!\n")
                 self.player.durability -= 1
             if self.player.durability <= 0:
-                print("- Game over")
+                self.player.is_alive = False
                 self.controller.handle_death()
         else:
-            print("\n- " + monster.monster_type + " attack missed you!\n")
+            print("- " + monster.monster_type + " attack missed you!\n")
 
     def flee(self):
         flee_var = self.player.agility * 10
@@ -151,3 +151,21 @@ class CombatController:
             return True
         else:
             return False
+
+
+def clear_cmd():
+    import os
+    import platform
+    try:
+        if platform.system() == 'Windows':
+            os.system('cls')
+            print('\n' * 10)
+        elif platform.system() == 'Linux':
+            os.system('clear')
+            # Used for debugging in Pycharm IDE:
+            print('\n' * 10)
+        else:
+            print("Platform unknown but printing empty rows..")
+            print('\n' * 10)
+    except Exception:
+        print("Clear failed")
