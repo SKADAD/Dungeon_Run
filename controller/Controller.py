@@ -338,8 +338,8 @@ class Controller:
                 money += var[1]
             self.character.amount_of_gold += money
             print("- Your character has gathered: " + str(self.character.amount_of_gold) + " gold so far")
-            room.list_of_treasures = []
             self.character.statistics.treasures_collected(room.list_of_treasures)
+            room.list_of_treasures = []
             if type(self.character) is Ai:
                 time.sleep(self.character.wait_time)
             else:
