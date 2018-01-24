@@ -106,10 +106,10 @@ class Controller:
             if wait_time > 20:
                 raise TypeError
             else:
-                #self.character = Ai(self.character_hero, wait_time)
-                #self.character_name = self.character.name
+                self.character = Ai(self.character_hero, wait_time)
+                self.character_name = self.character.name
                 clear_cmd()
-                self.menu_ai_number_of_rounds()
+                #self.menu_ai_number_of_rounds()
         except (TypeError, ValueError):
             clear_cmd()
             print("\nYou must enter a digit lower then 20!\n")
@@ -135,25 +135,25 @@ class Controller:
             print("\nYou must enter a digit lower then 20!\n")
             self.menu_ai_number_of_rounds()
 
-    # User selects map size and set position function starts
-    def menu_map_size(self):
-        print("\nSelect dungeon size:")
-        choice = validate(["4 x 4 Grid (16 rooms)", "5 x 5 grid (25 rooms)", "8 x 8 grid (64 rooms)",
-                           "Return to main menu"])
-        clear_cmd()
-        if choice:
-            if choice == 1:
-                self.size_of_map = 4
-            elif choice == 2:
-                self.size_of_map = 5
-            elif choice == 3:
-                self.size_of_map = 8
-            elif choice == 4:
-                self.start_menu()
-            print("\nNumber of rooms in dungeon: " + str(self.size_of_map * self.size_of_map))
-            self.menu_player_position()
-        elif not choice:
-            self.menu_map_size()
+    ## User selects map size and set position function starts
+    #def menu_map_size(self):
+    #    print("\nSelect dungeon size:")
+    #    choice = validate(["4 x 4 Grid (16 rooms)", "5 x 5 grid (25 rooms)", "8 x 8 grid (64 rooms)",
+    #                       "Return to main menu"])
+    #    clear_cmd()
+    #    if choice:
+    #        if choice == 1:
+    #            self.size_of_map = 4
+    #        elif choice == 2:
+    #            self.size_of_map = 5
+    #        elif choice == 3:
+    #            self.size_of_map = 8
+    #        elif choice == 4:
+    #            self.start_menu()
+    #        print("\nNumber of rooms in dungeon: " + str(self.size_of_map * self.size_of_map))
+    #        self.menu_player_position()
+    #    elif not choice:
+    #        self.menu_map_size()
 
     # Position is selected and map started
     def menu_player_position(self):
@@ -236,16 +236,6 @@ class Controller:
         elif quit_confirm.lower() == 'n':
             self.start_menu()
 
-    @staticmethod
-    def game_finish(self):    # If player finds the exit
-        clear_cmd()
-        exit_confirm = input("User found the exit! Do you want to leave? \nConfirm with Y/N:\n ")
-        if exit_confirm.lower() == 'y':
-            print("\nQuitting game")
-            raise SystemExit
-        elif exit_confirm.lower() == 'n':
-            return
-
     def player_movement(self):
         # Rensa och skriv ut kartan. Hämta möjliga moves från dungeon_map
         # Iterera över moves och skriv ut dessa. Vid korrekt input, flytta spelaren och hantera det nya rummet.
@@ -299,19 +289,17 @@ class Controller:
             clear_cmd()
             while True:
                 print(Player.summary_string_dungeon(self.character))
-                print("There is an exit in the room. Do you wish to leave? Y/N\n")
-                choice = input().lower()
-                if choice == "y":
+                exit_confirm = input("User found the exit! Do you want to leave dungeon? \nConfirm with Y/N:\n ").lower()
+                if exit_confirm == "y":
                     rooms_visited = self.dungeon_map.get_number_of_visited_rooms()
                     self.character.statistics.room_count(rooms_visited)
                     self.character.durability = self.character.max_durability
                     self.account_manager.save_list_characters()
-
                     self.start_menu()
                     print("- Player found the exit and escaped!")
                     return "exit"
-                elif choice == "n":
-                    break
+                elif exit_confirm == "n":
+                    return
                 else:
                     print("You must choose yes or no!")
                     continue
