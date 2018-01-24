@@ -1,11 +1,10 @@
-import sys
-sys.path.append('../')
-from controller.CombatController import CombatController
 from model.AI import Ai
 from model.AccountManager import *
 from model.DungeonMap import *
 from model.Player import *
-
+from controller.CombatController import *
+import sys
+sys.path.append('../')
 
 class Controller:
 
@@ -71,6 +70,7 @@ class Controller:
             self.menu_char_new()
         elif self.account_manager.create_new_character(self.character_name, self.character_hero):
             print("\nCharacter " + self.character_name + ", The " + self.character_hero + " was born!")
+            self.character = self.account_manager.get_character_by_name(self.character_name)
             self.menu_map_size()
         else:
             print("\nCharacter name already exists! Try again.")

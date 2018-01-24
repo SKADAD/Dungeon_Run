@@ -135,6 +135,7 @@ class CombatController:
                 print("- " + monster.monster_type + " hit you for 1 durability!\n")
                 self.player.durability -= 1
             if self.player.durability <= 0:
+                self.player.is_alive = False
                 self.controller.handle_death()
         else:
             print("- " + monster.monster_type + " attack missed you!\n")
