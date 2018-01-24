@@ -109,51 +109,52 @@ class Controller:
                 self.character = Ai(self.character_hero, wait_time)
                 self.character_name = self.character.name
                 clear_cmd()
+                self.menu_map_size()
                 #self.menu_ai_number_of_rounds()
         except (TypeError, ValueError):
             clear_cmd()
             print("\nYou must enter a digit lower then 20!\n")
             self.menu_ai_select_wait_time()
 
-    def menu_ai_number_of_rounds(self): # AI Option sets number of rounds AI should play
-        number_of_rounds = input("Enter number of rounds AI should play or type \"cancel\" to cancel:\n")
-        try:
-            if str(number_of_rounds.lower()) == "cancel":
-                clear_cmd()
-                self.menu_ai_select_wait_time()
-            wait_time = int(number_of_rounds)
-            if wait_time > 20:
-                raise TypeError
-            else:
-                self.character = Ai(self.character_hero, wait_time, number_of_rounds)
-                self.character_name = self.character.name
-                clear_cmd()
-                print("Number of rounds AI will play: " + number_of_rounds)
-                self.menu_map_size()
-        except (TypeError, ValueError):
-            clear_cmd()
-            print("\nYou must enter a digit lower then 20!\n")
-            self.menu_ai_number_of_rounds()
-
-    ## User selects map size and set position function starts
-    #def menu_map_size(self):
-    #    print("\nSelect dungeon size:")
-    #    choice = validate(["4 x 4 Grid (16 rooms)", "5 x 5 grid (25 rooms)", "8 x 8 grid (64 rooms)",
-    #                       "Return to main menu"])
-    #    clear_cmd()
-    #    if choice:
-    #        if choice == 1:
-    #            self.size_of_map = 4
-    #        elif choice == 2:
-    #            self.size_of_map = 5
-    #        elif choice == 3:
-    #            self.size_of_map = 8
-    #        elif choice == 4:
-    #            self.start_menu()
-    #        print("\nNumber of rooms in dungeon: " + str(self.size_of_map * self.size_of_map))
-    #        self.menu_player_position()
-    #    elif not choice:
-    #        self.menu_map_size()
+    #def menu_ai_number_of_rounds(self): # AI Option sets number of rounds AI should play
+    #    number_of_rounds = input("Enter number of rounds AI should play or type \"cancel\" to cancel:\n")
+    #    try:
+    #        if str(number_of_rounds.lower()) == "cancel":
+    #            clear_cmd()
+    #            self.menu_ai_select_wait_time()
+    #        wait_time = int(number_of_rounds)
+    #        if wait_time > 20:
+    #            raise TypeError
+    #        else:
+    #            self.character = Ai(self.character_hero, wait_time, number_of_rounds)
+    #            self.character_name = self.character.name
+    #            clear_cmd()
+    #            print("Number of rounds AI will play: " + number_of_rounds)
+    #            self.menu_map_size()
+    #    except (TypeError, ValueError):
+    #        clear_cmd()
+    #        print("\nYou must enter a digit lower then 20!\n")
+    #        self.menu_ai_number_of_rounds()
+#
+    # User selects map size and set position function starts
+    def menu_map_size(self):
+        print("\nSelect dungeon size:")
+        choice = validate(["4 x 4 Grid (16 rooms)", "5 x 5 grid (25 rooms)", "8 x 8 grid (64 rooms)",
+                           "Return to main menu"])
+        clear_cmd()
+        if choice:
+            if choice == 1:
+                self.size_of_map = 4
+            elif choice == 2:
+                self.size_of_map = 5
+            elif choice == 3:
+                self.size_of_map = 8
+            elif choice == 4:
+                self.start_menu()
+            print("\nNumber of rooms in dungeon: " + str(self.size_of_map * self.size_of_map))
+            self.menu_player_position()
+        elif not choice:
+            self.menu_map_size()
 
     # Position is selected and map started
     def menu_player_position(self):
