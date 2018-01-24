@@ -15,6 +15,7 @@ class Controller:
         self.size_of_map = 1
         self.account_manager = AccountManager()
         self.dungeon_map = DungeonMap(5, "NW")
+        self.number_of_rounds = 0
 
     def start_menu(self):    # Main menu. User makes a choice and the appropriate function is called:
         while True:
@@ -108,33 +109,28 @@ class Controller:
                 self.character = Ai(self.character_hero, wait_time)
                 self.character_name = self.character.name
                 clear_cmd()
-                self.menu_map_size()
-                #self.menu_ai_number_of_rounds()
+                # self.menu_map_size()
+                self.menu_ai_number_of_rounds()
         except (TypeError, ValueError):
             clear_cmd()
             print("\nYou must enter a digit lower then 20!\n")
             self.menu_ai_select_wait_time()
 
-    #def menu_ai_number_of_rounds(self): # AI Option sets number of rounds AI should play
-    #    number_of_rounds = input("Enter number of rounds AI should play or type \"cancel\" to cancel:\n")
-    #    try:
-    #        if str(number_of_rounds.lower()) == "cancel":
-    #            clear_cmd()
-    #            self.menu_ai_select_wait_time()
-    #        wait_time = int(number_of_rounds)
-    #        if wait_time > 20:
-    #            raise TypeError
-    #        else:
-    #            self.character = Ai(self.character_hero, wait_time, number_of_rounds)
-    #            self.character_name = self.character.name
-    #            clear_cmd()
-    #            print("Number of rounds AI will play: " + number_of_rounds)
-    #            self.menu_map_size()
-    #    except (TypeError, ValueError):
-    #        clear_cmd()
-    #        print("\nYou must enter a digit lower then 20!\n")
-    #        self.menu_ai_number_of_rounds()
-#
+    def menu_ai_number_of_rounds(self): # AI Option sets number of rounds AI should play
+        number_of_rounds = input("Enter number of rounds AI should play or type \"cancel\" to cancel:\n")
+        try:
+            if number_of_rounds.lower() == "cancel":
+                clear_cmd()
+                return
+            self.number_of_rounds = int(number_of_rounds)
+            clear_cmd()
+            print("Number of rounds AI will play: " + str(number_of_rounds))
+            self.menu_map_size()
+        except (TypeError, ValueError):
+            clear_cmd()
+            print("\nYou must enter a digit!\n")
+            self.menu_ai_number_of_rounds()
+
     # User selects map size and set position function starts
     def menu_map_size(self):
         print("\nSelect dungeon size:")
@@ -191,7 +187,12 @@ class Controller:
         if test == "0":
             self.start_menu()
         elif type(self.character) is Ai:
-            self.ai_movement()
+            for i in range(self.number_of_rounds):
+                print("New round")
+                self.ai_movement()
+                self.dungeon_map = DungeonMap(self.size_of_map, self.starting_pos)
+            print(self.character.summary_string())
+            input("Press Enter to return to main menu")
         else:
             self.character = self.account_manager.get_character_by_name(self.character_name)
             self.player_movement()
@@ -259,11 +260,12 @@ class Controller:
             if direction in string_of_choices:
                 room = self.dungeon_map.move_player(direction)
                 if self.room_handler(room) is "exit":
-                    self.start_menu()
+                    self.finish_adventure()
             else:
                 print("fool, wrong step")
 
     def ai_movement(self):
+        # Ta reda på vilka riktningar som är möjliga. Slumpa ett index ifrån denna sträng och flytta AI
         while True:
             clear_cmd()
             print(self.dungeon_map.print_map())
@@ -272,7 +274,9 @@ class Controller:
             direction = string_of_choices[index]
             room = self.dungeon_map.move_player(direction)
             if self.room_handler(room) is "exit":
-                self.start_menu()
+                self.character.durability = self.character.max_durability
+                self.character.is_alive = True
+                return
 
     def room_handler(self, room):
         # Kolla om det finns en utgång. Ge isf valet att avsluta.
@@ -281,21 +285,20 @@ class Controller:
         clear_cmd()
         if room.is_exit:
             if type(self.character) is Ai:
-                self.character.durability = self.character.max_durability
-                print(Player.summary_string_dungeon(self.character))
-                input("\nPress \"Enter\" to continue")
+                self.update_visited_rooms()
                 clear_cmd()
                 return "exit"
             clear_cmd()
             while True:
-                print(Player.summary_string_dungeon(self.character))
+                self.update_visited_rooms()
+                print(self.character.summary_string_dungeon())
+                # print(Player.summary_string_dungeon(self.character))
                 exit_confirm = input("User found the exit! Do you want to leave dungeon? \nConfirm with Y/N:\n ").lower()
                 if exit_confirm == "y":
-                    rooms_visited = self.dungeon_map.get_number_of_visited_rooms()
-                    self.character.statistics.room_count(rooms_visited)
-                    self.character.durability = self.character.max_durability
-                    self.account_manager.save_list_characters()
-                    self.start_menu()
+                    # rooms_visited = self.dungeon_map.get_number_of_visited_rooms()
+                    # self.character.statistics.room_count(rooms_visited)
+                    # self.character.durability = self.character.max_durability
+                    # self.account_manager.save_list_characters()
                     print("- Player found the exit and escaped!")
                     return "exit"
                 elif exit_confirm == "n":
@@ -310,8 +313,16 @@ class Controller:
             combat = CombatController(self, room)
             if combat.start():
                 if not self.character.is_alive:
-                    self.handle_death()
-                    return
+                    if type(self.character) is Ai:
+                        self.character.number_of_deaths += 1
+                        print("Ai died")
+                    return "exit"
+                # if not self.character.is_alive and type(self.character) == Player:
+                #     self.handle_death()
+                #     return
+                # elif not self.character.is_alive:
+                #     self.character.number_of_deaths += 1
+                #     return "exit"
             else:
                 return
 
@@ -332,6 +343,20 @@ class Controller:
                 time.sleep(self.character.wait_time)
             else:
                 input("\nPress Enter to confirm and continue")
+
+    def finish_adventure(self):
+        # Updatera antal besökta rum. Återställ durability. Spara. Skriv ut sammanställning
+        self.update_visited_rooms()
+        self.character.durability = self.character.max_durability
+        if type(self.character) is Player:
+            self.account_manager.save_list_characters()
+            print(self.character.summary_string_dungeon())
+            input("Press Enter to continue to main menu")
+
+    def update_visited_rooms(self):
+        # Uppdatera statistik över besökta rum
+        rooms_visited = self.dungeon_map.get_number_of_visited_rooms()
+        self.character.statistics.room_count(rooms_visited)
 
     def handle_death(self):
         self.character.is_alive = False

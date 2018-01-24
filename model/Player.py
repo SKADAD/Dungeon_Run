@@ -23,7 +23,6 @@ class Player:
             self.attack = 6
             self.agility = 4
             self.is_warrior = True
-            self.is_alive = True
 
         elif characterClass == "Wizard":
             self.initiative = 6
@@ -31,7 +30,6 @@ class Player:
             self.attack = 9
             self.agility = 5
             self.is_wizard = True
-            self.is_alive = True
 
         elif characterClass == "Thief":
             self.initiative = 7
@@ -39,7 +37,6 @@ class Player:
             self.attack = 5
             self.agility = 7
             self.is_thief = True
-            self.is_alive = True
 
         self.max_durability = self.durability
         
