@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../')
 from controller.CombatController import CombatController
 from model.AI import Ai
 from model.AccountManager import *
@@ -29,13 +31,13 @@ class Controller:
                 elif choice == 2:
                     self.menu_char_existing()
                 elif choice == 3:
-                    self.create_ai_class()
+                    self.menu_ai_class_select()
                 elif choice == 4:
-                    self.statistics()
+                    self.menu_statistics()
                 elif choice == 5:
-                    self.statistics_high_scores()
+                    self.menu_statistics_high_scores()
                 elif choice == 6:
-                    self.game_quit()
+                    self.menu_game_quit()
 
     # Create new character intro and finally calls new player name
     def menu_char_new(self):
@@ -74,7 +76,7 @@ class Controller:
             print("\nCharacter name already exists! Try again.")
             self.menu_new_player_name()
 
-    def create_ai_class(self):
+    def menu_ai_class_select(self): # AI Option select class
         print("\nSelect hero class for the AI:")
         choice = validate(["Warrior", "Wizard", "Thief", "Return to main menu."])
         clear_cmd()
@@ -87,31 +89,51 @@ class Controller:
                 elif choice == 3:
                     self.character_hero = "Thief"
                 print("Selected AI Hero class: " + self.character_hero)
-                self.select_wait_time_for_ai()
+                self.menu_ai_select_wait_time()
             elif choice == 4:
                 self.start_menu()
         else:
-            self.create_ai_class()
+            self.menu_ai_class_select()
 
-    def select_wait_time_for_ai(self):
-        print("\nEnter seconds to delay or type \"cancel\" to cancel.")
+    def menu_ai_select_wait_time(self): # AI Option select delay
+        print("\nEnter seconds to delay or type \"cancel\" to cancel:")
         wait_time = input()
         try:
             if str(wait_time.lower()) == "cancel":
                 clear_cmd()
-                self.create_ai_class()
+                self.menu_ai_class_select()
             wait_time = int(wait_time)
             if wait_time > 20:
                 raise TypeError
             else:
-                self.character = Ai(self.character_hero, wait_time)
+                #self.character = Ai(self.character_hero, wait_time)
+                #self.character_name = self.character.name
+                clear_cmd()
+                self.menu_ai_number_of_rounds()
+        except (TypeError, ValueError):
+            clear_cmd()
+            print("\nYou must enter a digit lower then 20!\n")
+            self.menu_ai_select_wait_time()
+
+    def menu_ai_number_of_rounds(self): # AI Option sets number of rounds AI should play
+        number_of_rounds = input("Enter number of rounds AI should play or type \"cancel\" to cancel:\n")
+        try:
+            if str(number_of_rounds.lower()) == "cancel":
+                clear_cmd()
+                self.menu_ai_select_wait_time()
+            wait_time = int(number_of_rounds)
+            if wait_time > 20:
+                raise TypeError
+            else:
+                self.character = Ai(self.character_hero, wait_time, number_of_rounds)
                 self.character_name = self.character.name
                 clear_cmd()
+                print("Number of rounds AI will play: " + number_of_rounds)
                 self.menu_map_size()
         except (TypeError, ValueError):
             clear_cmd()
             print("\nYou must enter a digit lower then 20!\n")
-            self.select_wait_time_for_ai()
+            self.menu_ai_number_of_rounds()
 
     # User selects map size and set position function starts
     def menu_map_size(self):
@@ -154,7 +176,6 @@ class Controller:
                 self.present_game_start_info()
             elif choice == 5:
                 self.start_menu()
-
 
     # Before starting game, shows game selected info:
     def present_game_start_info(self):
@@ -206,7 +227,7 @@ class Controller:
                 print("Index Error! Try again")
                 self.menu_char_existing()
 
-    def game_quit(self):    # If user request quit from Main Menu
+    def menu_game_quit(self):    # If user request quit from Main Menu
         clear_cmd()
         quit_confirm = input("User requesting to quit game. Confirm with Y/N:\n ")
         if quit_confirm.lower() == 'y':
@@ -215,6 +236,7 @@ class Controller:
         elif quit_confirm.lower() == 'n':
             self.start_menu()
 
+    @staticmethod
     def game_finish(self):    # If player finds the exit
         clear_cmd()
         exit_confirm = input("User found the exit! Do you want to leave? \nConfirm with Y/N:\n ")
@@ -222,7 +244,7 @@ class Controller:
             print("\nQuitting game")
             raise SystemExit
         elif exit_confirm.lower() == 'n':
-            self.start_menu()
+            return
 
     def player_movement(self):
         # Rensa och skriv ut kartan. Hämta möjliga moves från dungeon_map
@@ -331,10 +353,10 @@ class Controller:
         input("Press Enter to continue to main menu")
         self.start_menu()
 
-    def statistics(self):
+    def menu_statistics(self):
         print("FIX statistics here please")
 
-    def statistics_high_scores(self):
+    def menu_statistics_high_scores(self):
         print("FIX statistics high scores here please")
 
 
