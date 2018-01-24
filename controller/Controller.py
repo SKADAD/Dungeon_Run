@@ -1,10 +1,9 @@
-from model.AI import Ai
-from model.AccountManager import *
+import sys
+sys.path.append('../')
+
 from model.DungeonMap import *
 from model.Player import *
 from controller.CombatController import *
-import sys
-sys.path.append('../')
 
 class Controller:
 
