@@ -14,7 +14,7 @@ class Ai(Player):
         if self.number_of_deaths == 0:
             summary += "The AI survived the dungeon(s) and is still alive.\n"
         else:
-            summary += "The AI died " + str(self.number_of_deaths) + " times of: " + self.total_runs + " runs.+\n"
+            summary += "The AI died " + str(self.number_of_deaths) + " times of " + str(self.total_runs) + " dungeon runs.\n"
             summary += "Total rounds = " + str(self.total_runs) + "\n"
         summary += "Number of monsters killed:\n" + self.statistics.monster_killed_toString()
         summary += "Total gold collected = " + str(self.amount_of_gold) + "\n"

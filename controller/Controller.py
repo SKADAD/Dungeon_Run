@@ -5,6 +5,7 @@ from model.DungeonMap import *
 from model.Player import *
 from controller.CombatController import *
 
+
 class Controller:
 
     def __init__(self):
@@ -115,7 +116,6 @@ class Controller:
         except (TypeError, ValueError):
             clear_cmd()
             print("\nYou must enter a digit lower then 20!\n")
-            self.menu_ai_select_wait_time()
 
     def menu_ai_number_of_rounds(self): # AI Option sets number of rounds AI should play
         number_of_rounds = input("Enter the number of rounds AI should play, or type \"cancel\" to cancel:\n")
@@ -191,15 +191,12 @@ class Controller:
         if test == "0":
             self.start_menu()
         elif type(self.character) is Ai:
-            try:
                 for i in range(self.number_of_rounds):
                     print("New round")
                     self.ai_movement()
                     self.dungeon_map = DungeonMap(self.size_of_map, self.starting_pos)
                 print(self.character.summary_string())
                 input("Press Enter to return to main menu")
-            except Exception as e:
-                print(e)
         else:
             self.character = self.account_manager.get_character_by_name(self.character_name)
             self.player_movement()
@@ -297,7 +294,7 @@ class Controller:
                 return "exit"
             clear_cmd()
             while True:
-                self.update_visited_rooms()
+                #self.update_visited_rooms()
                 print(self.character.summary_string_dungeon())
                 # print(Player.summary_string_dungeon(self.character))
                 exit_confirm = input("\nUser found the exit! \nDo you want to leave dungeon? \nConfirm with Y/N:\n ").lower()
@@ -363,7 +360,24 @@ class Controller:
             self.account_manager.save_list_characters()
             print(self.character.summary_string_dungeon())
             input("\nPress Enter to continue to main menu")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            self.character.amount_of_gold = 0
             return
+        self.character.amount_of_gold = 0
 
 
     def update_visited_rooms(self):
