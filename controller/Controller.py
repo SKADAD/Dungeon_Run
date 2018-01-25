@@ -44,7 +44,7 @@ class Controller:
         print("Select hero class:")
         choice = validate([" Warrior\t" + str(attributes("Warrior")), " Wizard\t" + str(attributes("Wizard")),
                            " Thief\t" + str(attributes("Thief")), "Return to main menu."])
-        clear_cmd()
+
         if choice:
             if choice != 4:
                 if choice == 1:
@@ -60,6 +60,7 @@ class Controller:
         else:
             self.menu_char_new()
 
+
     # Create new name for new character and then saves to disk
     def menu_new_player_name(self):
         self.character_name = input("\nEnter character name or \"0\" to return:\n")
@@ -70,7 +71,7 @@ class Controller:
         elif self.character_name == "0":
             self.menu_char_new()
         elif self.account_manager.create_new_character(self.character_name, self.character_hero):
-            print("\nCharacter " + self.character_name + ", The " + self.character_hero + " was born!")
+            print("Character " + self.character_name + ", The " + self.character_hero + " was born!")
             self.character = self.account_manager.get_character_by_name(self.character_name)
             self.menu_map_size()
         else:
@@ -118,11 +119,14 @@ class Controller:
             self.menu_ai_select_wait_time()
 
     def menu_ai_number_of_rounds(self): # AI Option sets number of rounds AI should play
-        number_of_rounds = input("Enter number of rounds AI should play or type \"cancel\" to cancel:\n")
+        number_of_rounds = input("Enter the number of rounds AI should play, or type \"cancel\" to cancel:\n")
         try:
             if number_of_rounds.lower() == "cancel":
                 clear_cmd()
                 return
+            elif int(number_of_rounds) == 0:
+                print("\nInvalid choice, AI must play at least 1 time\n")
+                self.menu_ai_number_of_rounds()
             self.number_of_rounds = int(number_of_rounds)
             clear_cmd()
             print("Number of rounds AI will play: " + str(number_of_rounds))
