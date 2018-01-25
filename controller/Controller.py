@@ -98,24 +98,25 @@ class Controller:
             self.menu_ai_class_select()
 
     def menu_ai_select_wait_time(self): # AI Option select delay
-        print("Enter seconds to delay or type \"cancel\" to cancel:")
-        wait_time = input()
-        try:
-            if str(wait_time.lower()) == "cancel":
+        while True:
+            print("Enter seconds to delay or type \"cancel\" to cancel:")
+            wait_time = input()
+            try:
+                if str(wait_time.lower()) == "cancel":
+                    clear_cmd()
+                    self.menu_ai_class_select()
+                wait_time = int(wait_time)
+                if wait_time > 20:
+                    raise TypeError
+                else:
+                    self.character = Ai(self.character_hero, wait_time)
+                    self.character_name = self.character.name
+                    clear_cmd()
+                    # self.menu_map_size()
+                    self.menu_ai_number_of_rounds()
+            except (TypeError, ValueError):
                 clear_cmd()
-                self.menu_ai_class_select()
-            wait_time = int(wait_time)
-            if wait_time > 20:
-                raise TypeError
-            else:
-                self.character = Ai(self.character_hero, wait_time)
-                self.character_name = self.character.name
-                clear_cmd()
-                # self.menu_map_size()
-                self.menu_ai_number_of_rounds()
-        except (TypeError, ValueError):
-            clear_cmd()
-            print("\nYou must enter a digit lower then 20!\n")
+                print("\nYou must enter a digit lower then 20!\n")
 
     def menu_ai_number_of_rounds(self): # AI Option sets number of rounds AI should play
         number_of_rounds = input("Enter number of rounds AI should play or type \"cancel\" to cancel:\n")
@@ -196,6 +197,7 @@ class Controller:
                 print(self.character.summary_string())
                 input("Press Enter to return to main menu")
                 clear_cmd()
+                self.start_menu()
         else:
             self.character = self.account_manager.get_character_by_name(self.character_name)
             self.player_movement()
@@ -284,6 +286,7 @@ class Controller:
             room = self.dungeon_map.move_player(direction)
             if self.room_handler(room) is "exit":
                 self.finish_adventure()
+                self.character.durability = self.character.max_durability
                 self.character.is_alive = True
                 return
 
@@ -297,7 +300,7 @@ class Controller:
                 return "exit"
             clear_cmd()
             while True:
-                #self.update_visited_rooms()
+                self.update_visited_rooms()
                 print(self.character.summary_string_dungeon())
                 # print(Player.summary_string_dungeon(self.character))
                 exit_confirm = input("User found the exit! Do you want to leave dungeon? \nConfirm with Y/N:\n ").lower()
@@ -326,8 +329,6 @@ class Controller:
                 if not self.character.is_alive:
                     if type(self.character) is Ai:
                         self.character.number_of_deaths += 1
-                        self.character.amount_of_gold = 0
-                        self.finish_adventure()
                         print("\n- AI Player died!\n")
                     return "exit"
                 # if not self.character.is_alive and type(self.character) == Player:
@@ -357,23 +358,24 @@ class Controller:
     def finish_adventure(self):
         # Updatera antal besökta rum. Återställ durability. Spara. Skriv ut sammanställning
         self.update_visited_rooms()
-        self.character.durability = self.character.max_durability
-        self.character.statistics.rooms_visited = self.character.total_rooms
-        self.character.total_rooms = 0
-        self.character.statistics.total_amount_of_gold = self.character.amount_of_gold
-        self.character.amount_of_gold = 0
+        self.character.statistics.total_rooms += self.character.rooms_visited
+        self.character.statistics.total_amount_of_gold += self.character.amount_of_gold
         if type(self.character) is Player:
             self.account_manager.save_list_characters()
             clear_cmd()
             print(self.character.summary_string_dungeon())
+            self.character.durability = self.character.max_durability
             input("\nPress Enter to continue to main menu")
             clear_cmd()
-            return
+
+        self.character.rooms_visited = 0
+        self.character.amount_of_gold = 0
+        self.character.statistics.total_runs += 1
 
     def update_visited_rooms(self):
         # Uppdatera statistik över besökta rum
         rooms_visited = self.dungeon_map.get_number_of_visited_rooms()
-        self.character.total_rooms = rooms_visited
+        self.character.rooms_visited = rooms_visited
 
 
     #def handle_death(self):
@@ -418,7 +420,7 @@ class Controller:
                 character_string += "\t\t\t"
             else:
                 character_string += "\t\t\t\t"
-            character_string += (str(character.statistics.rooms_visited) + "\t\t\t" +
+            character_string += (str(character.statistics.total_rooms) + "\t\t\t" +
                                 str(character.statistics.total_amount_of_gold) + "\t\t\t" +
                                 str(character.statistics.total_kills()))
             print(character_string)

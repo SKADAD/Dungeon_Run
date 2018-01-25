@@ -10,12 +10,10 @@ class Ai(Player):
         # self.number_of_rounds = number_of_rounds
 
     def summary_string(self):
-        summary = "Summary of AI run with " + self.characterClass + ":\n\n"
-        if self.number_of_deaths == 0:
-            summary += "The AI survived the dungeon(s) and is still alive.\n"
-        else:
-            summary += "The AI died " + str(self.number_of_deaths) + " times of " + str(self.total_runs) + " dungeon runs.\n"
+        summary = "Summary of AI run with " + self.name + ":\n\n"
+        summary += "The AI played " + str(self.statistics.total_runs) + " dungeon(s) and died " + str(self.number_of_deaths) + " time(s).\n"
         summary += "Number of monsters killed:\n" + self.statistics.monster_killed_toString()
         summary += "Total gold collected = " + str(self.statistics.total_amount_of_gold) + "\n"
-        summary += "Total rooms visited = " + str(self.statistics.rooms_visited) + "\n"
+        summary += "Total rooms visited = " + str(self.statistics.total_rooms) + "\n"
         return summary
+

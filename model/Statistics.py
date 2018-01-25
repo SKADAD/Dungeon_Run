@@ -7,7 +7,7 @@ class Statistics:
         self.orchs_killed = 0
         self.trolls_killed = 0
         self.treasures = []
-        self.rooms_visited = 0
+        self.total_rooms = 0
         self.total_runs = 0
         self.total_amount_of_gold = 0
 
@@ -47,7 +47,7 @@ class Statistics:
         return return_string
 
     def room_count(self, number_of_rooms):
-        self.rooms_visited += number_of_rooms
+        self.total_rooms += number_of_rooms
 
     def total_kills(self):
         total_kills = 0

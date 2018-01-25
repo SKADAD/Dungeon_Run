@@ -68,6 +68,6 @@ class AccountManager:
                                        reverse=True)
         elif category is "rooms":
             list_of_highscore = sorted(self.list_of_characters,
-                                       key=lambda character: character.statistics.rooms_visited,
+                                       key=lambda character: character.statistics.total_rooms,
                                        reverse=True)
         return list_of_highscore[:5]
