@@ -53,6 +53,7 @@ class Controller:
                 print("Selected hero class: " + self.character_hero)
                 self.menu_new_player_name()
             elif choice == 4:
+                clear_cmd()
                 self.start_menu()
         else:
             self.menu_char_new()
@@ -146,7 +147,7 @@ class Controller:
                 self.size_of_map = 8
             elif choice == 4:
                 self.start_menu()
-            print("\nNumber of rooms in dungeon: " + str(self.size_of_map * self.size_of_map))
+            print("Number of rooms in dungeon: " + str(self.size_of_map * self.size_of_map) + "\n")
             self.menu_player_position()
         elif not choice:
             self.menu_map_size()
@@ -194,6 +195,7 @@ class Controller:
                     self.dungeon_map = DungeonMap(self.size_of_map, self.starting_pos)
                 print(self.character.summary_string())
                 input("Press Enter to return to main menu")
+                clear_cmd()
         else:
             self.character = self.account_manager.get_character_by_name(self.character_name)
             self.player_movement()
@@ -211,21 +213,26 @@ class Controller:
         if not choice:
             self.menu_char_existing()
         elif choice == len(list_of_existing_char):
+            clear_cmd()
             self.start_menu()
         else:
+            clear_cmd()
             try:
                 self.character = self.account_manager.list_of_characters[choice - 1]
                 if self.character.is_alive:
                     self.character_name = self.character.name
                     self.character_hero = self.character.characterClass
-                    print("\nSelected character: " + self.character_name)
+                    print("Selected character: " + self.character_name + "\n")
                     self.menu_map_size()
                 else:
+                    clear_cmd()
                     print("The character is dead, choose one that is alive or create a new.")
                     self.menu_char_existing()
             except TypeError:
+                clear_cmd()
                 self.menu_char_new()
             except IndexError:
+                clear_cmd()
                 print("Index Error! Try again")
                 self.menu_char_existing()
 
@@ -357,6 +364,7 @@ class Controller:
         self.character.amount_of_gold = 0
         if type(self.character) is Player:
             self.account_manager.save_list_characters()
+            clear_cmd()
             print(self.character.summary_string_dungeon())
             input("\nPress Enter to continue to main menu")
             clear_cmd()
