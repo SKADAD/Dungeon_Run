@@ -32,7 +32,7 @@ class AccountManager:
             list_of_names = []
             try:
                 for character in self.list_of_characters:
-                    if not character.is_alive:
+                    if character.is_alive:
                         list_of_names.append(character.name + "\n\tClass: " + character.characterClass + "\n\tStats: " +
                                              character.short_string())
                 return list_of_names
