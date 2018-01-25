@@ -261,6 +261,7 @@ class Controller:
                 room = self.dungeon_map.move_player(direction)
                 if self.room_handler(room) is "exit":
                     self.finish_adventure()
+                    self.start_menu()
             else:
                 print("fool, wrong step")
 

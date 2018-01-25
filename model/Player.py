@@ -71,7 +71,7 @@ class Player:
         summary += "Number of monsters killed:\n"
         summary += self.statistics.monster_killed_toString()
         summary += "Total gold collected: " + str(self.amount_of_gold)
-        summary += "Total rooms visited: " + str(self.statistics.room_count)
+        summary += "Total rooms visited: " + str(self.statistics.rooms_visited)
         return summary
 
 def attributes(character_hero):
