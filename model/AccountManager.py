@@ -47,12 +47,10 @@ class AccountManager:
 
     def load_list_characters(self):
         while True:
-            print("Trying to load chars.... // Account Manager")
             try:
                 Load = pickle.load(open("Database.pickle", "rb"))
                 Load = list(Load)
                 self.list_of_characters = Load
                 break
             except:
-                print("Exception")
                 break

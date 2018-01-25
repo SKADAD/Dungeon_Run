@@ -24,11 +24,11 @@ class Statistics:
             self.trolls_killed += 1
 
     def monster_killed_toString(self):
-        return_string = ""
-        return_string += "\nSpiders killed: " + str(self.spiders_killed)
+        return_string = "Spiders killed: " + str(self.spiders_killed)
         return_string += "\nSkeletons killed: " + str(self.skeletons_killed)
         return_string += "\nOrchs killed: " + str(self.orchs_killed)
         return_string += "\nTrolls killed: " + str(self.trolls_killed)
+        return_string += "\n"
 
         return return_string
 
@@ -45,6 +45,4 @@ class Statistics:
         return return_string
 
     def room_count(self, number_of_rooms):
-
-        rooms_visited = number_of_rooms
-        return rooms_visited
+        self.rooms_visited += number_of_rooms
