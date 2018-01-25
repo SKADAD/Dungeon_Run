@@ -418,7 +418,7 @@ class Controller:
                 character_string += "\t\t\t"
             else:
                 character_string += "\t\t\t\t"
-            character_string += (str(character.statistics.total_rooms) + "\t\t\t" +
+            character_string += (str(character.statistics.rooms_visited) + "\t\t\t" +
                                 str(character.statistics.total_amount_of_gold) + "\t\t\t" +
                                 str(character.statistics.total_kills()))
             print(character_string)
