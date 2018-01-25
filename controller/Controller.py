@@ -115,7 +115,6 @@ class Controller:
         except (TypeError, ValueError):
             clear_cmd()
             print("\nYou must enter a digit lower then 20!\n")
-            self.menu_ai_select_wait_time()
 
     def menu_ai_number_of_rounds(self): # AI Option sets number of rounds AI should play
         number_of_rounds = input("Enter number of rounds AI should play or type \"cancel\" to cancel:\n")
@@ -188,18 +187,19 @@ class Controller:
         if test == "0":
             self.start_menu()
         elif type(self.character) is Ai:
-            for i in range(self.number_of_rounds):
-                print("New round")
-                self.ai_movement()
-                self.dungeon_map = DungeonMap(self.size_of_map, self.starting_pos)
-            print(self.character.summary_string())
-            input("Press Enter to return to main menu")
+                for i in range(self.number_of_rounds):
+                    print("New round")
+                    self.ai_movement()
+                    self.dungeon_map = DungeonMap(self.size_of_map, self.starting_pos)
+                print(self.character.summary_string())
+                input("Press Enter to return to main menu")
         else:
             self.character = self.account_manager.get_character_by_name(self.character_name)
             self.player_movement()
 
     # If user wants to play with existing character:
     def menu_char_existing(self):
+        clear_cmd()
         list_of_existing_char = self.account_manager.get_list_of_names()
         if not list_of_existing_char:
             print("\nNo characters in this account exists! Please create your first now.")
@@ -207,7 +207,6 @@ class Controller:
         list_of_existing_char.append("Return to main menu")
         print("\nPick one of your characters:")
         choice = validate(list_of_existing_char)
-        clear_cmd()
         if not choice:
             self.menu_char_existing()
         elif choice == len(list_of_existing_char):
@@ -244,7 +243,6 @@ class Controller:
         while True:
             clear_cmd()
             print(self.dungeon_map.print_map())
-
             list_of_direction = []
             string_of_choices = self.dungeon_map.get_movement_choices()
             for char in string_of_choices:
@@ -291,7 +289,7 @@ class Controller:
                 return "exit"
             clear_cmd()
             while True:
-                self.update_visited_rooms()
+                #self.update_visited_rooms()
                 print(self.character.summary_string_dungeon())
                 # print(Player.summary_string_dungeon(self.character))
                 exit_confirm = input("User found the exit! Do you want to leave dungeon? \nConfirm with Y/N:\n ").lower()
@@ -300,7 +298,8 @@ class Controller:
                     # self.character.statistics.room_count(rooms_visited)
                     # self.character.durability = self.character.max_durability
                     # self.account_manager.save_list_characters()
-                    print("- Player found the exit and escaped!")
+                    clear_cmd()
+                    print("- Player found the exit and escaped!\n")
                     return "exit"
                 elif exit_confirm == "n":
                     return
@@ -316,7 +315,9 @@ class Controller:
                 if not self.character.is_alive:
                     if type(self.character) is Ai:
                         self.character.number_of_deaths += 1
-                        print("Ai died")
+                        self.character.amount_of_gold = 0
+                        self.finish_adventure()
+                        print("\n- AI Player died!\n")
                     return "exit"
                 # if not self.character.is_alive and type(self.character) == Player:
                 #     self.handle_death()
@@ -342,32 +343,41 @@ class Controller:
             room.list_of_treasures = []
             if type(self.character) is Ai:
                 time.sleep(self.character.wait_time)
-            else:
-                input("\nPress Enter to confirm and continue")
 
     def finish_adventure(self):
         # Updatera antal besökta rum. Återställ durability. Spara. Skriv ut sammanställning
         self.update_visited_rooms()
         self.character.durability = self.character.max_durability
+        self.character.total_runs += 1
+        if type(self.character) is Player:
+            self.account_manager.save_list_characters()
+            print(self.character.summary_string_dungeon())
+            input("\nPress Enter to continue to main menu")
+            self.character.amount_of_gold = 0
+            return
+        self.character.amount_of_gold = 0
         self.character.statistics.total_amount_of_gold = self.character.amount_of_gold
         self.character.amount_of_gold = 0
         if type(self.character) is Player:
             self.account_manager.save_list_characters()
             print(self.character.summary_string_dungeon())
             input("Press Enter to continue to main menu")
-
+            
     def update_visited_rooms(self):
         # Uppdatera statistik över besökta rum
         rooms_visited = self.dungeon_map.get_number_of_visited_rooms()
         self.character.statistics.room_count(rooms_visited)
 
-    def handle_death(self):
-        self.character.is_alive = False
-        self.account_manager.save_list_characters()
-        clear_cmd()
-        print(Player.summary_string_dungeon(self.character))
-        input("Press Enter to continue to main menu")
-        self.start_menu()
+
+    #def handle_death(self):
+    #    self.character.is_alive = False
+    #    self.character.total_runs += 1
+    #    self.account_manager.save_list_characters()
+    #    clear_cmd()
+    #    print(Player.summary_string_dungeon(self.character))
+
+    #    input("Press Enter to continue to main menu")
+    #    self.start_menu()
 
     def menu_statistics_high_scores(self):
         # Ge användaren ett val på vilken highscore dom vill se. Skicka vidare till korrekt printout.

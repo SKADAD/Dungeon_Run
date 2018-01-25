@@ -8,6 +8,7 @@ class Statistics:
         self.trolls_killed = 0
         self.treasures = []
         self.rooms_visited = 0
+        self.total_runs = 0
         self.total_amount_of_gold = 0
 
     def monster_killed(self, monster_type):
@@ -25,10 +26,10 @@ class Statistics:
             self.trolls_killed += 1
 
     def monster_killed_toString(self):
-        return_string = "Spiders killed: " + str(self.spiders_killed)
-        return_string += "\nSkeletons killed: " + str(self.skeletons_killed)
-        return_string += "\nOrchs killed: " + str(self.orchs_killed)
-        return_string += "\nTrolls killed: " + str(self.trolls_killed)
+        return_string = "Spiders killed = " + str(self.spiders_killed)
+        return_string += "\nSkeletons killed = " + str(self.skeletons_killed)
+        return_string += "\nOrchs killed = " + str(self.orchs_killed)
+        return_string += "\nTrolls killed = " + str(self.trolls_killed)
         return_string += "\n"
 
         return return_string

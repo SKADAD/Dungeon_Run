@@ -15,6 +15,8 @@ class Player:
         self.is_thief = False
         self.is_alive = True
         self.amount_of_gold = 0
+        self.total_rooms = 0
+        self.total_runs = 0
         self.statistics = Statistics()
 
         if characterClass == "Warrior":
@@ -68,11 +70,16 @@ class Player:
             summary += "Your durability remaining: " + str(self.durability) + "\n"
         else:
             summary += "\nYou died during battle!\n"
-        summary += "Number of monsters killed:\n"
-        summary += self.statistics.monster_killed_toString()
-        summary += "Total gold collected: " + str(self.amount_of_gold)
-        summary += "\nTotal rooms visited: " + str(self.statistics.rooms_visited)
+        #summary += "Number of monsters killed:\n"
+        #summary += self.statistics.monster_killed_toString()
+        #summary += "Total gold collected: " + str(self.amount_of_gold)
+        #summary += "\nTotal rooms visited: " + str(self.statistics.rooms_visited)
+        #self.statistics.total_runs += int(self.total_runs)
+        #summary += "\nTotal runs:" + str(self.statistics.total_runs)
+        #self.amount_of_gold = 0
+        #self.total_rooms = 0
         return summary
+
 
 def attributes(character_hero):
     if character_hero == "Warrior":
