@@ -54,3 +54,19 @@ class AccountManager:
                 break
             except:
                 break
+
+    def get_highscore(self, category):
+        list_of_highscore = []
+        if category is "gold":
+            list_of_highscore = sorted(self.list_of_characters,
+                                       key=lambda character: character.statistics.total_amount_of_gold,
+                                       reverse=True)
+        elif category is "kills":
+            list_of_highscore = sorted(self.list_of_characters,
+                                       key=lambda character: character.statistics.total_kills(),
+                                       reverse=True)
+        elif category is "rooms":
+            list_of_highscore = sorted(self.list_of_characters,
+                                       key=lambda character: character.statistics.rooms_visited,
+                                       reverse=True)
+        return list_of_highscore[:5]
