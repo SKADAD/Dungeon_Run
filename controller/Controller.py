@@ -19,7 +19,8 @@ class Controller:
 
     def start_menu(self):    # Main menu. User makes a choice and the appropriate function is called:
         while True:
-            print("\n* Main Menu *")
+            clear_cmd()
+            print("* Main Menu *")
             # Validate returns true if users selected choice is within the available choices, otherwise false
             choice = validate(["New Character", "Existing Character(s)", "AI Auto Play", "Statistics", "High Scores",
                                "Quit game"])
@@ -40,7 +41,7 @@ class Controller:
 
     # Create new character intro and finally calls new player name
     def menu_char_new(self):
-        print("\nSelect hero class:")
+        print("Select hero class:")
         choice = validate([" Warrior\t" + str(attributes("Warrior")), " Wizard\t" + str(attributes("Wizard")),
                            " Thief\t" + str(attributes("Thief")), "Return to main menu."])
         clear_cmd()
@@ -146,7 +147,7 @@ class Controller:
                 self.size_of_map = 8
             elif choice == 4:
                 self.start_menu()
-            print("\nNumber of rooms in dungeon: " + str(self.size_of_map * self.size_of_map))
+            print("Number of rooms in dungeon: " + str(self.size_of_map * self.size_of_map))
             self.menu_player_position()
         elif not choice:
             self.menu_map_size()
@@ -176,7 +177,7 @@ class Controller:
     # Before starting game, shows game selected info:
     def present_game_start_info(self):
         clear_cmd()
-        print("* Game Start Information *")
+        print("* Game Start Information *\n")
         print("Name:\t\t" + self.character_name)
         print("Hero Class:\t" + self.character_hero)
         # print("Selected Characters stats:" + self.character.short_string())
@@ -381,7 +382,7 @@ def clear_cmd():
     import os
     import platform
     try:
-        print('\n' * 10)
+        # print('\n' * 10)
         if platform.system() == 'Windows':
             os.system('cls')
         elif platform.system() == 'Linux':
