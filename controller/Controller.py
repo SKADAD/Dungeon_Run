@@ -359,7 +359,6 @@ class Controller:
         if type(self.character) is Player:
             self.account_manager.save_list_characters()
             print(self.character.summary_string_dungeon())
-            input("Press Enter to continue to main menu")
             self.start_menu()
 
     def update_visited_rooms(self):
