@@ -13,7 +13,7 @@ class Ai(Player):
     def summary_string(self):
         summary = "Summary of AI run with " + self.characterClass + ":\n\n"
         if self.number_of_deaths == 0:
-            summary += "The AI survived the dungeon(s) and is still alive.\n"
+            summary += "The AI survived the dungeon and is still alive.\n"
         else:
             summary += "The AI died " + str(self.number_of_deaths) + " number of times.\n"
         summary += "Number of monsters killed: \n" + self.statistics.monster_killed_toString()
