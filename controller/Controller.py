@@ -206,7 +206,7 @@ class Controller:
             print("No characters in this account exists! Please create your first now.")
             self.menu_char_new()
         list_of_existing_char.append("Return to main menu")
-        print("\Pick one of your characters:")
+        print("Pick one of your characters:")
         choice = validate(list_of_existing_char)
         if not choice:
             self.menu_char_existing()
@@ -284,7 +284,6 @@ class Controller:
         # Kolla om det finns en utgång. Ge isf valet att avsluta.
         # Kolla ifall det finns några monster i rummet. Isf starta combat.
         # Lever spelaren så får den skatterna som finns i rummet.
-        clear_cmd()
         if room.is_exit:
             if type(self.character) is Ai:
                 clear_cmd()
@@ -309,6 +308,9 @@ class Controller:
                     print("You must choose yes or no!")
                     continue
 
+        if len(room.list_of_monsters) + len(room.list_of_treasures) == 0 and type(self.character) is Ai:
+            time.sleep(self.character.wait_time)
+
         if len(room.list_of_monsters) > 0:
             clear_cmd()
             print("The room is populated with monsters! Defend yourself!")
@@ -331,7 +333,6 @@ class Controller:
                 return
 
         if len(room.list_of_treasures) > 0:
-            print("*" * 10)
             money = 0
             clear_cmd()
             print("Room items:")
