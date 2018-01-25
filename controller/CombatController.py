@@ -52,7 +52,7 @@ class CombatController:
         # Konvertera input till int. Antingen fly, eller attackera valt monster.
 
         while True:
-            print("Choose your action: " + self.character.short_string())
+            print("Choose your action: ")
             for i, monster in enumerate(self.list_of_monsters):
                 print(str(i + 1) + ". Attack the " + monster.short_string())
             print("0. Flee to the previous room")
@@ -60,13 +60,13 @@ class CombatController:
             try:
                 choice = int(input())
             except ValueError:
-                print("- You must enter a valid input!")
+                print("\n- You must enter a valid input!")
                 continue
 
             if choice == 0:
                 if self.flee():
                     clear_cmd()
-                    print("\n- You fled from the room!")
+                    print("\n- You fled from the room!\n")
                     self.room.list_of_monsters = self.temp_monsters
                     # self.list_of_monsters = self.temp_monsters
                     return "flee"
@@ -106,13 +106,13 @@ class CombatController:
         enemy_agility = self.roll_dice(monster_target.agility)
         if player_attack >= enemy_agility:
             if self.character.is_thief and random.randint(1, 100) <= 25:
-                print("- Double Strike hit " + monster_target.monster_type + " for 2 durability.\n")
+                print("- Double Strike hit " + monster_target.monster_type + " for 2 durability.")
                 monster_target.durability -= 2
             else:
-                print("- Attack hit " + monster_target.monster_type + " for 1 durability.\n")
+                print("- Your attack hit " + monster_target.monster_type + " for 1 durability.")
                 monster_target.durability -= 1
             if monster_target.durability <= 0:
-                print("- You killed: " + monster_target.monster_type + "!\n")
+                print("- You killed: " + monster_target.monster_type + "!")
                 self.character.statistics.monster_killed(monster_target.monster_type)
                 self.list_of_monsters.remove(monster_target)
                 self.order_of_attack.remove(monster_target)
@@ -138,7 +138,7 @@ class CombatController:
                 self.character.is_alive = False
                 # self.controller.handle_death()
         else:
-            print("- " + monster.monster_type + " attack missed you!\n")
+            print("- " + monster.monster_type + " tried to attack but missed!\n")
 
     def flee(self):
         flee_var = self.character.agility * 10

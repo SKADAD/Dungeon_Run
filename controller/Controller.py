@@ -171,7 +171,7 @@ class Controller:
                 self.dungeon_map = DungeonMap(self.size_of_map, self.starting_pos)
                 self.present_game_start_info()
             elif choice == 5:
-                self.start_menu()
+                self.menu_map_size()
 
     # Before starting game, shows game selected info:
     def present_game_start_info(self):
@@ -293,7 +293,7 @@ class Controller:
                 self.update_visited_rooms()
                 print(self.character.summary_string_dungeon())
                 # print(Player.summary_string_dungeon(self.character))
-                exit_confirm = input("User found the exit! Do you want to leave dungeon? \nConfirm with Y/N:\n ").lower()
+                exit_confirm = input("\nUser found the exit! \nDo you want to leave dungeon? \nConfirm with Y/N:\n ").lower()
                 if exit_confirm == "y":
                     # rooms_visited = self.dungeon_map.get_number_of_visited_rooms()
                     # self.character.statistics.room_count(rooms_visited)
@@ -302,6 +302,7 @@ class Controller:
                     print("- Player found the exit and escaped!")
                     return "exit"
                 elif exit_confirm == "n":
+                    print("- Player took a chose to not escape.")
                     return
                 else:
                     print("You must choose yes or no!")
@@ -336,7 +337,7 @@ class Controller:
                 print("Value: " + str(var[1]))
                 money += var[1]
             self.character.amount_of_gold += money
-            print("- Your character has gathered: " + str(self.character.amount_of_gold) + " gold so far")
+            print("\n- Your character has gathered: " + str(self.character.amount_of_gold) + " gold so far")
             self.character.statistics.treasures_collected(room.list_of_treasures)
             room.list_of_treasures = []
             if type(self.character) is Ai:
@@ -352,6 +353,7 @@ class Controller:
             self.account_manager.save_list_characters()
             print(self.character.summary_string_dungeon())
             input("Press Enter to continue to main menu")
+            self.start_menu()
 
     def update_visited_rooms(self):
         # Uppdatera statistik över besökta rum
