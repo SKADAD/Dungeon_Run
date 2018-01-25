@@ -109,7 +109,7 @@ class CombatController:
                 print("\n- Your attack hit " + monster_target.monster_type + " for 1 durability.")
                 monster_target.durability -= 1
             if monster_target.durability <= 0:
-                print("\n- You killed: " + monster_target.monster_type + "!")
+                print("\n- You killed " + monster_target.monster_type + "!")
                 self.character.statistics.monster_killed(monster_target.monster_type)
                 self.list_of_monsters.remove(monster_target)
                 self.order_of_attack.remove(monster_target)
@@ -135,7 +135,7 @@ class CombatController:
                 self.character.is_alive = False
                 # self.controller.handle_death()
         else:
-            print("- " + monster.monster_type + " tried to attack but missed!\n")
+            print("\n- " + monster.monster_type + " tried to attack but missed!\n")
 
     def flee(self):
         flee_var = self.character.agility * 10

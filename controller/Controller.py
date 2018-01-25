@@ -300,18 +300,19 @@ class Controller:
                     # self.character.statistics.room_count(rooms_visited)
                     # self.character.durability = self.character.max_durability
                     # self.account_manager.save_list_characters()
-                    print("- Player found the exit and escaped!")
+                    clear_cmd()
+                    print("- Player found the exit and escaped!\n")
                     return "exit"
                 elif exit_confirm == "n":
-                    print("- Player took a chose to not escape.")
+                    print("- Player chose to not escape.\n")
                     return
                 else:
-                    print("You must choose yes or no!")
+                    print("You must choose yes or no!\n")
                     continue
 
         if len(room.list_of_monsters) > 0:
             clear_cmd()
-            print("The room is populated with monsters! Defend yourself!\n")
+            print("The room is populated with monsters! Defend yourself!")
             combat = CombatController(self, room)
             if combat.start():
                 if not self.character.is_alive:
