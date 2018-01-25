@@ -353,16 +353,10 @@ class Controller:
             self.account_manager.save_list_characters()
             print(self.character.summary_string_dungeon())
             input("\nPress Enter to continue to main menu")
+            self.character.statistics.total_amount_of_gold = self.character.amount_of_gold
             self.character.amount_of_gold = 0
             return
-        self.character.amount_of_gold = 0
-        self.character.statistics.total_amount_of_gold = self.character.amount_of_gold
-        self.character.amount_of_gold = 0
-        if type(self.character) is Player:
-            self.account_manager.save_list_characters()
-            print(self.character.summary_string_dungeon())
-            input("Press Enter to continue to main menu")
-            
+
     def update_visited_rooms(self):
         # Uppdatera statistik över besökta rum
         rooms_visited = self.dungeon_map.get_number_of_visited_rooms()
