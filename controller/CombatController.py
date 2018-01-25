@@ -6,9 +6,6 @@ from model.Monster import Monster
 from model.Player import Player
 from model.Statistics import Statistics
 from model.AccountManager import *
-#import controller.Controller
-
-
 
 
 class CombatController:
@@ -106,13 +103,13 @@ class CombatController:
         enemy_agility = self.roll_dice(monster_target.agility)
         if player_attack >= enemy_agility:
             if self.character.is_thief and random.randint(1, 100) <= 25:
-                print("- Double Strike hit " + monster_target.monster_type + " for 2 durability.")
+                print("\n- Double Strike hit " + monster_target.monster_type + " for 2 durability.")
                 monster_target.durability -= 2
             else:
-                print("- Your attack hit " + monster_target.monster_type + " for 1 durability.")
+                print("\n- Your attack hit " + monster_target.monster_type + " for 1 durability.")
                 monster_target.durability -= 1
             if monster_target.durability <= 0:
-                print("- You killed: " + monster_target.monster_type + "!")
+                print("\n- You killed: " + monster_target.monster_type + "!")
                 self.character.statistics.monster_killed(monster_target.monster_type)
                 self.list_of_monsters.remove(monster_target)
                 self.order_of_attack.remove(monster_target)
@@ -122,17 +119,17 @@ class CombatController:
                         self.temp_monsters.remove(monster)
                         break
         else:
-            print("- Your attack missed!\n")
+            print("\n- Your attack missed!\n")
 
     def monster_attack(self, monster):
         monster_attack = self.roll_dice(monster.attack)
         player_agility = self.roll_dice(self.character.agility)
         if monster_attack > player_agility:
             if self.character.is_warrior and self.soldier_special:
-                print("- The shield blocked the attack. You take no damage.\n")
+                print("\n- The shield blocked the attack! You take no damage.\n")
                 self.soldier_special = False
             else:
-                print("- " + monster.monster_type + " hit you for 1 durability!\n")
+                print("\n- " + monster.monster_type + " hit you for 1 durability!\n")
                 self.character.durability -= 1
             if self.character.durability <= 0:
                 self.character.is_alive = False
