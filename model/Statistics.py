@@ -8,6 +8,7 @@ class Statistics:
         self.trolls_killed = 0
         self.treasures = []
         self.rooms_visited = 0
+        self.total_amount_of_gold = 0
 
     def monster_killed(self, monster_type):
 
@@ -46,3 +47,8 @@ class Statistics:
 
     def room_count(self, number_of_rooms):
         self.rooms_visited += number_of_rooms
+
+    def total_kills(self):
+        total_kills = 0
+        total_kills += self.spiders_killed + self.skeletons_killed + self.orchs_killed + self.trolls_killed
+        return total_kills
