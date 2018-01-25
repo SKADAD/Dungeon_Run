@@ -348,19 +348,20 @@ class Controller:
         # Updatera antal besökta rum. Återställ durability. Spara. Skriv ut sammanställning
         self.update_visited_rooms()
         self.character.durability = self.character.max_durability
-        self.character.total_runs += 1
+        self.character.statistics.rooms_visited = self.character.total_rooms
+        self.character.total_rooms = 0
+        self.character.statistics.total_amount_of_gold = self.character.amount_of_gold
+        self.character.amount_of_gold = 0
         if type(self.character) is Player:
             self.account_manager.save_list_characters()
             print(self.character.summary_string_dungeon())
             input("\nPress Enter to continue to main menu")
-            self.character.statistics.total_amount_of_gold = self.character.amount_of_gold
-            self.character.amount_of_gold = 0
             return
 
     def update_visited_rooms(self):
         # Uppdatera statistik över besökta rum
         rooms_visited = self.dungeon_map.get_number_of_visited_rooms()
-        self.character.statistics.room_count(rooms_visited)
+        self.character.total_rooms = rooms_visited
 
 
     #def handle_death(self):
