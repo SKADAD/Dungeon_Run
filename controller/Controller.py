@@ -381,16 +381,14 @@ def clear_cmd():
     import os
     import platform
     try:
+        print('\n' * 10)
         if platform.system() == 'Windows':
             os.system('cls')
-            print('\n' * 10)
         elif platform.system() == 'Linux':
             os.system('clear')
             # Used for debugging in Pycharm IDE:
-            print('\n' * 10)
         else:
             print("Platform unknown but printing empty rows..")
-            print('\n' * 10)
     except Exception:
         print("Clear failed")
 

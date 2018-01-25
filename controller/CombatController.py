@@ -32,7 +32,7 @@ class CombatController:
                 if type(creature) is Player:
                     action = self.player_action()
                     if action == "flee":
-                        input("Press enter to confirm")
+                        input("\nPress enter to confirm")
                         return False
                 elif type(creature) is Ai:
                     self.player_attack(self.list_of_monsters[0])
@@ -49,7 +49,7 @@ class CombatController:
         # Konvertera input till int. Antingen fly, eller attackera valt monster.
 
         while True:
-            print("Choose your action: ")
+            print("\nChoose your action: ")
             for i, monster in enumerate(self.list_of_monsters):
                 print(str(i + 1) + ". Attack the " + monster.short_string())
             print("0. Flee to the previous room")
@@ -63,14 +63,14 @@ class CombatController:
             if choice == 0:
                 if self.flee():
                     clear_cmd()
-                    print("\n- You fled from the room!\n")
+                    print("\n- You fled from the room!")
                     self.room.list_of_monsters = self.temp_monsters
                     # self.list_of_monsters = self.temp_monsters
                     return "flee"
                 else:
                     # Clear cmd
                     clear_cmd()
-                    print("\n- Your escape attempt failed!\n")
+                    print("\n- Your escape attempt failed!")
                     return "failed"
             elif choice <= len(self.list_of_monsters):
                 self.player_attack(self.list_of_monsters[choice - 1])
@@ -99,6 +99,7 @@ class CombatController:
         return value
 
     def player_attack(self, monster_target):
+        clear_cmd()
         player_attack = self.roll_dice(self.character.attack)
         enemy_agility = self.roll_dice(monster_target.agility)
         if player_attack >= enemy_agility:
@@ -119,23 +120,23 @@ class CombatController:
                         self.temp_monsters.remove(monster)
                         break
         else:
-            print("\n- Your attack missed!\n")
+            print("\n- Your attack missed!")
 
     def monster_attack(self, monster):
         monster_attack = self.roll_dice(monster.attack)
         player_agility = self.roll_dice(self.character.agility)
         if monster_attack > player_agility:
             if self.character.is_warrior and self.soldier_special:
-                print("\n- The shield blocked the attack! You take no damage.\n")
+                print("\n- The shield blocked the attack! You take no damage.")
                 self.soldier_special = False
             else:
-                print("\n- " + monster.monster_type + " hit you for 1 durability!\n")
+                print("\n- " + monster.monster_type + " hit you for 1 durability!")
                 self.character.durability -= 1
             if self.character.durability <= 0:
                 self.character.is_alive = False
                 # self.controller.handle_death()
         else:
-            print("\n- " + monster.monster_type + " tried to attack but missed!\n")
+            print("\n- " + monster.monster_type + " tried to attack you but missed!")
 
     def flee(self):
         flee_var = self.character.agility * 10
