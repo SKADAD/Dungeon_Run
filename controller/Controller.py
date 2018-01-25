@@ -1,6 +1,5 @@
 import sys
 sys.path.append('../')
-
 from model.DungeonMap import *
 from model.Player import *
 from controller.CombatController import *
@@ -20,10 +19,9 @@ class Controller:
 
     def start_menu(self):    # Main menu. User makes a choice and the appropriate function is called:
         while True:
-            clear_cmd()
-            print("* Main Menu *")
+            print("\n* Main Menu *")
             # Validate returns true if users selected choice is within the available choices, otherwise false
-            choice = validate(["New Character", "Existing Character(s)", "AI Auto Play", "Statistics", "High Scores",
+            choice = validate(["New Character", "Existing Character(s)", "AI Auto Play", "High Scores",
                                "Quit game"])
             clear_cmd()
             if choice:
@@ -34,17 +32,16 @@ class Controller:
                 elif choice == 3:
                     self.menu_ai_class_select()
                 elif choice == 4:
-                    self.menu_statistics()
-                elif choice == 5:
                     self.menu_statistics_high_scores()
-                elif choice == 6:
+                elif choice == 5:
                     self.menu_game_quit()
 
     # Create new character intro and finally calls new player name
     def menu_char_new(self):
-        print("Select hero class:")
+        print("\nSelect hero class:")
         choice = validate([" Warrior\t" + str(attributes("Warrior")), " Wizard\t" + str(attributes("Wizard")),
                            " Thief\t" + str(attributes("Thief")), "Return to main menu."])
+        clear_cmd()
         if choice:
             if choice != 4:
                 if choice == 1:
@@ -60,18 +57,20 @@ class Controller:
         else:
             self.menu_char_new()
 
-
     # Create new name for new character and then saves to disk
     def menu_new_player_name(self):
-        self.character_name = input("\nEnter character name or \"0\" to return:\n")
+        self.character_name = input("\nEnter character name or \"0\" to return (max 10 characters in name):\n")
         clear_cmd()
         if self.character_name == "":
             print("Blank name not allowed")
             self.menu_new_player_name()
+        elif len(self.character_name) > 10:
+            print("Name can not be longer then 10 characters")
+            self.menu_new_player_name()
         elif self.character_name == "0":
             self.menu_char_new()
         elif self.account_manager.create_new_character(self.character_name, self.character_hero):
-            print("Character " + self.character_name + ", The " + self.character_hero + " was born!")
+            print("\nCharacter " + self.character_name + ", The " + self.character_hero + " was born!")
             self.character = self.account_manager.get_character_by_name(self.character_name)
             self.menu_map_size()
         else:
@@ -118,14 +117,11 @@ class Controller:
             print("\nYou must enter a digit lower then 20!\n")
 
     def menu_ai_number_of_rounds(self): # AI Option sets number of rounds AI should play
-        number_of_rounds = input("Enter the number of rounds AI should play, or type \"cancel\" to cancel:\n")
+        number_of_rounds = input("Enter number of rounds AI should play or type \"cancel\" to cancel:\n")
         try:
             if number_of_rounds.lower() == "cancel":
                 clear_cmd()
                 return
-            elif int(number_of_rounds) == 0:
-                print("\nInvalid choice, AI must play at least 1 time\n")
-                self.menu_ai_number_of_rounds()
             self.number_of_rounds = int(number_of_rounds)
             clear_cmd()
             print("Number of rounds AI will play: " + str(number_of_rounds))
@@ -150,7 +146,7 @@ class Controller:
                 self.size_of_map = 8
             elif choice == 4:
                 self.start_menu()
-            print("Number of rooms in dungeon: " + str(self.size_of_map * self.size_of_map))
+            print("\nNumber of rooms in dungeon: " + str(self.size_of_map * self.size_of_map))
             self.menu_player_position()
         elif not choice:
             self.menu_map_size()
@@ -175,12 +171,12 @@ class Controller:
                 self.dungeon_map = DungeonMap(self.size_of_map, self.starting_pos)
                 self.present_game_start_info()
             elif choice == 5:
-                self.menu_map_size()
+                self.start_menu()
 
     # Before starting game, shows game selected info:
     def present_game_start_info(self):
         clear_cmd()
-        print("* Game Start Information *\n")
+        print("* Game Start Information *")
         print("Name:\t\t" + self.character_name)
         print("Hero Class:\t" + self.character_hero)
         # print("Selected Characters stats:" + self.character.short_string())
@@ -278,7 +274,7 @@ class Controller:
             direction = string_of_choices[index]
             room = self.dungeon_map.move_player(direction)
             if self.room_handler(room) is "exit":
-                self.character.durability = self.character.max_durability
+                self.finish_adventure()
                 self.character.is_alive = True
                 return
 
@@ -289,7 +285,6 @@ class Controller:
         clear_cmd()
         if room.is_exit:
             if type(self.character) is Ai:
-                self.update_visited_rooms()
                 clear_cmd()
                 return "exit"
             clear_cmd()
@@ -297,26 +292,24 @@ class Controller:
                 #self.update_visited_rooms()
                 print(self.character.summary_string_dungeon())
                 # print(Player.summary_string_dungeon(self.character))
-                exit_confirm = input("\nUser found the exit! \nDo you want to leave dungeon? \nConfirm with Y/N:\n ").lower()
+                exit_confirm = input("User found the exit! Do you want to leave dungeon? \nConfirm with Y/N:\n ").lower()
                 if exit_confirm == "y":
                     # rooms_visited = self.dungeon_map.get_number_of_visited_rooms()
                     # self.character.statistics.room_count(rooms_visited)
                     # self.character.durability = self.character.max_durability
                     # self.account_manager.save_list_characters()
-                    self.finish_adventure()
                     clear_cmd()
                     print("- Player found the exit and escaped!\n")
                     return "exit"
                 elif exit_confirm == "n":
-                    print("- Player chose to not escape.\n")
                     return
                 else:
-                    print("You must choose yes or no!\n")
+                    print("You must choose yes or no!")
                     continue
 
         if len(room.list_of_monsters) > 0:
             clear_cmd()
-            print("The room is populated with monsters! Defend yourself!")
+            print("The room is populated with monsters! Defend yourself!\n")
             combat = CombatController(self, room)
             if combat.start():
                 if not self.character.is_alive:
@@ -345,7 +338,7 @@ class Controller:
                 print("Value: " + str(var[1]))
                 money += var[1]
             self.character.amount_of_gold += money
-            print("\n- Your character has gathered: " + str(self.character.amount_of_gold) + " gold so far")
+            print("- Your character has gathered: " + str(self.character.amount_of_gold) + " gold so far")
             self.character.statistics.treasures_collected(room.list_of_treasures)
             room.list_of_treasures = []
             if type(self.character) is Ai:
@@ -360,26 +353,16 @@ class Controller:
             self.account_manager.save_list_characters()
             print(self.character.summary_string_dungeon())
             input("\nPress Enter to continue to main menu")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             self.character.amount_of_gold = 0
             return
         self.character.amount_of_gold = 0
-
-
+        self.character.statistics.total_amount_of_gold = self.character.amount_of_gold
+        self.character.amount_of_gold = 0
+        if type(self.character) is Player:
+            self.account_manager.save_list_characters()
+            print(self.character.summary_string_dungeon())
+            input("Press Enter to continue to main menu")
+            
     def update_visited_rooms(self):
         # Uppdatera statistik över besökta rum
         rooms_visited = self.dungeon_map.get_number_of_visited_rooms()
@@ -396,25 +379,58 @@ class Controller:
     #    input("Press Enter to continue to main menu")
     #    self.start_menu()
 
-    def menu_statistics(self):
-        print("FIX statistics here please")
-
     def menu_statistics_high_scores(self):
-        print("FIX statistics high scores here please")
+        # Ge användaren ett val på vilken highscore dom vill se. Skicka vidare till korrekt printout.
+        while True:
+            clear_cmd()
+            print("Choose which highscore to show:")
+            list_of_choices = ["Most rooms visited", "Most gold collected", "Most monsters killed", "Go back to main menu"]
+            choice = validate(list_of_choices)
+            if not choice:
+                continue
+            elif choice == 1:
+                self.show_highscore("rooms")
+            elif choice == 2:
+                self.show_highscore("gold")
+            elif choice == 3:
+                self.show_highscore("kills")
+            elif choice == len(list_of_choices):
+                return
 
+    def show_highscore(self, category):
+        # Hämta lista med top 5 spelare i rätt kategori. Skriv ut dess med snygg formatering.
+        clear_cmd()
+        list_of_characters = self.account_manager.get_highscore(category)
+        print("Name\t\t\tTotal rooms\tTotal gold\tTotal kills")
+        for i, character in enumerate(list_of_characters):
+
+            character_string = (str(i + 1) + ". " + character.name)
+            if len(character.name) > 8:
+                character_string += "\t\t"
+            elif len(character.name) > 4:
+                character_string += "\t\t\t"
+            else:
+                character_string += "\t\t\t\t"
+            character_string += (str(character.statistics.total_rooms) + "\t\t\t" +
+                                str(character.statistics.total_amount_of_gold) + "\t\t\t" +
+                                str(character.statistics.total_kills()))
+            print(character_string)
+        input("Press Enter to go back")
 
 def clear_cmd():
     import os
     import platform
     try:
-        # print('\n' * 10)
         if platform.system() == 'Windows':
             os.system('cls')
+            print('\n' * 10)
         elif platform.system() == 'Linux':
             os.system('clear')
             # Used for debugging in Pycharm IDE:
+            print('\n' * 10)
         else:
             print("Platform unknown but printing empty rows..")
+            print('\n' * 10)
     except Exception:
         print("Clear failed")
 
