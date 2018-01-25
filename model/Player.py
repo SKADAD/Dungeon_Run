@@ -64,20 +64,24 @@ class Player:
                         " | ALIVE = " + str(self.is_alive)
         return return_string
 
+    def short_string_dur(self):
+        return_string = "Your durability =" + str(self.initiative)
+        return return_string
+
     def summary_string_dungeon(self):
         summary = "\nSummary of run with " + self.characterClass + ":\n"
         if self.is_alive:
             summary += "Your durability remaining: " + str(self.durability) + "\n"
         else:
             summary += "\nYou died during battle!\n"
-        #summary += "Number of monsters killed:\n"
-        #summary += self.statistics.monster_killed_toString()
-        #summary += "Total gold collected: " + str(self.amount_of_gold)
-        #summary += "\nTotal rooms visited: " + str(self.statistics.rooms_visited)
-        #self.statistics.total_runs += int(self.total_runs)
-        #summary += "\nTotal runs:" + str(self.statistics.total_runs)
-        #self.amount_of_gold = 0
-        #self.total_rooms = 0
+        summary += "Number of monsters killed:\n"
+        summary += self.statistics.monster_killed_toString()
+        summary += "Total gold collected: " + str(self.amount_of_gold)
+        summary += "\nTotal rooms visited: " + str(self.statistics.rooms_visited)
+        self.statistics.total_runs += int(self.total_runs)
+        summary += "\nTotal runs:" + str(self.statistics.total_runs)
+        self.amount_of_gold = 0
+        self.total_rooms = 0
         return summary
 
 

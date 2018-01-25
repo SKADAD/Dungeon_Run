@@ -19,7 +19,7 @@ class Controller:
 
     def start_menu(self):    # Main menu. User makes a choice and the appropriate function is called:
         while True:
-            print("\n* Main Menu *")
+            print("* Main Menu *")
             # Validate returns true if users selected choice is within the available choices, otherwise false
             choice = validate(["New Character", "Existing Character(s)", "AI Auto Play", "High Scores",
                                "Quit game"])
@@ -38,7 +38,7 @@ class Controller:
 
     # Create new character intro and finally calls new player name
     def menu_char_new(self):
-        print("\nSelect hero class:")
+        print("Select hero class:")
         choice = validate([" Warrior\t" + str(attributes("Warrior")), " Wizard\t" + str(attributes("Wizard")),
                            " Thief\t" + str(attributes("Thief")), "Return to main menu."])
         clear_cmd()
@@ -59,7 +59,7 @@ class Controller:
 
     # Create new name for new character and then saves to disk
     def menu_new_player_name(self):
-        self.character_name = input("\nEnter character name or \"0\" to return (max 10 characters in name):\n")
+        self.character_name = input("Enter character name or \"0\" to return (max 10 characters in name):\n")
         clear_cmd()
         if self.character_name == "":
             print("Blank name not allowed")
@@ -78,7 +78,7 @@ class Controller:
             self.menu_new_player_name()
 
     def menu_ai_class_select(self): # AI Option select class
-        print("\nSelect hero class for the AI:")
+        print("Select hero class for the AI:")
         choice = validate(["Warrior", "Wizard", "Thief", "Return to main menu."])
         clear_cmd()
         if choice:
@@ -97,7 +97,7 @@ class Controller:
             self.menu_ai_class_select()
 
     def menu_ai_select_wait_time(self): # AI Option select delay
-        print("\nEnter seconds to delay or type \"cancel\" to cancel:")
+        print("Enter seconds to delay or type \"cancel\" to cancel:")
         wait_time = input()
         try:
             if str(wait_time.lower()) == "cancel":
@@ -133,7 +133,7 @@ class Controller:
 
     # User selects map size and set position function starts
     def menu_map_size(self):
-        print("\nSelect dungeon size:")
+        print("Select dungeon size:")
         choice = validate(["4 x 4 Grid (16 rooms)", "5 x 5 grid (25 rooms)", "8 x 8 grid (64 rooms)",
                            "Return to main menu"])
         clear_cmd()
@@ -153,7 +153,7 @@ class Controller:
 
     # Position is selected and map started
     def menu_player_position(self):
-        print("\nChoose starting corner:")
+        print("Choose starting corner:")
         choice = validate(["North West", "North East", "South West", "South East", "Return to select dungeon size"])
         clear_cmd()
         if not choice:
@@ -171,7 +171,7 @@ class Controller:
                 self.dungeon_map = DungeonMap(self.size_of_map, self.starting_pos)
                 self.present_game_start_info()
             elif choice == 5:
-                self.start_menu()
+                self.menu_new_player_name()
 
     # Before starting game, shows game selected info:
     def present_game_start_info(self):
@@ -185,6 +185,7 @@ class Controller:
         test = input("\nPress Enter to enter the dungeon or \"0\" to return to main menu\n")
         clear_cmd()
         if test == "0":
+            clear_cmd()
             self.start_menu()
         elif type(self.character) is Ai:
                 for i in range(self.number_of_rounds):
@@ -202,10 +203,10 @@ class Controller:
         clear_cmd()
         list_of_existing_char = self.account_manager.get_list_of_names()
         if not list_of_existing_char:
-            print("\nNo characters in this account exists! Please create your first now.")
+            print("No characters in this account exists! Please create your first now.")
             self.menu_char_new()
         list_of_existing_char.append("Return to main menu")
-        print("\nPick one of your characters:")
+        print("\Pick one of your characters:")
         choice = validate(list_of_existing_char)
         if not choice:
             self.menu_char_existing()
@@ -231,6 +232,7 @@ class Controller:
     def menu_game_quit(self):    # If user request quit from Main Menu
         clear_cmd()
         quit_confirm = input("User requesting to quit game. Confirm with Y/N:\n ")
+        clear_cmd()
         if quit_confirm.lower() == 'y':
             print("\nQuitting game. Bye!")
             raise SystemExit
@@ -309,7 +311,7 @@ class Controller:
 
         if len(room.list_of_monsters) > 0:
             clear_cmd()
-            print("The room is populated with monsters! Defend yourself!\n")
+            print("The room is populated with monsters! Defend yourself!")
             combat = CombatController(self, room)
             if combat.start():
                 if not self.character.is_alive:
@@ -356,6 +358,7 @@ class Controller:
             self.account_manager.save_list_characters()
             print(self.character.summary_string_dungeon())
             input("\nPress Enter to continue to main menu")
+            clear_cmd()
             return
 
     def update_visited_rooms(self):
@@ -418,14 +421,8 @@ def clear_cmd():
     try:
         if platform.system() == 'Windows':
             os.system('cls')
-            print('\n' * 10)
         elif platform.system() == 'Linux':
             os.system('clear')
-            # Used for debugging in Pycharm IDE:
-            print('\n' * 10)
-        else:
-            print("Platform unknown but printing empty rows..")
-            print('\n' * 10)
     except Exception:
         print("Clear failed")
 

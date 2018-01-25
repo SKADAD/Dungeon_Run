@@ -32,8 +32,9 @@ class AccountManager:
             list_of_names = []
             try:
                 for character in self.list_of_characters:
-                    list_of_names.append(character.name + "\n\tClass: " + character.characterClass + "\n\tStats: " +
-                                         character.short_string())
+                    if not character.is_alive:
+                        list_of_names.append(character.name + "\n\tClass: " + character.characterClass + "\n\tStats: " +
+                                             character.short_string())
                 return list_of_names
             except TypeError:
                 break

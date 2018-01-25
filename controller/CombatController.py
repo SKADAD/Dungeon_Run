@@ -49,7 +49,7 @@ class CombatController:
         # Konvertera input till int. Antingen fly, eller attackera valt monster.
 
         while True:
-            print("\nChoose your action: ")
+            print("\nChoose your action:\n" + Player.short_string_dur(self.character))
             for i, monster in enumerate(self.list_of_monsters):
                 print(str(i + 1) + ". Attack the " + monster.short_string())
             print("0. Flee to the previous room")
@@ -57,6 +57,7 @@ class CombatController:
             try:
                 choice = int(input())
             except ValueError:
+                clear_cmd()
                 print("\n- You must enter a valid input!")
                 continue
 
@@ -76,7 +77,8 @@ class CombatController:
                 self.player_attack(self.list_of_monsters[choice - 1])
                 return "attack"
             else:
-                print("Must enter a valid input!")
+                clear_cmd()
+                print("\n- You must enter a valid input!")
 
     def create_order_of_attack(self):
         # Skapa en dictionary med varje deltagare och deras initiativ för striden.
@@ -155,13 +157,9 @@ def clear_cmd():
     import os
     import platform
     try:
-        # print('\n' * 10)
         if platform.system() == 'Windows':
             os.system('cls')
         elif platform.system() == 'Linux':
             os.system('clear')
-            # Used for debugging in Pycharm IDE:
-        else:
-            print("Platform unknown but printing empty rows..")
     except Exception:
         print("Clear failed")
