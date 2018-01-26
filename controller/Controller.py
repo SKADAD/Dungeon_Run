@@ -355,6 +355,7 @@ class Controller:
             room.list_of_treasures = []
             if type(self.character) is Ai:
                 time.sleep(self.character.wait_time)
+            input("Press Enter to continue")
 
     def finish_adventure(self):
         # Updatera antal besökta rum. Återställ durability. Spara. Skriv ut sammanställning
