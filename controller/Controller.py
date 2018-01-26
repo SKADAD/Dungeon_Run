@@ -19,7 +19,7 @@ class Controller:
 
     def start_menu(self):    # Main menu. User makes a choice and the appropriate function is called:
         while True:
-            print("* Main Menu *")
+            print("* Main Menu *\n")
             # Validate returns true if users selected choice is within the available choices, otherwise false
             choice = validate(["New Character", "Existing Character(s)", "AI Auto Play", "High Scores",
                                "Quit game"])
@@ -38,7 +38,7 @@ class Controller:
 
     # Create new character intro and finally calls new player name
     def menu_char_new(self):
-        print("Select hero class:")
+        print("Select hero class:\n")
         choice = validate([" Warrior\t" + str(attributes("Warrior")), " Wizard\t" + str(attributes("Wizard")),
                            " Thief\t" + str(attributes("Thief")), "Return to main menu."])
         clear_cmd()
@@ -50,7 +50,7 @@ class Controller:
                     self.character_hero = "Wizard"
                 elif choice == 3:
                     self.character_hero = "Thief"
-                print("Selected hero class: " + self.character_hero)
+                print("Selected hero class: " + self.character_hero + "\n")
                 self.menu_new_player_name()
             elif choice == 4:
                 clear_cmd()
@@ -63,15 +63,15 @@ class Controller:
         self.character_name = input("Enter character name or \"0\" to return (max 10 characters in name):\n")
         clear_cmd()
         if self.character_name == "":
-            print("Blank name not allowed")
+            print("Blank name not allowed\n")
             self.menu_new_player_name()
         elif len(self.character_name) > 10:
-            print("Name can not be longer then 10 characters")
+            print("Name can not be longer then 10 characters\n")
             self.menu_new_player_name()
         elif self.character_name == "0":
             self.menu_char_new()
         elif self.account_manager.create_new_character(self.character_name, self.character_hero):
-            print("\nCharacter " + self.character_name + ", The " + self.character_hero + " was born!")
+            print("Character " + self.character_name + ", The " + self.character_hero + " was born!\n")
             self.character = self.account_manager.get_character_by_name(self.character_name)
             self.menu_map_size()
         else:
@@ -79,7 +79,8 @@ class Controller:
             self.menu_new_player_name()
 
     def menu_ai_class_select(self): # AI Option select class
-        print("Select hero class for the AI:")
+        clear_cmd()
+        print("Select hero class for the AI:\n")
         choice = validate(["Warrior", "Wizard", "Thief", "Return to main menu."])
         clear_cmd()
         if choice:
@@ -90,7 +91,7 @@ class Controller:
                     self.character_hero = "Wizard"
                 elif choice == 3:
                     self.character_hero = "Thief"
-                print("Selected AI Hero class: " + self.character_hero)
+                print("Selected AI Hero class: " + self.character_hero + "\n")
                 self.menu_ai_select_wait_time()
             elif choice == 4:
                 self.start_menu()
@@ -116,7 +117,7 @@ class Controller:
                     self.menu_ai_number_of_rounds()
             except (TypeError, ValueError):
                 clear_cmd()
-                print("\nYou must enter a digit lower then 20!\n")
+                print("You must enter a digit lower then 20!\n")
 
     def menu_ai_number_of_rounds(self): # AI Option sets number of rounds AI should play
         number_of_rounds = input("Enter number of rounds AI should play or type \"cancel\" to cancel:\n")
@@ -178,9 +179,9 @@ class Controller:
     # Before starting game, shows game selected info:
     def present_game_start_info(self):
         clear_cmd()
-        print("* Game Start Information *")
-        print("Name:\t\t" + self.character_name)
-        print("Hero Class:\t" + self.character_hero)
+        print("* Game Start Information *\n")
+        print("Name:\t\t\t" + self.character_name)
+        print("Hero Class:\t\t" + self.character_hero)
         # print("Selected Characters stats:" + self.character.short_string())
         print("Number of rooms: \t" + str(self.size_of_map * self.size_of_map))
         print("Starting corner: \t" + self.starting_pos)
@@ -210,7 +211,7 @@ class Controller:
             print("No characters in this account exists! Please create your first now.")
             self.menu_char_new()
         list_of_existing_char.append("Return to main menu")
-        print("Pick one of your characters:")
+        print("Pick one of your characters:\n")
         choice = validate(list_of_existing_char)
         if not choice:
             self.menu_char_existing()
@@ -392,9 +393,10 @@ class Controller:
         # Ge användaren ett val på vilken highscore dom vill se. Skicka vidare till korrekt printout.
         while True:
             clear_cmd()
-            print("Choose which highscore to show:")
+            print("Choose which high score to show:\n")
             list_of_choices = ["Most rooms visited", "Most gold collected", "Most monsters killed", "Go back to main menu"]
             choice = validate(list_of_choices)
+            clear_cmd()
             if not choice:
                 continue
             elif choice == 1:
